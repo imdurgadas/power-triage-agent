@@ -80,6 +80,34 @@ export default function DependencyTable({ packages, onOpenCodeAudit }) {
         </div>
       </div>
 
+      {/* Effort Sizing Guide Banner */}
+      <div style={{ 
+        background: 'rgba(30, 41, 59, 0.45)', 
+        border: '1px solid rgba(255, 255, 255, 0.08)', 
+        borderRadius: 'var(--radius-md)', 
+        padding: '0.55rem 0.85rem', 
+        marginBottom: '1rem', 
+        fontSize: '0.78rem', 
+        display: 'flex', 
+        gap: '1.25rem', 
+        flexWrap: 'wrap', 
+        alignItems: 'center',
+        color: 'var(--text-muted)'
+      }}>
+        <span style={{ fontWeight: 600, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+          <HelpCircle size={14} color="#38bdf8" /> Effort Breakdown Guide:
+        </span>
+        <span>
+          <strong style={{ color: '#93c5fd' }}>Build</strong>: Source compilation, toolchain setup & packaging.
+        </span>
+        <span>
+          <strong style={{ color: '#facc15' }}>Engineering</strong>: Architecture adaptation (SIMD/VSX vector porting, replacing proprietary x86 blockers, 64KB page alignment).
+        </span>
+        <span>
+          <strong style={{ color: '#4ade80' }}>Test</strong>: Verification suites, accuracy harnesses & benchmarks.
+        </span>
+      </div>
+
       <div style={{ marginBottom: '1rem' }}>
         <input 
           type="text" 
@@ -100,7 +128,17 @@ export default function DependencyTable({ packages, onOpenCodeAudit }) {
               <th>Readiness Status</th>
               <th>Build System & Toolchain</th>
               <th>Transitive Build Scope</th>
-              <th>Estimated Effort</th>
+              <th>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                  <span>Estimated Effort</span>
+                  <span 
+                    title="Effort breakdown:&#10;• Build: Clean source compilation & packaging&#10;• Engineering: Architecture adaptation (SIMD/VSX, replacing proprietary x86 blockers, 64KB page tuning)&#10;• Test: Verification suites & harnesses"
+                    style={{ cursor: 'help', color: 'var(--text-muted)' }}
+                  >
+                    <HelpCircle size={13} />
+                  </span>
+                </div>
+              </th>
               <th>Evidence & Links</th>
             </tr>
           </thead>
@@ -179,8 +217,16 @@ export default function DependencyTable({ packages, onOpenCodeAudit }) {
                         {p.total_effort_pd > 0 ? `${p.total_effort_pd} PD` : '0 PD (Ready)'}
                       </div>
                       {p.total_effort_pd > 0 && (
-                        <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>
-                          Base: {p.base_build_effort_pd}d | Arch: {p.arch_complexity_effort_pd}d
+                        <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', marginTop: '0.15rem' }}>
+                          <span title="Build: Standard compilation & packaging">Build: {p.base_build_effort_pd}d</span>
+                          {' | '}
+                          <span title="Engineering: Architecture adaptation (SIMD/VSX translation, replacing proprietary x86 blockers, 64KB page tuning)">Engineering: {p.arch_complexity_effort_pd}d</span>
+                          {p.test_effort_pd > 0 && (
+                            <>
+                              {' | '}
+                              <span title="Test: Verification suites & test harness porting">Test: {p.test_effort_pd}d</span>
+                            </>
+                          )}
                         </div>
                       )}
                     </td>

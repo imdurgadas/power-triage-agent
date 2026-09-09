@@ -564,7 +564,7 @@ class TriageAgent:
 
                 # Sub-Tasks 2 & 3: SIMD scaling breakdown
                 if p.arch_sensitivity and (p.arch_sensitivity.has_simd_avx or p.arch_sensitivity.has_64k_page_risk or p.arch_sensitivity.has_inline_asm):
-                    md += f"- **Architecture Code Friction (+{p.arch_complexity_effort_pd} PD):**\n"
+                    md += f"- **Engineering Adaptation Effort (+{p.arch_complexity_effort_pd} PD):**\n"
                     if p.arch_sensitivity.has_simd_avx:
                         md += (
                             f"  - **SIMD/AVX Analysis:** {p.arch_sensitivity.simd_instruction_count} instruction(s) detected • "
