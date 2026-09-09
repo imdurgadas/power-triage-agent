@@ -273,6 +273,50 @@ export default function DependencyTable({ packages, onOpenCodeAudit }) {
                             </p>
                           )}
 
+                          {/* Sizing Derivation & Math Breakdown */}
+                          {p.total_effort_pd > 0 && (
+                            <div style={{ marginBottom: '1rem', padding: '0.75rem 1rem', background: 'rgba(15, 23, 42, 0.65)', borderRadius: '6px', border: '1px solid rgba(56, 189, 248, 0.25)' }}>
+                              <div style={{ fontSize: '0.84rem', fontWeight: 700, color: '#38bdf8', marginBottom: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                📐 Effort Sizing Derivation & Calculation Breakdown ({p.total_effort_pd} Person-Days Total)
+                              </div>
+                              <div style={{ fontSize: '0.76rem', color: '#cbd5e1', marginBottom: '0.6rem', fontFamily: 'var(--font-mono)' }}>
+                                Total {p.total_effort_pd} PD = Build ({p.base_build_effort_pd}d) + Engineering ({p.arch_complexity_effort_pd}d) + Test ({p.test_effort_pd}d) {p.transitive_deps_effort_pd > 0 ? `+ Transitive (${p.transitive_deps_effort_pd}d)` : ''}
+                              </div>
+                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.6rem', fontSize: '0.78rem' }}>
+                                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '0.5rem', borderRadius: '4px' }}>
+                                  <div style={{ color: '#93c5fd', fontWeight: 600 }}>1. Base Compilation</div>
+                                  <div style={{ color: '#f8fafc', fontSize: '0.88rem', fontWeight: 700 }}>{p.base_build_effort_pd} PD</div>
+                                  <div style={{ color: 'var(--text-dim)', fontSize: '0.72rem' }}>Toolchain & clean source build</div>
+                                </div>
+                                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '0.5rem', borderRadius: '4px' }}>
+                                  <div style={{ color: '#facc15', fontWeight: 600 }}>2. Engineering Adaptation</div>
+                                  <div style={{ color: '#f8fafc', fontSize: '0.88rem', fontWeight: 700 }}>{p.arch_complexity_effort_pd} PD</div>
+                                  {p.arch_sensitivity?.simd_instruction_count > 0 ? (
+                                    <div style={{ color: 'var(--text-dim)', fontSize: '0.72rem', lineHeight: 1.3 }}>
+                                      Base {p.arch_sensitivity.base_engineering_effort_pd || 2.0}d × {p.arch_sensitivity.simd_instruction_multiplier || 1.0}x ({p.arch_sensitivity.simd_instruction_count} SIMD instrs) × {p.arch_sensitivity.simd_complexity_multiplier || 1.0}x ({p.arch_sensitivity.simd_porting_complexity?.replace('_', ' ') || 'direct'})
+                                    </div>
+                                  ) : (
+                                    <div style={{ color: 'var(--text-dim)', fontSize: '0.72rem' }}>Architecture / blocker adaptation</div>
+                                  )}
+                                </div>
+                                {p.test_effort_pd > 0 && (
+                                  <div style={{ background: 'rgba(255,255,255,0.03)', padding: '0.5rem', borderRadius: '4px' }}>
+                                    <div style={{ color: '#4ade80', fontWeight: 600 }}>3. Testing & Validation</div>
+                                    <div style={{ color: '#f8fafc', fontSize: '0.88rem', fontWeight: 700 }}>{p.test_effort_pd} PD</div>
+                                    <div style={{ color: 'var(--text-dim)', fontSize: '0.72rem' }}>{p.test_dependencies?.length || 0} test harness(es)</div>
+                                  </div>
+                                )}
+                                {p.transitive_deps_effort_pd > 0 && (
+                                  <div style={{ background: 'rgba(255,255,255,0.03)', padding: '0.5rem', borderRadius: '4px' }}>
+                                    <div style={{ color: '#f87171', fontWeight: 600 }}>4. Unported Transitive Deps</div>
+                                    <div style={{ color: '#f8fafc', fontSize: '0.88rem', fontWeight: 700 }}>+{p.transitive_deps_effort_pd} PD</div>
+                                    <div style={{ color: 'var(--text-dim)', fontSize: '0.72rem' }}>Transitive build requirements</div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
                           {/* Nested Transitive Dependency List */}
                           {hasTransitiveDeps && (
                             <div style={{ marginBottom: '1rem' }}>

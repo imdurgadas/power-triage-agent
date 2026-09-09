@@ -23,7 +23,7 @@ from .models import (
 )
 from .normalizer import UniversalNormalizer
 from .prober import MultiSourceProber
-from .build_analyzer import BuildAnalyzer, scale_arch_effort
+from .build_analyzer import BuildAnalyzer, scale_arch_effort, get_simd_multipliers
 from .repo_scanner import RepoScanner
 from .gemini_helper import generate_gemini_content
 
@@ -354,8 +354,19 @@ class TriageAgent:
                                 if "remediation_strategy" in parsed_simd:
                                     pkg.arch_sensitivity.remediation_strategy = parsed_simd["remediation_strategy"]
 
-                                # Rescale arch effort with newly evaluated count & tier
-                                base_arch = pkg.arch_complexity_effort_pd if pkg.arch_complexity_effort_pd > 0 else 1.5
+                                # Rescale arch effort from unscaled base_arch_complexity_effort_pd
+                                base_arch = (
+                                    pkg.base_arch_complexity_effort_pd
+                                    if pkg.base_arch_complexity_effort_pd > 0
+                                    else (pkg.arch_sensitivity.base_engineering_effort_pd if pkg.arch_sensitivity and pkg.arch_sensitivity.base_engineering_effort_pd > 0 else 2.0)
+                                )
+                                count_m, comp_m = get_simd_multipliers(
+                                    pkg.arch_sensitivity.simd_instruction_count,
+                                    pkg.arch_sensitivity.simd_porting_complexity
+                                )
+                                pkg.arch_sensitivity.base_engineering_effort_pd = base_arch
+                                pkg.arch_sensitivity.simd_instruction_multiplier = count_m
+                                pkg.arch_sensitivity.simd_complexity_multiplier = comp_m
                                 pkg.arch_complexity_effort_pd = scale_arch_effort(
                                     base_arch,
                                     pkg.arch_sensitivity.simd_instruction_count,
@@ -380,7 +391,7 @@ class TriageAgent:
                             target=f"{pkg.package_name} Code Audit",
                             thought=(
                                 f"Detected architecture friction in {pkg.package_name}: {pkg.arch_sensitivity.simd_instruction_count} SIMD instruction(s), "
-                                f"complexity tier '{pkg.arch_sensitivity.simd_porting_complexity.value}'. Scaled arch effort: {pkg.arch_complexity_effort_pd} PD."
+                                f"complexity tier '{pkg.arch_sensitivity.simd_porting_complexity.value}'. Scaled engineering effort: {pkg.arch_complexity_effort_pd} PD."
                             ),
                             detail=pkg.arch_sensitivity.remediation_strategy
                         ).model_dump()
@@ -395,8 +406,16 @@ class TriageAgent:
         # Apply Sub-Task 6 architecture support scan factor to unported components
         if arch_scan and arch_scan.effort_adjustment_factor != 1.0:
             for p in triaged_packages:
-                if p.total_effort_pd > 0:
-                    p.total_effort_pd = max(1, int(round(p.total_effort_pd * arch_scan.effort_adjustment_factor)))
+                if p.arch_complexity_effort_pd > 0:
+                    p.arch_complexity_effort_pd = round(p.arch_complexity_effort_pd * arch_scan.effort_adjustment_factor, 2)
+                total = (
+                    p.base_build_effort_pd
+                    + p.transitive_deps_effort_pd
+                    + p.arch_complexity_effort_pd
+                    + p.test_effort_pd
+                )
+                if total > 0:
+                    p.total_effort_pd = max(1, int(round(total)))
 
         # Add Sub-Task 5 & 7 container image effort into primary package
         container_extra_pd = sum(f.effort_pd for f in docker_findings) + sum(f.effort_pd for f in config_findings)

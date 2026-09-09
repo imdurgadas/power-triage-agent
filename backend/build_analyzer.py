@@ -13,13 +13,8 @@ from .models import (
 logger = logging.getLogger("build_analyzer")
 
 
-def scale_arch_effort(base_arch_effort: float, count: int, complexity: SIMDPortingComplexity) -> float:
-    """Scales architecture porting effort by SIMD instruction count and complexity tier.
-    Formula: base_arch_effort * count_multiplier * complexity_multiplier
-    """
-    if base_arch_effort <= 0.0:
-        return 0.0
-
+def get_simd_multipliers(count: int, complexity: SIMDPortingComplexity) -> Tuple[float, float]:
+    """Returns (count_multiplier, complexity_multiplier) for SIMD scaling."""
     # SIMD instruction count multiplier
     if count <= 0:
         count_mult = 1.0
@@ -40,7 +35,17 @@ def scale_arch_effort(base_arch_effort: float, count: int, complexity: SIMDPorti
         SIMDPortingComplexity.FULL_REDESIGN: 4.0,
     }
     comp_mult = comp_map.get(complexity, 1.0)
+    return count_mult, comp_mult
 
+
+def scale_arch_effort(base_arch_effort: float, count: int, complexity: SIMDPortingComplexity) -> float:
+    """Scales architecture porting effort by SIMD instruction count and complexity tier.
+    Formula: base_arch_effort * count_multiplier * complexity_multiplier
+    """
+    if base_arch_effort <= 0.0:
+        return 0.0
+
+    count_mult, comp_mult = get_simd_multipliers(count, complexity)
     return round(base_arch_effort * count_mult * comp_mult, 2)
 
 
@@ -203,8 +208,16 @@ class BuildAnalyzer:
 
             package.base_build_effort_pd = kb["base_effort"]
             package.transitive_deps_effort_pd = transitive_effort
+            package.base_arch_complexity_effort_pd = kb["arch_effort"]
             
             # Apply SIMD scaling
+            count_m, comp_m = get_simd_multipliers(
+                package.arch_sensitivity.simd_instruction_count,
+                package.arch_sensitivity.simd_porting_complexity
+            )
+            package.arch_sensitivity.base_engineering_effort_pd = kb["arch_effort"]
+            package.arch_sensitivity.simd_instruction_multiplier = count_m
+            package.arch_sensitivity.simd_complexity_multiplier = comp_m
             package.arch_complexity_effort_pd = scale_arch_effort(
                 kb["arch_effort"],
                 package.arch_sensitivity.simd_instruction_count,
@@ -299,6 +312,14 @@ class BuildAnalyzer:
             package.base_build_effort_pd = 1.0
             package.transitive_deps_effort_pd = unported_sub_dep.porting_effort_pd
             base_arch = 2.0
+            package.base_arch_complexity_effort_pd = base_arch
+            count_m, comp_m = get_simd_multipliers(
+                package.arch_sensitivity.simd_instruction_count,
+                package.arch_sensitivity.simd_porting_complexity
+            )
+            package.arch_sensitivity.base_engineering_effort_pd = base_arch
+            package.arch_sensitivity.simd_instruction_multiplier = count_m
+            package.arch_sensitivity.simd_complexity_multiplier = comp_m
             package.arch_complexity_effort_pd = scale_arch_effort(
                 base_arch,
                 package.arch_sensitivity.simd_instruction_count,

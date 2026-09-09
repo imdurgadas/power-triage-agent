@@ -48,6 +48,9 @@ class ArchSensitivity(BaseModel):
     simd_details: Optional[str] = None
     simd_instruction_count: int = 0
     simd_porting_complexity: SIMDPortingComplexity = SIMDPortingComplexity.DIRECT
+    base_engineering_effort_pd: float = 0.0
+    simd_instruction_multiplier: float = 1.0
+    simd_complexity_multiplier: float = 1.0
     has_inline_asm: bool = False
     asm_details: Optional[str] = None
     has_64k_page_risk: bool = False
@@ -139,6 +142,7 @@ class PackageTriageResult(BaseModel):
     # Effort computation
     base_build_effort_pd: float = 0.0
     transitive_deps_effort_pd: float = 0.0
+    base_arch_complexity_effort_pd: float = 0.0
     arch_complexity_effort_pd: float = 0.0
     total_effort_pd: int = 0
     confidence_level: str = "High"  # "High", "Medium", "Estimated"

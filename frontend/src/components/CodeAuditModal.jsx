@@ -50,6 +50,35 @@ export default function CodeAuditModal({ packageData, onClose }) {
             )}
           </div>
 
+          {arch.has_simd_avx && (
+            <div style={{ background: 'rgba(15, 23, 42, 0.7)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: 'var(--radius-md)', padding: '0.85rem 1rem', marginBottom: '1.25rem' }}>
+              <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#38bdf8', marginBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <Cpu size={16} /> Engineering Effort Calculation Derivation ({packageData.arch_complexity_effort_pd} PD)
+              </div>
+              <div style={{ fontSize: '0.8rem', color: '#f8fafc', marginBottom: '0.6rem', fontFamily: 'var(--font-mono)', background: 'rgba(0,0,0,0.25)', padding: '0.4rem 0.6rem', borderRadius: '4px' }}>
+                Base Engineering ({arch.base_engineering_effort_pd || 2.0} PD) × Instruction Volume ({arch.simd_instruction_multiplier || 1.0}x) × Complexity Tier ({arch.simd_complexity_multiplier || 1.0}x) = <strong>{packageData.arch_complexity_effort_pd} Person-Days</strong>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '0.5rem', fontSize: '0.78rem' }}>
+                <div style={{ background: 'rgba(255, 255, 255, 0.04)', padding: '0.45rem', borderRadius: '4px' }}>
+                  <span style={{ color: 'var(--text-muted)' }}>Base Engineering:</span>
+                  <div style={{ fontWeight: 700, color: '#93c5fd' }}>{arch.base_engineering_effort_pd || 2.0} PD</div>
+                </div>
+                <div style={{ background: 'rgba(255, 255, 255, 0.04)', padding: '0.45rem', borderRadius: '4px' }}>
+                  <span style={{ color: 'var(--text-muted)' }}>SIMD Volume ({arch.simd_instruction_count} instrs):</span>
+                  <div style={{ fontWeight: 700, color: '#facc15' }}>
+                    {arch.simd_instruction_multiplier || 1.0}x ({arch.simd_instruction_count > 500 ? '>500 bracket' : arch.simd_instruction_count > 200 ? '201-500 bracket' : arch.simd_instruction_count > 50 ? '51-200 bracket' : '1-50 bracket'})
+                  </div>
+                </div>
+                <div style={{ background: 'rgba(255, 255, 255, 0.04)', padding: '0.45rem', borderRadius: '4px' }}>
+                  <span style={{ color: 'var(--text-muted)' }}>Complexity Tier:</span>
+                  <div style={{ fontWeight: 700, color: '#38bdf8', textTransform: 'uppercase' }}>
+                    {arch.simd_complexity_multiplier || 1.0}x ({arch.simd_porting_complexity?.replace('_', ' ') || 'direct'})
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {arch.simd_details && (
             <div style={{ marginBottom: '1rem' }}>
               <div style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)' }}>SIMD Analysis:</div>
