@@ -20,4 +20,11 @@ fi
 echo "Stopping and removing IBM Power Porting Triage Agent containers using $COMPOSE_CMD..."
 $COMPOSE_CMD down
 
+# Also ensure named containers are removed if previously started standalone
+if command -v podman >/dev/null 2>&1; then
+  podman rm -f ibm-power-triage-backend ibm-power-triage-frontend >/dev/null 2>&1 || true
+elif command -v docker >/dev/null 2>&1; then
+  docker rm -f ibm-power-triage-backend ibm-power-triage-frontend >/dev/null 2>&1 || true
+fi
+
 echo "Containers stopped successfully."
