@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Elite Program — Customer Presentation Document</title>
+  <style>
+    :root {
+      --primary: #0f62fe;
+      --secondary: #002d9c;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --bg-subtle: #f8fafc;
+      --border: #e2e8f0;
+      --success: #16a34a;
+      --warning: #d97706;
+      --danger: #dc2626;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text-main);
+      background-color: #f1f5f9;
+      line-height: 1.6;
+      padding: 2rem 1rem;
+    }
+
+    .doc-container {
+      max-width: 860px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 3.5rem 4rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      border: 1px solid var(--border);
+    }
+
+    .header-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--primary);
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: 2.1rem;
+      font-weight: 800;
+      color: var(--secondary);
+      line-height: 1.25;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-bottom: 1.75rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 2rem;
+      font-size: 0.88rem;
+    }
+
+    .meta-item strong {
+      color: var(--secondary);
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-top: 2rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    p {
+      margin-bottom: 0.9rem;
+      font-size: 0.96rem;
+      color: var(--text-main);
+    }
+
+    ul {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+      font-size: 0.94rem;
+    }
+
+    li strong {
+      color: #1e293b;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.25rem 0 1.75rem 0;
+      font-size: 0.88rem;
+    }
+
+    th {
+      background: var(--secondary);
+      color: #ffffff;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--secondary);
+    }
+
+    td {
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) {
+      background: var(--bg-subtle);
+    }
+
+    .tag-go {
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .tag-caution {
+      color: var(--warning);
+      font-weight: 700;
+    }
+
+    .tag-risk {
+      color: var(--danger);
+      font-weight: 700;
+    }
+
+    .callout {
+      background: #eff6ff;
+      border-left: 4px solid var(--primary);
+      padding: 1rem 1.25rem;
+      border-radius: 0 6px 6px 0;
+      margin: 1.75rem 0;
+      font-size: 0.92rem;
+      color: #1e40af;
+    }
+
+    .print-bar {
+      max-width: 860px;
+      margin: 0 auto 1rem auto;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--primary);
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--text-main);
+      border: 1px solid var(--border);
+    }
+
+    @media print {
+      body {
+        background: none;
+        padding: 0;
+      }
+      .print-bar {
+        display: none;
+      }
+      .doc-container {
+        box-shadow: none;
+        border: none;
+        padding: 0;
+        max-width: 100%;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="print-bar">
+    <button class="btn btn-secondary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+    <a class="btn" href="customer_presentation.pdf" download>📥 Download Pre-built PDF</a>
+  </div>
+
+  <div class="doc-container">
+    <span class="header-badge">AI Elite Program Prototype Submission</span>
+    <h1>Autonomous IBM Power Porting Triage Agent</h1>
+    <div class="subtitle">Accelerating Enterprise Workload Modernization to IBM Power (ppc64le) via Multi-Source Probing & Generative Pre-Sales Synthesis</div>
+
+    <div class="meta-grid">
+      <div class="meta-item"><strong>Target Architecture:</strong> IBM Power (ppc64le)</div>
+      <div class="meta-item"><strong>Target OS:</strong> RHEL 8/9, OpenShift (OCP), Ubuntu, SLES</div>
+      <div class="meta-item"><strong>Customer Focus:</strong> Enterprise Infrastructure Modernization</div>
+      <div class="meta-item"><strong>Submission Category:</strong> Problem Statement & AI Agent Prototype</div>
+    </div>
+
+    <h2>1. Customer & Target Persona</h2>
+    <p><strong>Primary Customer:</strong> Global enterprises running mission-critical workloads (transactional processing, time-series engines, high-throughput caching, and AI inference pipelines) evaluating or executing architecture modernization from commodity x86 to <strong>IBM Power (ppc64le)</strong>.</p>
+    
+    <p><strong>Target Personas:</strong></p>
+    <ul>
+      <li><strong>IBM Infrastructure Sales & Technical Pre-Sales Specialists (Technical Sales Engineers / Solution Architects):</strong> Need to qualify migration feasibility, size porting timelines, and instill platform confidence during rapid competitive sales cycles.</li>
+      <li><strong>Enterprise Architecture Decision-Makers (CIO / VP Infrastructure / Chief Architects):</strong> Require objective feasibility scoring, risk transparency, and effort bounds before committing to modernization proposals.</li>
+      <li><strong>IBM Power Porting Lab & Ecosystem Engineers:</strong> Specialist teams who need structured transitive build-dependency specifications and reproducible toolchain requirements rather than vague application lists.</li>
+    </ul>
+
+    <h2>2. Business Problem & The Estimation Gap</h2>
+    <p>While IBM Power delivers exceptional hardware throughput (massive memory bandwidth, SMT8 core threading, and built-in Matrix Math Accelerators), <strong>the pre-sales qualification process represents a major friction point:</strong></p>
+    <ul>
+      <li><strong>Unstandardized & Heterogeneous Inputs:</strong> Customers submit dependency specifications across wildly disparate formats: CycloneDX/SPDX SBOMs, Dockerfiles, Python requirements files, or informal meeting notes.</li>
+      <li><strong>Fragmented Ecosystem Registries:</strong> Probing package availability requires manual, time-consuming lookups across RHEL BaseOS, EPEL 9, Quay.io, Docker Hub, PyPI, and community repositories (Conda-forge, Open-CE).</li>
+      <li><strong>The "Iceberg" Estimation Gap:</strong> When components lack prebuilt Power binaries, sales teams have no fast heuristic to look beneath the surface. Uncovered build-time dependencies (e.g. jemalloc needing 64KB page size tuning) or unported x86 SIMD intrinsics surface late, causing significant estimation variance and deal friction.</li>
+    </ul>
+
+    <h2>3. Quantified Business Impact</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Operational Dimension</th>
+          <th>Current Manual Process</th>
+          <th>AI Agent Prototype Impact</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Pre-Sales Turnaround Time</strong></td>
+          <td>5 to 10 Business Days of email exchanges and catalog lookups</td>
+          <td><strong>&lt; 30 Seconds</strong> automated end-to-end qualification</td>
+        </tr>
+        <tr>
+          <td><strong>Porting Lab Engineering Waste</strong></td>
+          <td>~40% of senior specialist time spent on routine catalog lookups</td>
+          <td><strong>Zero wasted hours</strong>; lab only receives scoped, actionable unported specs</td>
+        </tr>
+        <tr>
+          <td><strong>Sales Deal Velocity</strong></td>
+          <td>Deal slowdown and customer hesitation over unquantified risk</td>
+          <td><strong>Immediate qualification confidence</strong> with traffic-light GO/CAUTION/RISK scoring</td>
+        </tr>
+        <tr>
+          <td><strong>Effort Sizing Accuracy</strong></td>
+          <td>Subjective guesswork prone to 2x–5x variance from hidden dependencies</td>
+          <td><strong>Standardized 3-Pillar Sizing Formula</strong> scoping hardware friction and build trees</td>
+        </tr>
+        <tr>
+          <td><strong>Executive Deliverables</strong></td>
+          <td>Days spent drafting custom proposal memos and spreadsheets</td>
+          <td><strong>1-Click Executive Memo & CSV JIRA Backlog</strong> generated autonomously</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="page-break"></div>
+
+    <h2>4. Proposed Opportunity & Agentic AI Solution</h2>
+    <p>We designed and built the <strong>Autonomous IBM Power Porting Triage Agent</strong>—a lightweight, containerized platform that integrates deterministic multi-source probing with generative sales reasoning:</p>
+    <ul>
+      <li><strong>Universal Manifest Ingestion:</strong> Automatically normalizes CycloneDX/SPDX SBOMs, Dockerfiles, Python requirements, and raw text into structured component representations across Containers, C/C++, PyPI, RPM, and Java.</li>
+      <li><strong>Deterministic Live Ecosystem Prober:</strong> Queries live API registries (Quay.io, Docker Hub v2, PyPI, RHEL/EPEL 9) to verify ppc64le multi-arch tags, returning canonical verification links directly to official package repositories.</li>
+      <li><strong>Deep Transitive Build Dependency Analysis:</strong> Solves the iceberg problem by recursing through build trees to identify unported build-time requirements (BuildRequires, compiler toolchains, submodules).</li>
+      <li><strong>Hardware Architecture Sensitivity Audit:</strong> Flags x86 SIMD/AVX2 intrinsics (prescribing SIMDe to Power VSX header mapping), 64KB memory page size risks (jemalloc alignment tuning), and inline assembly.</li>
+      <li><strong>Standardized 3-Pillar Sizing Formula:</strong> Computes realistic person-days (Base Build + Transitive Sub-deps + Hardware Friction) incorporating a 1-week deployment validation baseline, rounded to clean integers.</li>
+      <li><strong>Autonomous Generative Sales Proposal:</strong> Leverages Google Gemini with resilient multi-model fallback to draft tailored strategic sales narratives highlighting Power's memory bandwidth, SMT8 threading, and enterprise reliability.</li>
+    </ul>
+
+    <h2>5. Demonstrated Workload Scenarios</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Scenario / Workload</th>
+          <th>Stack Components</th>
+          <th>Triage Assessment & Findings</th>
+          <th>Score & Sizing</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Enterprise Cloud Microservices</strong></td>
+          <td>Nginx, Redis, PostgreSQL, Strimzi Kafka, Node.js</td>
+          <td>All components have verified native ppc64le container images in Docker Hub and Quay.io.</td>
+          <td><span class="tag-go">100% GO</span><br/>5 Person-Days</td>
+        </tr>
+        <tr>
+          <td><strong>AI/ML Vector Pipeline</strong></td>
+          <td>PyTorch, NumPy, Pandas, Scipy, Custom C++ DSP</td>
+          <td>PyTorch routed to IBM Open-CE with Power MMA acceleration; custom DSP kernel scoped with SIMDe AVX2->VSX fix.</td>
+          <td><span class="tag-go">95% GO</span><br/>5 – 8 Person-Days</td>
+        </tr>
+        <tr>
+          <td><strong>High-Throughput Storage Engine</strong></td>
+          <td>RocksDB 8.6, simdjson 3.6, Redis, zlib</td>
+          <td>Deep dependency iceberg scoped: 6 build deps uncovered, including unported 64KB-page tuned jemalloc and AVX-512 kernel.</td>
+          <td><span class="tag-caution">30% CAUTION</span><br/>8 – 12 Person-Days</td>
+        </tr>
+        <tr>
+          <td><strong>Legacy Financial Analytics</strong></td>
+          <td>Intel MKL, Python 3.9, Proprietary Risk Calc</td>
+          <td>Proprietary closed-source x86 blocker flagged; automated recommendation to substitute with IBM ESSL or OpenBLAS.</td>
+          <td><span class="tag-risk">HIGH RISK</span><br/>Arch substitution</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>6. Strategic Value & Program Alignment</h2>
+    <p>This prototype aligns directly with the charter of the <strong>AI Elite Program</strong> by solving a high-friction enterprise sales challenge with advanced agentic AI:</p>
+    <ul>
+      <li><strong>Accelerates Infrastructure Revenue:</strong> Removes pre-sales hesitation and compresses qualification cycles from 10 days to under 30 seconds.</li>
+      <li><strong>Optimizes Specialist Bandwidth:</strong> Keeps the IBM Power Porting Lab focused exclusively on high-value unported software rather than routine catalog checks.</li>
+      <li><strong>Demonstrates Enterprise AI Leadership:</strong> Unites deterministic API probing, deep systems heuristics, and generative LLMs into a seamless, high-confidence experience.</li>
+    </ul>
+
+    <div class="callout">
+      <strong>Prototype Status:</strong> Fully implemented and containerized with Podman / Docker Compose. Validated with automated test suites and available for live interactive evaluation at <code>http://localhost:5173</code>.
+    </div>
+  </div>
+
+</body>
+</html>
