@@ -2,62 +2,59 @@
 
 **Project Name:** Autonomous IBM Power Porting Triage Agent  
 **Initiative:** AI Elite Program Prototype Submission  
-**Target Architecture:** IBM Power (`ppc64le`) | Linux on Power (RHEL, Ubuntu, SLES, OpenShift)  
-**Submission Category:** Customer Problem Statement & AI Agent Prototype  
+**Target Architecture:** IBM Power (`ppc64le`) | Linux on Power (RHEL 8/9, OpenShift OCP, Ubuntu, SLES)  
+**Submission Category:** Customer Problem Statement & Autonomous AI Agent Prototype  
 
 ---
 
 ## 1. Customer & Target Persona
 
-### Primary Customer
-Enterprises running mission-critical workloads (financial transaction processing, high-throughput time-series databases, fraud analytics, and modern AI/data pipelines) currently evaluating or executing platform modernization from legacy x86 to **IBM Power (`ppc64le`)**.
+### Primary Customer Profile
+Global enterprise organizations operating high-throughput transactional, time-series, and data/AI workloads (banking, insurance, telecommunications, retail, and healthcare) evaluating or executing platform modernization from commodity x86 infrastructure to **IBM Power (`ppc64le`)** on Red Hat Enterprise Linux (RHEL) and Red Hat OpenShift Container Platform (OCP).
 
-### Target Persona
-- **IBM Infrastructure Sales & Technical Pre-Sales Specialists (Technical Sales Engineers / Client Solution Architects):** Responsible for qualifying customer migration feasibility, sizing hardware requirements, and providing rapid initial estimates.
-- **Enterprise Enterprise Architects & CIO / CTO Office:** Decision-makers requiring high-confidence risk qualification, sizing clarity, and platform ROI before approving migration initiatives.
-- **IBM Power Porting Lab & Ecosystem Engineering Teams:** Specialized engineers tasked with porting and validating unported third-party and custom software components.
+### Target Personas
+- **IBM Technical Pre-Sales Specialists & Client Solution Architects:** Frontline technical sellers who must rapidly qualify migration feasibility, size porting timelines, and build customer confidence during competitive evaluations.
+- **Enterprise Architecture Decision-Makers (CIO / CTO / VP Infrastructure):** Executive stakeholders requiring transparent risk qualification, timeline predictability, and platform ROI before signing multi-million dollar modernization contracts.
+- **IBM Power Porting Lab & Ecosystem Engineering Squads:** Specialized engineering squads responsible for compiling, tuning, and verifying unported packages, who need structured, actionable technical specifications.
 
 ---
 
 ## 2. Business Problem & Market Need
 
 ### The Core Challenge
-Migrating complex enterprise applications to IBM Power unlocks unmatched architectural advantages—such as **industry-leading memory bandwidth**, **SMT8 core multi-threading (up to 8 threads per core)**, and **hardware-accelerated AI execution (MMA)**. However, winning customer commitments during pre-sales hinges on answering a fundamental question:
+Migrating complex enterprise applications to IBM Power unlocks transformative hardware throughput—including **industry-leading memory bandwidth**, **SMT8 core multi-threading (up to 8 threads per core)**, and **hardware-accelerated AI execution (Matrix Math Accelerators / MMA)**. However, winning customer commitments during pre-sales hinges on answering a fundamental question:
 
 > *"Will our software stack run on IBM Power, and what is the exact engineering effort required to port what doesn't?"*
 
-Today, answering this question is broken:
+Today, answering this question creates severe friction in the enterprise sales pipeline:
 
-1. **Unstandardized & Fragmented Input Manifests:**  
-   Customers provide dependency lists in messy, heterogeneous formats—ranging from sprawling CycloneDX/SPDX SBOM JSON files, raw multi-stage Dockerfiles, Python `requirements.txt`, Maven POMs, to unstructured informal emails and bulleted spreadsheets.
-
-2. **Fragmented Availability Sources:**  
-   Pre-sales teams must manually navigate across dozens of disparate ecosystems:
-   - Linux Distro Repositories (RHEL BaseOS/AppStream, EPEL, Ubuntu Ports, SLES)
-   - Multi-arch Container Registries (Docker Hub, Quay.io, Red Hat Ecosystem Catalog)
-   - Language Registries (PyPI wheels, npm, Maven Central)
-   - Community Accelerators (IBM Open-CE, Conda-forge ppc64le)
-
-3. **The "Estimation Gap" & The Dependency Iceberg Effect:**  
-   When a C/C++ library or database engine lacks an official prebuilt binary for `ppc64le`, pre-sales teams have **no automated way to look beneath the surface**. A library like `RocksDB` may appear to just need a simple recompile, but hidden build-time requirements (such as `jemalloc` needing 64KB page size tuning, or unported internal vector kernels) surface late, causing massive project overruns.
+1. **Unstandardized & Heterogeneous Inputs:**  
+   Customers provide dependency specifications in fragmented formats: CycloneDX/SPDX SBOM JSONs, multi-stage Dockerfiles, Python `requirements.txt`, Docker Compose files, Kubernetes manifests, or informal meeting notes.
+2. **Fragmented Ecosystem Registries & Version Drift:**  
+   Determining package availability requires tedious manual searches across RHEL BaseOS/AppStream, EPEL 9, Quay.io, Docker Hub, PyPI, and community channels (Conda-forge, IBM Open-CE). Often, generic version queries give false confidence when the customer's *specific version tag* lacks a ppc64le binary.
+3. **The "Iceberg" Estimation Gap:**  
+   When a C/C++ library or database engine lacks an official prebuilt binary for `ppc64le`, pre-sales teams have no automated way to look beneath the surface. Uncovered build-time dependencies (e.g. jemalloc needing 64KB page size tuning) or unported x86 SIMD intrinsics (AVX2/AVX-512) surface late, resulting in costly project overruns and customer dissatisfaction.
+4. **Opaque & Subjective Effort Sizing:**  
+   Traditional sizing relies on subjective guesswork, leading to 2x–5x variance and lack of trust between sales teams and client engineering leads.
 
 ---
 
-## 3. Business Impact
+## 3. Quantified Business Impact
 
 | Operational Dimension | Current Manual Process | AI Agent Prototype Impact |
 | :--- | :--- | :--- |
-| **Pre-Sales Qualification Cycle Time** | **5 to 10 Business Days** across back-and-forth emails | **< 30 Seconds** automated end-to-end qualification |
-| **Porting Lab Engineering Waste** | **~40% of Porting Lab bandwidth** spent triaging standard workloads | **Zero wasted engineering hours** on routine qualification; Lab only receives scoped unported specs |
-| **Sales Deal Velocity & Friction** | High deal drop-off; customer hesitation due to uncertain migration risks | **Immediate qualification confidence** with instant traffic-light GO/CAUTION/RISK scoring |
-| **Effort Sizing Accuracy** | Gut-feel guesswork prone to 2x–5x estimation errors | **Standardized 3-Pillar Sizing Formula** scoping toolchains, transitive build deps, and hardware friction |
-| **Executive Deliverables Turnaround** | Days spent drafting manual PowerPoint decks and spreadsheets | **One-click executive 1-pager Markdown memo & CSV backlog** ready for sales presentations |
+| **Qualification Turnaround Time** | **5 to 10 Business Days** of email exchanges & manual catalog lookups | **< 30 Seconds** automated end-to-end qualification |
+| **Porting Lab Bandwidth Waste** | **~40% of senior engineer time** spent on routine initial triage | **Zero wasted hours** on routine triage; lab only receives scoped specs |
+| **Deal Velocity & Friction** | Prolonged sales cycles; customer hesitation due to unknown porting risks | **Immediate sales confidence** with instant traffic-light readiness scoring |
+| **Effort Sizing Accuracy** | Subjective guesswork prone to 2x–5x variance from hidden dependencies | **Transparent 3-Pillar Sizing** (Build + Engineering Adaptation + Test) |
+| **Container & CI Visibility** | Multi-stage Dockerfiles and CI workflows ignored until deployment | **Automated Multi-Stage Dockerfile & CI matrix scanning** |
+| **Executive Proposal Deliverables** | Days spent assembling custom slide decks and proposal memos | **1-Click Executive Memo & CSV Backlog** generated autonomously |
 
 ---
 
-## 4. Proposed Opportunity & Agentic AI Solution
+## 4. Proposed Opportunity: Autonomous AI Agent Architecture
 
-We designed, architected, and built the **Autonomous IBM Power Porting Triage Agent**—an intelligent, autonomous AI platform that replaces weeks of manual qualification with automated, deterministic ecosystem probing and generative executive synthesis.
+The **Autonomous IBM Power Porting Triage Agent** combines deterministic ecosystem probing with generative sales synthesis, delivering instant qualification, transparent effort sizing, and executive deliverables:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -66,10 +63,11 @@ We designed, architected, and built the **Autonomous IBM Power Porting Triage Ag
   Input Manifests                    Autonomous Agent Workflow                Executive Outputs
  ┌─────────────────┐               ┌───────────────────────────┐            ┌────────────────────┐
  │ • SBOM (JSON)   │               │ 1. Universal Normalizer   │            │ Executive Feasibility│
- │ • Dockerfile    │ ────────────> │ 2. Multi-Source Prober    │ ─────────> │ Scorecard (GO/RISK)│
- │ • requirements  │               │ 3. Build Tree Iceberg     │            │                    │
- │ • Free Text/YAML│               │ 4. Arch Friction (SIMD/64K)            │ 3-Pillar Sizing (PD)│
- └─────────────────┘               │ 5. Executive LLM Proposal │            │ One-Click 1-Pager  │
+ │ • Dockerfiles   │ ────────────> │ 2. Multi-Source Prober    │ ─────────> │ Scorecard (GO/RISK)│
+ │ • requirements  │               │ 3. Deep Build Tree Scoper │            │                    │
+ │ • Compose / K8s │               │ 4. Arch Sensitivity Audit │            │ Transparent Sizing │
+ │ • Git Repo URL  │               │ 5. CI / Repo Posture Scan │            │ (Build/Eng/Test PD)│
+ └─────────────────┘               │ 6. Executive LLM Proposal │            │ One-Click 1-Pager  │
                                    └───────────────────────────┘            │ CSV JIRA Backlog   │
                                                  │                          └────────────────────┘
                                    ┌─────────────┴─────────────┐
@@ -77,74 +75,93 @@ We designed, architected, and built the **Autonomous IBM Power Porting Triage Ag
                                    │ • Quay.io / Docker Hub    │
                                    │ • RHEL / EPEL 9 Repos     │
                                    │ • PyPI / Conda / Open-CE  │
+                                   │ • GitHub Repo & CI Matrix │
                                    │ • Gemini Fallback Cascade │
                                    └───────────────────────────┘
 ```
 
-### Core Innovations Implemented:
+### Key Technical Capabilities & Innovations:
 
-#### 1. Universal Manifest Normalization
-Ingests CycloneDX/SPDX SBOMs, Dockerfiles, Python requirements, or raw unstructured text and normalizes them into structured component targets across container, C/C++, Python, Java, and RPM ecosystems.
-
-#### 2. Deterministic & Live Ecosystem Probing
-Performs multi-threaded live API queries across:
-- **Quay.io & Docker Hub API v2:** Inspects image manifest v2 schemas for verified `linux/ppc64le` architecture layers.
-- **Distro Package Catalogs:** Distinguishes official RHEL/EPEL 9 repositories from community Conda-forge and Ubuntu Ports.
-- **PyPI & Open-CE:** Identifies universal pure-Python wheels vs. architecture-dependent C-extensions, automatically recommending IBM Open-CE builds for PyTorch, TensorFlow, and NumPy.
-- **Real-Time Canonical Verification Links:** Every qualified package includes direct, clickable links to official RPM repositories, Conda channels, or container registries.
-
-#### 3. Deep Transitive Build Dependency Analysis (Solving the Iceberg)
-For components requiring source compilation, the agent recurses down the build tree to surface hidden `BuildRequires` and submodules (e.g. scoping `jemalloc-ppc64le` for RocksDB or SIMD vector submodules for DSP engines).
-
-#### 4. Hardware Architecture Sensitivity Auditing
-Detects CPU architecture friction points:
-- **x86 SIMD / AVX2 / AVX-512:** Flags `immintrin.h` intrinsics and generates automated SIMDe (`simde/x86/avx2.h`) translation recommendations to map directly onto Power VSX instructions.
-- **64KB Memory Page Size:** Identifies memory allocators and storage engines assuming 4KB pages and prescribes alignment configurations (`--with-lg-page=16`).
-- **Inline Assembly:** Flags x86 `pause` / `rdtsc` instructions and supplies Power `__ppc_get_timebase()` replacements.
-
-#### 5. Standardized 3-Pillar Sizing Formula
-Calculates realistic person-day effort:
-$$\text{Total Effort (PD)} = E_{\text{base}} + E_{\text{transitive}} + E_{\text{arch}}$$
-- Integrates a standard baseline buffer for environment staging and regression testing.
-- Produces clean, integer-rounded Person-Days (`X – Y PD`).
-
-#### 6. Autonomous Generative Sales Proposal
-Harnesses **Google Gemini (with resilient multi-model fallback across `gemini-3.5-flash`, `gemini-3.5-flash-lite`)** to synthesize an executive-ready strategic sales rationale tailored to the customer's specific workload, highlighting IBM Power's memory bandwidth, SMT8 threading, and enterprise uptime.
-
----
-
-## 5. Demonstration Scenarios & Validation
-
-The working prototype was tested and validated across four enterprise migration scenarios:
-
-1. **Enterprise Cloud Microservices (Acme Payments Stack):**
-   - Manifest: Nginx, Redis, PostgreSQL, Strimzi Kafka, Node.js, Spring Boot.
-   - Result: **100% Porting Readiness Score | Traffic Light: 🟢 GO**.
-   - Sizing: Ready off-the-shelf with standard smoke-testing buffer.
-
-2. **AI/ML Inference Pipeline (with Vector Acceleration):**
-   - Manifest: PyTorch, NumPy, Pandas, Scipy, FastAPI, Custom C++ DSP Kernel.
-   - Result: **95% Readiness Score | Traffic Light: 🟢 GO**.
-   - Strategic Output: Automatic recommendation of IBM Open-CE Power VSX accelerated PyTorch wheels + SIMDe remediation for custom vector code.
-
-3. **High-Throughput Storage Engine (RocksDB & simdjson — Dependency Iceberg):**
-   - Manifest: RocksDB 8.6, simdjson 3.6, Redis, zlib.
-   - Result: **Traffic Light: 🟡 CAUTION | Sizing: 8 – 12 Person-Days**.
-   - Scoped: 6 build dependencies, including unported 64KB-page tuned `jemalloc-ppc64le` and AVX2-to-VSX kernel translation.
-
-4. **Legacy Financial Analytics (Proprietary x86 Blocker):**
-   - Manifest: Intel-MKL, Python, Custom Risk Engine.
-   - Result: **Traffic Light: 🔴 HIGH RISK**.
-   - Remediation: Automatic identification of proprietary blocker with recommendation to substitute with **IBM ESSL (Engineering and Scientific Subroutine Library)** or OpenBLAS.
+1. **Universal Ingestion & Multi-Stage Dockerfile Parsing:**  
+   Parses CycloneDX/SPDX SBOMs, Python requirements, Compose/Kubernetes manifests, and raw multi-stage Dockerfiles (`FROM ... AS builder`), validating base images for every build and runtime stage.
+2. **Deterministic Prober with Version-Aware Intelligence:**  
+   Performs live, multi-threaded queries against Quay.io, Docker Hub v2 API, RHEL/EPEL 9 repositories, and PyPI. Detects version mismatches (e.g. requested tag unavailable on `ppc64le`), providing actionable upgrade/downgrade advice with clickable verification URLs.
+3. **Deep Transitive Build Dependency Analysis ("Solving the Iceberg"):**  
+   Recursively inspects build requirements (`BuildRequires`, submodules, header libraries) for unported packages to uncover hidden dependencies before compilation starts.
+4. **Hardware Architecture Sensitivity Auditing:**  
+   Detects CPU architecture friction points:
+   - **x86 SIMD / AVX2 / AVX-512:** Flags `immintrin.h` intrinsics and generates SIMDe (`simde/x86/avx2.h`) or Power VSX translation strategies.
+   - **64KB Memory Page Size:** Identifies memory allocators assuming 4KB pages (e.g. jemalloc) and prescribes `--with-lg-page=16` configurations.
+   - **Inline Assembly:** Flags x86 `pause` / `rdtsc` and maps to Power `or 27,27,27` (yield) and `__ppc_get_timebase()`.
+5. **Calibrated SIMD Volume Bracket Scaling:**  
+   Scales engineering effort according to vector instruction density:
+   - **0–50 instructions:** 1.0x (minimal surface)
+   - **51–200 instructions:** 1.5x (moderate vector loops)
+   - **201–500 instructions:** 2.5x (heavy SIMD utilization)
+   - **>500 instructions:** 4.0x (deep architectural vectorization)
+6. **4-Tier SIMD-to-VSX Porting Complexity Classification:**  
+   Classifies vector adaptation into rigorous engineering tiers:
+   - `DIRECT` (1.0x): 1:1 intrinsic substitution.
+   - `SIMDE_COMPATIBLE` (1.5x): Automated header translation via SIMDe.
+   - `PARTIAL_REWRITE` (2.5x): Algorithm refactoring for 128-bit VSX vs 256-bit AVX2.
+   - `FULL_REDESIGN` (4.0x): Complete redesign for AVX-512 gather/scatter or Power MMA kernels.
+7. **Dedicated Test Suite & Validation Effort Sizing:**  
+   Discovers test dependencies (GTest, pytest, Testcontainers) and allocates dedicated test validation effort (`test_effort_pd`) to ensure regression verification is fully accounted for.
+8. **Git Repository Architecture Posture & CI Matrix Scanning:**  
+   Analyzes upstream Git repositories for existing Power markers (`#ifdef __powerpc__`) and checks GitHub Actions / GitLab CI matrices for active `ppc64le` runners, applying an effort adjustment factor (0.7x for mature Power CI to 1.3x for x86-only codebases).
+9. **Transparent Engineering Derivation & UI Clarity:**  
+   Renamed `Arch` to `Engineering Adaptation`, providing full transparency into the mathematical derivation of every person-day estimate.
 
 ---
 
-## 6. Strategic Value to IBM & Next Steps
+## 5. Transparent Effort Sizing Methodology
 
-1. **Empowers Technical Sales:** Equips pre-sales teams with an instant, authoritative tool to accelerate enterprise Power server and OpenShift deal velocity.
-2. **Standardizes Porting Lab Handoffs:** Generates structured CSV engineering backlogs and CMake/toolchain requirements, cutting project ramp-up time in half.
-3. **Showcases Hybrid AI Leadership:** Combines deterministic knowledge graphs and API probing with cutting-edge agentic LLM reasoning to solve a high-value enterprise problem.
+The agent calculates effort using a transparent 3-pillar formula:
+
+$$\text{Total Person-Days (PD)} = \text{Build Effort} + \text{Engineering Effort} + \text{Test Effort}$$
+
+Where:
+$$\text{Engineering Effort} = \text{Base Engineering} \times \text{SIMD Count Multiplier} \times \text{Complexity Multiplier} \times \text{Repo CI Factor}$$
+
+### Sizing Parameters & Multipliers:
+
+| Parameter | Brackets / Tiers | Multiplier | Engineering Rationale |
+| :--- | :--- | :--- | :--- |
+| **SIMD Volume** | 0 – 50 instructions<br/>51 – 200 instructions<br/>201 – 500 instructions<br/>> 500 instructions | **1.0x**<br/>**1.5x**<br/>**2.5x**<br/>**4.0x** | Reflects the code surface requiring inspection, replacement, and micro-benchmarking. |
+| **Porting Complexity** | `DIRECT`<br/>`SIMDE_COMPATIBLE`<br/>`PARTIAL_REWRITE`<br/>`FULL_REDESIGN` | **1.0x**<br/>**1.5x**<br/>**2.5x**<br/>**4.0x** | Ranges from simple intrinsic replacement to complete redesign of 512-bit vector kernels to Power MMA. |
+| **Repo CI Posture** | Power CI present (`ppc64le` runner)<br/>Neutral / Mixed markers<br/>Hardcoded x86 / No Power CI | **0.7x**<br/>**1.0x**<br/>**1.3x** | Accounts for upstream willingness and readiness to accept and maintain Power patches. |
+
+### Worked Example: `simdjson` Sizing Derivation
+- **Base Build Effort:** 1.0 Person-Day (CMake configuration and compiler toolchain setup)
+- **Base Engineering Effort:** 2.0 Person-Days (Base vector adaptation)
+- **SIMD Volume Multiplier:** 2.5x (320 SIMD instructions identified)
+- **Complexity Multiplier:** 1.5x (`SIMDE_COMPATIBLE` tier — SIMDe header mapping)
+- **Repo CI Factor:** 1.0x (Neutral upstream repository)
+- **Calculated Engineering Effort:** $2.0 \times 2.5 \times 1.5 \times 1.0 = \mathbf{7.5 \text{ PD}}$
+- **Test Validation Effort:** 1.0 Person-Day (cxxopts + regression benchmark suite)
+- **Total Person-Days:** $1.0 + 7.5 + 1.0 \approx \mathbf{10 \text{ Person-Days}}$
 
 ---
 
-*Submitted for the AI Elite Program.*
+## 6. Demonstrated Workload Scenarios & Validation
+
+The prototype was validated across four enterprise migration scenarios:
+
+| Scenario / Workload | Stack Components | Agent Triage Findings | Score & Transparent Sizing |
+| :--- | :--- | :--- | :--- |
+| **Enterprise Cloud Microservices** | Nginx, Redis, PostgreSQL, Strimzi Kafka, Node.js | All components have verified native `ppc64le` container images in Docker Hub and Quay.io. | **100% GO**<br/>**5 Person-Days** (Staging & smoke validation) |
+| **AI / ML Vector Pipeline** | PyTorch, NumPy, Pandas, Scipy, Custom C++ DSP | PyTorch routed to IBM Open-CE with Power MMA acceleration; custom DSP kernel scoped with SIMDe AVX2->VSX remediation. | **95% GO**<br/>**6 – 8 Person-Days** (1d Build + 4d Eng + 2d Test) |
+| **High-Throughput Storage Engine** | RocksDB 8.6, simdjson 3.6, Redis, zlib | Deep dependency iceberg scoped: 6 build deps, including 64KB-page tuned jemalloc build and SIMD vector translation. | **30% CAUTION**<br/>**12 – 16 Person-Days** (Explicit Build + Eng + Test breakdown) |
+| **Legacy Financial Analytics** | Intel MKL, Python 3.9, Proprietary Risk Calc | Closed-source x86 blocker flagged; automated recommendation to substitute with **IBM ESSL** or OpenBLAS. | **HIGH RISK**<br/>**Architecture Substitution** required |
+
+---
+
+## 7. Strategic Value to IBM & Program Alignment
+
+1. **Accelerates Infrastructure Revenue:** Eliminates the 5-to-10 day qualification bottleneck, delivering authoritative migration roadmaps within 30 seconds of customer interaction.
+2. **Eliminates Engineering Waste:** Protects IBM Power Porting Lab bandwidth by qualifying off-the-shelf components automatically and providing precise, scoped engineering handoffs for unported packages.
+3. **Demonstrates Hybrid AI Leadership:** Uniquely combines deterministic knowledge graphs, real-time registry verification, and multi-model LLM reasoning to solve mission-critical enterprise systems challenges.
+
+---
+
+*Submitted for the AI Elite Program Prototype Evaluation.*
