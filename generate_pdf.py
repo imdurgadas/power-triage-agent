@@ -442,19 +442,19 @@ def build_presentation_pdf(output_path="customer_presentation.pdf"):
             Paragraph("<b>AI / ML Vector Pipeline</b>", table_cell_style),
             Paragraph("PyTorch, NumPy, Pandas, Scipy, Custom C++ DSP", table_cell_style),
             Paragraph("PyTorch routed to IBM Open-CE with Power MMA acceleration; custom DSP kernel scoped with SIMDe AVX2->VSX remediation. Test suite validated.", table_cell_style),
-            Paragraph("<font color='#16a34a'><b>95% GO</b></font><br/><b>6 – 8 Person-Days</b><br/>(1d Build + 4d Eng + 2d Test)", table_cell_style)
+            Paragraph("<font color='#16a34a'><b>Minor Effort</b></font><br/><b>8 Person-Days</b><br/>(Fibonacci Sized)", table_cell_style)
         ],
         [
             Paragraph("<b>High-Throughput Storage Engine</b>", table_cell_style),
             Paragraph("RocksDB 8.6, simdjson 3.6, Redis, zlib", table_cell_style),
             Paragraph("Deep dependency iceberg scoped: 6 build deps, including 64KB-page tuned jemalloc and SIMD vector translation. Full transparent derivation provided.", table_cell_style),
-            Paragraph("<font color='#d97706'><b>30% CAUTION</b></font><br/><b>12 – 16 Person-Days</b><br/>(Multi-package iceberg)", table_cell_style)
+            Paragraph("<font color='#d97706'><b>Moderate Effort</b></font><br/><b>21 Person-Days</b><br/>(Fibonacci Sized)", table_cell_style)
         ],
         [
             Paragraph("<b>Legacy Financial Analytics</b>", table_cell_style),
             Paragraph("Intel MKL, Python 3.9, Proprietary Risk Calc", table_cell_style),
             Paragraph("Proprietary closed-source x86 blocker flagged; automated recommendation to substitute with <b>IBM ESSL</b> or OpenBLAS.", table_cell_style),
-            Paragraph("<font color='#dc2626'><b>HIGH RISK</b></font><br/><b>Arch Substitution</b><br/>required", table_cell_style)
+            Paragraph("<font color='#7c3aed'><b>Not Possible As-Is</b></font><br/><b>Arch Substitution</b><br/>(ESSL / OpenBLAS)", table_cell_style)
         ]
     ]
     demo_table = Table(demo_data, colWidths=[115, 110, 217, 80])

@@ -155,53 +155,83 @@ class UniversalNormalizer:
 
     @classmethod
     def _parse_freeform_text(cls, text: str) -> List[Dict[str, str]]:
-        """Extracts recognizable packages from human sentences, lists, or notes."""
+        """Extracts recognizable packages from human sentences, lists, or notes in order of appearance."""
         results = []
-        
-        # Common tech keywords to look for
-        known_tokens = [
-            "nginx", "redis", "postgres", "postgresql", "mysql", "mongodb", "kafka", "rabbitmq",
-            "elasticsearch", "opensearch", "torch", "pytorch", "tensorflow", "scipy", "numpy",
-            "pandas", "onnxruntime", "grpc", "rocksdb", "leveldb", "fastapi", "flask", "django",
-            "express", "spring-boot", "golang", "rust", "llvm", "bazel", "cmake", "libdeflate",
-            "openssl", "zlib", "simdjson", "spdk", "dpdk", "arrow", "parquet", "faiss",
-            "intel-mkl", "mkl", "openblas", "blis", "essl", "snappy", "lz4"
-        ]
-        
-        text_lower = text.lower()
         found_names = set()
 
-        for token in known_tokens:
-            if re.search(rf"\b{re.escape(token)}\b", text_lower):
-                # Guess ecosystem
-                eco = "container"
-                if token in ["torch", "pytorch", "tensorflow", "scipy", "numpy", "pandas", "fastapi", "flask", "django"]:
-                    eco = "pypi"
-                elif token in ["nginx", "redis", "postgres", "postgresql", "mysql", "mongodb", "kafka", "rabbitmq"]:
-                    eco = "container"
-                elif token in ["rocksdb", "leveldb", "simdjson", "spdk", "dpdk", "libdeflate", "openssl", "faiss", "zlib", "intel-mkl", "mkl", "openblas", "blis", "essl", "snappy", "lz4"]:
-                    eco = "native_c"
+        # Common tech keywords to look for
+        known_tokens = [
+            "rocksdb", "simdjson", "nginx", "redis", "postgres", "postgresql", "mysql", "mongodb", "kafka", "rabbitmq",
+            "elasticsearch", "opensearch", "torch", "pytorch", "tensorflow", "scipy", "numpy",
+            "pandas", "onnxruntime", "grpc", "leveldb", "fastapi", "flask", "django",
+            "express", "spring-boot", "golang", "rust", "llvm", "bazel", "cmake", "libdeflate",
+            "openssl", "zlib", "spdk", "dpdk", "arrow", "parquet", "faiss",
+            "intel-mkl", "mkl", "openblas", "blis", "essl", "snappy", "lz4", "jemalloc"
+        ]
 
-                # Look for adjacent version like "torch 2.1" or "nginx:1.24"
-                ver_match = re.search(rf"{re.escape(token)}[:\s/v]+([0-9]+\.[0-9]+(\.[0-9]+)?)", text_lower)
-                ver = ver_match.group(1) if ver_match else "latest"
+        def guess_ecosystem(token: str) -> str:
+            if token in ["torch", "pytorch", "tensorflow", "scipy", "numpy", "pandas", "fastapi", "flask", "django"]:
+                return "pypi"
+            elif token in ["nginx", "redis", "postgres", "postgresql", "mysql", "mongodb", "kafka", "rabbitmq"]:
+                return "container"
+            elif token in ["rocksdb", "leveldb", "simdjson", "spdk", "dpdk", "libdeflate", "openssl", "faiss", "zlib", "intel-mkl", "mkl", "openblas", "blis", "essl", "snappy", "lz4", "jemalloc"]:
+                return "native_c"
+            return "container"
 
-                results.append({"name": token, "version": ver, "ecosystem": eco})
-                found_names.add(token)
-
-        # Also capture line-by-line simple name==version or name:version
+        # Pass 1: Line-by-line inspection (prioritizes bullet points and listed components in order)
         for line in text.splitlines():
-            line = line.strip()
-            if not line or line.startswith("#"):
+            line_str = line.strip()
+            if not line_str or line_str.startswith("#"):
                 continue
-            match = re.match(r"^([a-zA-Z0-9_\-\.]+)[=:\s]+([0-9\.\*]+[a-zA-Z0-9_\-\.]*)", line)
-            if match:
-                name, ver = match.group(1), match.group(2)
+
+            # Strip leading list markers like "- ", "* ", "1. "
+            cleaned_line = re.sub(r"^[\s\-*•\d\.\)]+", "", line_str).strip()
+            line_lower = cleaned_line.lower()
+
+            # Check if line features a known token as the primary subject
+            line_token_found = None
+            for token in known_tokens:
+                m = re.search(rf"\b{re.escape(token)}\b", line_lower)
+                if m:
+                    # Choose token with earliest appearance on this line
+                    if line_token_found is None or m.start() < line_token_found[1]:
+                        ver_match = re.search(rf"{re.escape(token)}[:\s/v=]+([0-9]+\.[0-9]+(\.[0-9]+)?)", line_lower)
+                        ver = ver_match.group(1) if ver_match else "latest"
+                        line_token_found = (token, m.start(), ver, guess_ecosystem(token))
+
+            if line_token_found:
+                token, _, ver, eco = line_token_found
+                if token not in found_names:
+                    results.append({"name": token, "version": ver, "ecosystem": eco})
+                    found_names.add(token)
+                continue
+
+            # Check for generic "name==version" or "name:version" on this line
+            m_generic = re.match(r"^([a-zA-Z0-9_\-\.]+)[=:\s]+([0-9\.\*]+[a-zA-Z0-9_\-\.]*)", cleaned_line)
+            if m_generic:
+                name, ver = m_generic.group(1), m_generic.group(2)
                 if name.lower() not in found_names:
-                    results.append({"name": name, "version": ver, "ecosystem": "container" if ":" in line else "pypi"})
+                    results.append({"name": name, "version": ver, "ecosystem": "container" if ":" in cleaned_line else "pypi"})
                     found_names.add(name.lower())
 
-        # If nothing matched, treat lines as arbitrary packages
+        # Pass 2: If line-by-line found nothing or missed tokens, scan full text ordered by offset of appearance
+        if not results:
+            text_lower = text.lower()
+            token_matches = []
+            for token in known_tokens:
+                for m in re.finditer(rf"\b{re.escape(token)}\b", text_lower):
+                    ver_match = re.search(rf"{re.escape(token)}[:\s/v=]+([0-9]+\.[0-9]+(\.[0-9]+)?)", text_lower[m.start():m.start() + 30])
+                    ver = ver_match.group(1) if ver_match else "latest"
+                    token_matches.append((m.start(), token, ver, guess_ecosystem(token)))
+
+            # Sort strictly by order of appearance in the text
+            token_matches.sort(key=lambda x: x[0])
+            for _, token, ver, eco in token_matches:
+                if token not in found_names:
+                    results.append({"name": token, "version": ver, "ecosystem": eco})
+                    found_names.add(token)
+
+        # Fallback if nothing matched
         if not results:
             for line in text.splitlines():
                 clean = line.strip().strip("-*1234567890. ")

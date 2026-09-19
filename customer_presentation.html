@@ -279,17 +279,17 @@
         <tr>
           <td><strong>Sales Deal Velocity</strong></td>
           <td>Deal slowdown and customer hesitation over unquantified risk</td>
-          <td><strong>Immediate qualification confidence</strong> with traffic-light GO/CAUTION/RISK scoring</td>
+          <td><strong>Immediate qualification confidence</strong> with positive effort-based tiers (Minimal, Minor, Moderate, Significant)</td>
         </tr>
         <tr>
           <td><strong>Effort Sizing Accuracy</strong></td>
           <td>Subjective guesswork prone to 2x–5x variance from hidden dependencies</td>
-          <td><strong>Standardized 3-Pillar Sizing Formula</strong> scoping hardware friction and build trees</td>
+          <td><strong>Single Fibonacci Sizing Ceiling (e.g. 8, 21, 34, 55 PD)</strong> based on hardware friction and build trees</td>
         </tr>
         <tr>
           <td><strong>Executive Deliverables</strong></td>
           <td>Days spent drafting custom proposal memos and spreadsheets</td>
-          <td><strong>1-Click Executive Memo & CSV JIRA Backlog</strong> generated autonomously</td>
+          <td><strong>1-Click Executive PDF Memo & CSV JIRA Backlog</strong> generated autonomously</td>
         </tr>
       </tbody>
     </table>
@@ -299,12 +299,13 @@
     <h2>4. Proposed Opportunity & Agentic AI Solution</h2>
     <p>We designed and built the <strong>Autonomous IBM Power Porting Triage Agent</strong>—a lightweight, containerized platform that integrates deterministic multi-source probing with generative sales reasoning:</p>
     <ul>
-      <li><strong>Universal Manifest Ingestion:</strong> Automatically normalizes CycloneDX/SPDX SBOMs, Dockerfiles, Python requirements, and raw text into structured component representations across Containers, C/C++, PyPI, RPM, and Java.</li>
+      <li><strong>Universal Multi-Modal Ingestion:</strong> Automatically normalizes CycloneDX/SPDX SBOMs, Dockerfiles, Python requirements, raw text/emails, or direct <strong>GitHub repository / documentation URLs</strong> (e.g., <code>https://github.com/facebook/rocksdb</code> or <code>https://rocksdb.org</code>) by crawling repositories and inferring dependencies via Gemini LLM.</li>
       <li><strong>Deterministic Live Ecosystem Prober:</strong> Queries live API registries (Quay.io, Docker Hub v2, PyPI, RHEL/EPEL 9) to verify ppc64le multi-arch tags, returning canonical verification links directly to official package repositories.</li>
       <li><strong>Deep Transitive Build Dependency Analysis:</strong> Solves the iceberg problem by recursing through build trees to identify unported build-time requirements (BuildRequires, compiler toolchains, submodules).</li>
       <li><strong>Hardware Architecture Sensitivity Audit:</strong> Flags x86 SIMD/AVX2 intrinsics (prescribing SIMDe to Power VSX header mapping), 64KB memory page size risks (jemalloc alignment tuning), and inline assembly.</li>
-      <li><strong>Standardized 3-Pillar Sizing Formula:</strong> Computes realistic person-days (Base Build + Transitive Sub-deps + Hardware Friction) incorporating a 1-week deployment validation baseline, rounded to clean integers.</li>
-      <li><strong>Autonomous Generative Sales Proposal:</strong> Leverages Google Gemini with resilient multi-model fallback to draft tailored strategic sales narratives highlighting Power's memory bandwidth, SMT8 threading, and enterprise reliability.</li>
+      <li><strong>Single-Value Fibonacci Sizing Ceiling:</strong> Computes realistic person-days incorporating build requirements, SIMD adaptation, and test validation, mapped to the next Fibonacci number ceiling (e.g. 5→8 PD, 26→34 PD, 34→55 PD) to eliminate confusing ranges.</li>
+      <li><strong>Positive Pre-Sales Qualification Tiers:</strong> Replaces negative traffic lights with positive, constructive tiers: <em>Minimal Effort (Turnkey)</em>, <em>Minor Effort</em>, <em>Moderate Effort</em>, <em>Significant Effort</em>, and <em>Not Possible As-Is (Alternative Required)</em> with recommended drop-in substitutes.</li>
+      <li><strong>1-Click Executive PDF Generation:</strong> Generates high-fidelity, multi-page branded PDF feasibility memos ready for immediate delivery to client C-level executives.</li>
     </ul>
 
     <h2>5. Demonstrated Workload Scenarios</h2>
@@ -314,7 +315,7 @@
           <th>Scenario / Workload</th>
           <th>Stack Components</th>
           <th>Triage Assessment & Findings</th>
-          <th>Score & Sizing</th>
+          <th>Qualification Tier & Sizing</th>
         </tr>
       </thead>
       <tbody>
@@ -322,25 +323,31 @@
           <td><strong>Enterprise Cloud Microservices</strong></td>
           <td>Nginx, Redis, PostgreSQL, Strimzi Kafka, Node.js</td>
           <td>All components have verified native ppc64le container images in Docker Hub and Quay.io.</td>
-          <td><span class="tag-go">100% GO</span><br/>5 Person-Days</td>
+          <td><span class="tag-go">100% Minimal Effort</span><br/>0 Person-Days (Turnkey)</td>
         </tr>
         <tr>
           <td><strong>AI/ML Vector Pipeline</strong></td>
           <td>PyTorch, NumPy, Pandas, Scipy, Custom C++ DSP</td>
           <td>PyTorch routed to IBM Open-CE with Power MMA acceleration; custom DSP kernel scoped with SIMDe AVX2->VSX fix.</td>
-          <td><span class="tag-go">95% GO</span><br/>5 – 8 Person-Days</td>
+          <td><span class="tag-go">95% Minor Effort</span><br/>8 Person-Days (Fibonacci)</td>
         </tr>
         <tr>
           <td><strong>High-Throughput Storage Engine</strong></td>
           <td>RocksDB 8.6, simdjson 3.6, Redis, zlib</td>
           <td>Deep dependency iceberg scoped: 6 build deps uncovered, including unported 64KB-page tuned jemalloc and AVX-512 kernel.</td>
-          <td><span class="tag-caution">30% CAUTION</span><br/>8 – 12 Person-Days</td>
+          <td><span class="tag-caution">Moderate Effort</span><br/>21 Person-Days (Fibonacci)</td>
         </tr>
         <tr>
           <td><strong>Legacy Financial Analytics</strong></td>
           <td>Intel MKL, Python 3.9, Proprietary Risk Calc</td>
           <td>Proprietary closed-source x86 blocker flagged; automated recommendation to substitute with IBM ESSL or OpenBLAS.</td>
-          <td><span class="tag-risk">HIGH RISK</span><br/>Arch substitution</td>
+          <td><span class="tag-risk">Not Possible As-Is</span><br/>OpenBLAS / ESSL substitute</td>
+        </tr>
+        <tr>
+          <td><strong>Direct URL / GitHub Ingestion</strong></td>
+          <td>https://github.com/facebook/rocksdb</td>
+          <td>Autonomous crawling of GitHub tree & manifests; LLM infers dependencies (rocksdb, snappy, zlib, lz4, jemalloc).</td>
+          <td><span class="tag-caution">Moderate Effort</span><br/>21 Person-Days (Fibonacci)</td>
         </tr>
       </tbody>
     </table>

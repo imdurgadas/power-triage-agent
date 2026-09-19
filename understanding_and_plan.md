@@ -38,10 +38,10 @@ flowchart TD
     end
 
     subgraph Outputs ["Deliverables & Dashboards"]
-        C1["Readiness Scorecard & Go/No-Go Signal"]
-        C2["Compounded Person-Day Effort Range"]
+        C1["Readiness Scorecard & Positive Qualification Tier<br/>(Minimal, Minor, Moderate, Significant)"]
+        C2["Single Fibonacci Effort Ceiling<br/>(e.g. 8, 21, 34, 55 PD)"]
         C3["Transitive Build Dependency Matrix"]
-        C4["Executive 1-Pager (PDF/Markdown)"]
+        C4["Executive 1-Pager (1-Click PDF Report & Markdown)"]
         C5["Porting Lab Engineering Handover Spec"]
     end
 
@@ -62,20 +62,15 @@ flowchart TD
 
 ## 3. UI / UX Design Specifications
 
-The user interface is designed for rapid qualification by pre-sales teams while preserving deep engineering drill-down capabilities.
+The user interface features a modern **Obsidian & Cyber-Aurora (Emerald / Cyan / Violet)** theme, designed for rapid qualification by pre-sales teams while preserving deep engineering drill-down capabilities.
 
-### 3.1 Input Form Elements
+### 3.1 Input Form Elements & Tab Navigation
 1. **Target Deployment Environment:**
    - **Target OS & Version:** Red Hat Enterprise Linux (RHEL 8.x, 9.x), SUSE Linux Enterprise Server (SLES 15), Ubuntu (22.04 LTS, 24.04 LTS) for `ppc64le`.
    - **Platform Runtime:** Bare Metal, PowerVM LPAR, OpenShift Container Platform (OCP on Power).
-2. **Workload Ingestion (Multi-Modal):**
-   - **File Upload:** Drag-and-drop support for:
-     - Software Bill of Materials (SBOM): CycloneDX (JSON/XML), SPDX (JSON/tag-value).
-     - Container manifests: `Dockerfile`, `docker-compose.yml`, Helm `values.yaml`, K8s pod specs.
-     - Package manifests: `requirements.txt`, `Pipfile`, `pom.xml`, `package.json`, `go.mod`, `Cargo.toml`.
-     - Spreadsheet/Flat files: CSV, TSV, XLSX list of package names and versions.
-   - **Git Repository / Container URL:** Public or private Git repo URL (GitHub, GitLab), or Docker image name (e.g. `quay.io/org/app:v1.2`).
-   - **Free-Form Text Prompt:** Unstructured paste area where users can drop unstructured client notes, emails, or stack descriptions.
+2. **Workload Ingestion Tabs:**
+   - **Tab 1: Manifest / Free-Form Text / Email:** Supports pasting Dockerfiles, requirements.txt, CycloneDX/SPDX SBOMs, or informal client emails. File drag-and-drop included.
+   - **Tab 2: GitHub Repository or Documentation URL:** Paste direct GitHub repo URLs (e.g. `https://github.com/facebook/rocksdb`) or web documentation URLs (e.g. `https://rocksdb.org`). The agent autonomously crawls the source trees and documentation, inferring required packages and versions via Gemini LLM.
 3. **Triage Mode & Depth Selection:**
    - **Express Triage (10–30s):** Performs registry and repo lookups only.
    - **Deep Source Build Audit (1–3 min):** Clones source repositories of unported components, recursively maps build-time dependencies, and scans for architecture-specific code patterns.

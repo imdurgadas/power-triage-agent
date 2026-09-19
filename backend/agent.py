@@ -14,6 +14,7 @@ from .models import (
     PackageTriageResult,
     AgentStep,
     AvailabilityStatus,
+    SalesRecommendationTier,
     RecommendationTrafficLight,
     SIMDPortingComplexity,
     TestDependency,
@@ -26,8 +27,78 @@ from .prober import MultiSourceProber
 from .build_analyzer import BuildAnalyzer, scale_arch_effort, get_simd_multipliers
 from .repo_scanner import RepoScanner
 from .gemini_helper import generate_gemini_content
+from .url_extractor import URLExtractor
 
 logger = logging.getLogger("agent")
+
+FIBONACCI_NUMBERS = [0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610]
+
+
+def next_fibonacci_effort(effort: float) -> int:
+    """Returns the single Fibonacci value that is strictly greater than the input effort.
+    For example: 5 -> 8 (as requested), 26 -> 34, 34 -> 55, 0 -> 0.
+    """
+    if effort <= 0:
+        return 0
+    for fib in FIBONACCI_NUMBERS:
+        if fib > effort:
+            return fib
+KNOWN_ECOSYSTEM_DETAILS: Dict[str, Dict[str, str]] = {
+    "rocksdb": {
+        "git_repo_url": "https://github.com/facebook/rocksdb",
+        "doc_url": "https://rocksdb.org",
+        "ecosystem": "native_c",
+        "version": "8.6",
+    },
+    "redis": {
+        "git_repo_url": "https://github.com/redis/redis",
+        "doc_url": "https://redis.io",
+        "ecosystem": "container",
+        "version": "7.2",
+    },
+    "nginx": {
+        "git_repo_url": "https://github.com/nginx/nginx",
+        "doc_url": "https://nginx.org",
+        "ecosystem": "container",
+        "version": "1.24",
+    },
+    "fastapi": {
+        "git_repo_url": "https://github.com/tiangolo/fastapi",
+        "doc_url": "https://fastapi.tiangolo.com",
+        "ecosystem": "pypi",
+        "version": "0.110.0",
+    },
+    "pytorch": {
+        "git_repo_url": "https://github.com/pytorch/pytorch",
+        "doc_url": "https://pytorch.org",
+        "ecosystem": "pypi",
+        "version": "2.1.0",
+    },
+    "torch": {
+        "git_repo_url": "https://github.com/pytorch/pytorch",
+        "doc_url": "https://pytorch.org",
+        "ecosystem": "pypi",
+        "version": "2.1.0",
+    },
+    "simdjson": {
+        "git_repo_url": "https://github.com/simdjson/simdjson",
+        "doc_url": "https://simdjson.org",
+        "ecosystem": "native_c",
+        "version": "3.6",
+    },
+    "snappy": {
+        "git_repo_url": "https://github.com/google/snappy",
+        "doc_url": "https://github.com/google/snappy",
+        "ecosystem": "native_c",
+        "version": "1.1.9",
+    },
+    "jemalloc": {
+        "git_repo_url": "https://github.com/jemalloc/jemalloc",
+        "doc_url": "http://jemalloc.net",
+        "ecosystem": "native_c",
+        "version": "5.3.0",
+    },
+}
 
 
 class TriageAgent:
@@ -82,6 +153,67 @@ class TriageAgent:
 
         raw_text = request.raw_manifest or ""
         parsed_items = UniversalNormalizer.normalize(raw_text, request.manifest_type or "auto")
+
+        # Provenance detection & URL extraction
+        detected_git_url: Optional[str] = request.git_repo_url
+        detected_doc_url: Optional[str] = request.doc_url
+        primary_pkg_name: Optional[str] = None
+        primary_version: Optional[str] = None
+        primary_ecosystem: Optional[str] = None
+
+        # Check raw text for embedded URLs if not already supplied
+        if raw_text:
+            github_matches = re.findall(r"https?://github\.com/[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+", raw_text)
+            if not detected_git_url and github_matches:
+                detected_git_url = github_matches[0]
+            
+            all_urls = re.findall(r"https?://[a-zA-Z0-9_.-]+\.[a-zA-Z]{2,}(?:/[^\s)\"'>]*)?", raw_text)
+            non_git = [u for u in all_urls if "github.com" not in u]
+            if not detected_doc_url and non_git:
+                detected_doc_url = non_git[0]
+
+        # Step 1.1: If user supplied a GitHub or documentation URL, infer dependencies via LLM/scraper
+        candidate_url = detected_git_url or detected_doc_url
+        if not candidate_url and raw_text and URLExtractor.is_url(raw_text):
+            candidate_url = raw_text.strip()
+            if "github.com" in candidate_url:
+                detected_git_url = candidate_url
+            else:
+                detected_doc_url = candidate_url
+
+        if candidate_url and URLExtractor.is_url(candidate_url):
+            yield {
+                "type": "step",
+                "step": AgentStep(
+                    step_id=step_counter,
+                    agent_name="URLScraperAgent",
+                    action_type="url_inference",
+                    target=candidate_url,
+                    thought=f"Crawling package website or repository ({candidate_url}) to extract dependencies and manifest declarations...",
+                ).model_dump()
+            }
+            await asyncio.sleep(0.3)
+            step_counter += 1
+
+            url_pkgs, url_title, url_note = await URLExtractor.extract_from_url(candidate_url, gemini_client=self.gemini_client)
+            if url_pkgs:
+                parsed_items.extend(url_pkgs)
+                primary_pkg_name = url_pkgs[0]["name"]
+                primary_version = url_pkgs[0].get("version", "latest")
+                primary_ecosystem = url_pkgs[0].get("ecosystem", "native_c")
+                yield {
+                    "type": "step",
+                    "step": AgentStep(
+                        step_id=step_counter,
+                        agent_name="LLMDependencyInferenceAgent",
+                        action_type="url_inference",
+                        target=url_title,
+                        thought=f"Inferred {len(url_pkgs)} library requirements and version specifications from {candidate_url}.",
+                        detail=", ".join([f"{p['name']} ({p.get('version', 'latest')})" for p in url_pkgs[:6]]) + ("..." if len(url_pkgs) > 6 else "")
+                    ).model_dump()
+                }
+                await asyncio.sleep(0.3)
+                step_counter += 1
         
         # If user explicitly passed a list of packages
         if request.packages_list:
@@ -101,6 +233,35 @@ class TriageAgent:
                 seen.add(key)
                 unique_items.append(item)
 
+        # Infer primary package name if not set yet
+        if not primary_pkg_name:
+            if detected_git_url:
+                gh_m = re.search(r"github\.com/[^/]+/([^/\s?#]+)", detected_git_url)
+                if gh_m:
+                    primary_pkg_name = gh_m.group(1).replace(".git", "").lower()
+            elif detected_doc_url:
+                doc_m = re.search(r"https?://(?:www\.)?([^/\.]+)", detected_doc_url)
+                if doc_m:
+                    primary_pkg_name = doc_m.group(1).lower()
+            elif unique_items:
+                primary_pkg_name = unique_items[0]["name"]
+                primary_version = unique_items[0].get("version", "latest")
+                primary_ecosystem = unique_items[0].get("ecosystem", "container")
+
+        # Enrich provenance details from known ecosystem table
+        if primary_pkg_name:
+            norm_k = primary_pkg_name.lower().strip()
+            if norm_k in KNOWN_ECOSYSTEM_DETAILS:
+                k_info = KNOWN_ECOSYSTEM_DETAILS[norm_k]
+                if not detected_git_url:
+                    detected_git_url = k_info.get("git_repo_url")
+                if not detected_doc_url:
+                    detected_doc_url = k_info.get("doc_url")
+                if not primary_version or primary_version == "latest":
+                    primary_version = k_info.get("version", "latest")
+                if not primary_ecosystem:
+                    primary_ecosystem = k_info.get("ecosystem", "native_c")
+
         yield {
             "type": "step",
             "step": AgentStep(
@@ -108,7 +269,7 @@ class TriageAgent:
                 agent_name="IngestionAgent",
                 action_type="plan",
                 target="Dependency Normalizer",
-                thought=f"Successfully extracted and normalized {len(unique_items)} unique components across container, language, and system layers.",
+                thought=f"Successfully extracted and normalized {len(unique_items)} unique components across container, language, and system layers." + (f" Primary package: {primary_pkg_name}." if primary_pkg_name else ""),
                 detail=", ".join([i["name"] for i in unique_items[:6]]) + ("..." if len(unique_items) > 6 else "")
             ).model_dump()
         }
@@ -120,21 +281,22 @@ class TriageAgent:
         docker_findings: List[DockerfileImageFinding] = []
         config_findings: List[ConfigImageFinding] = []
 
-        if request.git_repo_url:
+        scan_repo_url = detected_git_url or request.git_repo_url
+        if scan_repo_url:
             yield {
                 "type": "step",
                 "step": AgentStep(
                     step_id=step_counter,
                     agent_name="RepoScanAgent",
                     action_type="scan",
-                    target=request.git_repo_url,
+                    target=scan_repo_url,
                     thought="Cloning repository shallowly to inspect architecture markers, Dockerfiles, and CI configurations...",
                 ).model_dump()
             }
             await asyncio.sleep(0.2)
             step_counter += 1
 
-            temp_repo = RepoScanner.shallow_clone_repo(request.git_repo_url)
+            temp_repo = RepoScanner.shallow_clone_repo(scan_repo_url)
             if temp_repo:
                 arch_scan = RepoScanner.scan_arch_support(temp_repo)
                 docker_findings = RepoScanner.scan_dockerfiles(temp_repo)
@@ -444,30 +606,37 @@ class TriageAgent:
         ready_units = native_count + agnostic_count + (substitute_count * 0.9) + (unported_count * 0.3)
         readiness_pct = round((ready_units / max(total_count, 1)) * 100.0, 1)
 
-        # Effort Summation with default 1 Person-Week (5 Person-Days) buffer and integer rounding
+        # Effort Summation with Fibonacci single-value sizing (based on max effort)
         BUFFER_PERSON_DAYS = 5  # 1 Person-Week buffer
         raw_total_pd = sum(p.total_effort_pd for p in triaged_packages)
 
-        if raw_total_pd == 0:
-            min_pd = BUFFER_PERSON_DAYS
-            max_pd = BUFFER_PERSON_DAYS
+        if raw_total_pd == 0 and unported_count == 0:
+            base_max_pd = 0
+            fib_pd = 0
+        elif raw_total_pd == 0:
+            base_max_pd = BUFFER_PERSON_DAYS
+            fib_pd = next_fibonacci_effort(base_max_pd)
         else:
             buffered_total = raw_total_pd + BUFFER_PERSON_DAYS
-            min_pd = int(round(buffered_total * 0.85))
-            max_pd = int(round(buffered_total * 1.30))
-            min_pd = max(min_pd, BUFFER_PERSON_DAYS)
-            max_pd = max(max_pd, min_pd)
+            base_max_pd = int(round(buffered_total * 1.30))
+            fib_pd = next_fibonacci_effort(base_max_pd)
 
-        # Recommendation
+        # Positive Effort-Oriented Qualification Recommendations
         if blocker_count > 0:
-            rec = RecommendationTrafficLight.HIGH_RISK
-            rec_reason = f"Workload contains {blocker_count} proprietary x86 component(s) requiring architectural substitution."
-        elif readiness_pct >= 85 and raw_total_pd <= 5:
-            rec = RecommendationTrafficLight.GO
-            rec_reason = f"High readiness ({readiness_pct}%). Total effort estimated at {min_pd}–{max_pd} Person-Days."
+            rec = SalesRecommendationTier.NOT_POSSIBLE_AS_IS
+            rec_reason = f"Workload contains {blocker_count} proprietary x86 component(s) requiring architectural substitution (e.g. OpenBLAS / ESSL alternatives recommended)."
+        elif readiness_pct >= 90 and raw_total_pd == 0 and blocker_count == 0:
+            rec = SalesRecommendationTier.MINIMAL_EFFORT
+            rec_reason = f"Turnkey readiness ({readiness_pct}%). All components run out-of-the-box on IBM Power (0 Person-Days)."
+        elif fib_pd <= 8:
+            rec = SalesRecommendationTier.MINOR_EFFORT
+            rec_reason = f"High readiness ({readiness_pct}%). Light build verification estimated at {fib_pd} Person-Days (Fibonacci max estimate)."
+        elif fib_pd <= 34:
+            rec = SalesRecommendationTier.MODERATE_EFFORT
+            rec_reason = f"Moderate porting scope ({readiness_pct}% ready). Transitive dependencies and build verification estimated at {fib_pd} Person-Days (Fibonacci max estimate)."
         else:
-            rec = RecommendationTrafficLight.CAUTION
-            rec_reason = f"Moderate readiness ({readiness_pct}%). Porting effort estimated at {min_pd}–{max_pd} Person-Days."
+            rec = SalesRecommendationTier.SIGNIFICANT_EFFORT
+            rec_reason = f"Extensive porting investment ({readiness_pct}% ready). Multi-tier transitive dependencies or vector kernels estimated at {fib_pd} Person-Days (Fibonacci max estimate)."
 
         summary = TriageSummary(
             total_packages=total_count,
@@ -479,8 +648,9 @@ class TriageAgent:
             readiness_score_pct=readiness_pct,
             recommendation=rec,
             recommendation_reason=rec_reason,
-            min_total_person_days=min_pd,
-            max_total_person_days=max_pd,
+            fibonacci_effort_pd=fib_pd,
+            min_total_person_days=fib_pd,
+            max_total_person_days=fib_pd,
             unported_transitive_deps_count=unported_transitive_count,
             test_deps_unresolved_count=unported_test_count
         )
@@ -498,19 +668,49 @@ class TriageAgent:
         }
         await asyncio.sleep(0.3)
 
+        # Attach repository and documentation links to triaged packages
+        for p in triaged_packages:
+            p_name_lower = p.package_name.lower()
+            if p_name_lower in KNOWN_ECOSYSTEM_DETAILS:
+                k = KNOWN_ECOSYSTEM_DETAILS[p_name_lower]
+                p.git_repo_url = k.get("git_repo_url")
+                p.doc_url = k.get("doc_url")
+                if not p.evidence_url:
+                    p.evidence_url = p.git_repo_url or p.doc_url
+            elif p_name_lower == (primary_pkg_name or "").lower():
+                p.git_repo_url = detected_git_url
+                p.doc_url = detected_doc_url
+                if not p.evidence_url:
+                    p.evidence_url = detected_git_url or detected_doc_url
+
         # Generate Executive Brief Markdown
-        brief_md = self._generate_executive_brief(request, summary, triaged_packages, arch_scan, docker_findings, config_findings)
+        brief_md = self._generate_executive_brief(
+            request, summary, triaged_packages, arch_scan, docker_findings, config_findings,
+            primary_package_name=primary_pkg_name,
+            git_repo_url=detected_git_url,
+            doc_url=detected_doc_url,
+            package_version=primary_version,
+            package_ecosystem=primary_ecosystem
+        )
         csv_data = self._generate_csv(triaged_packages)
 
+        detected_source_url = detected_git_url or detected_doc_url or (raw_text if URLExtractor.is_url(raw_text) else None)
+
         response = TriageResponse(
-            project_name=request.project_name or "Customer Migration Triage",
+            project_name=request.project_name or (f"{primary_pkg_name} Migration" if primary_pkg_name else "Customer Migration Triage"),
             target_os=request.target_os.value.upper(),
             target_platform=request.target_platform.value.upper(),
             summary=summary,
             packages=triaged_packages,
             agent_steps=[],
             executive_brief_markdown=brief_md,
-            export_csv_data=csv_data
+            export_csv_data=csv_data,
+            primary_package_name=primary_pkg_name,
+            git_repo_url=detected_git_url,
+            doc_url=detected_doc_url,
+            source_url=detected_source_url,
+            package_ecosystem=primary_ecosystem,
+            package_version=primary_version,
         )
 
         yield {
@@ -525,14 +725,39 @@ class TriageAgent:
         packages: List[PackageTriageResult],
         arch_scan: Optional[ArchSupportScan] = None,
         docker_findings: Optional[List[DockerfileImageFinding]] = None,
-        config_findings: Optional[List[ConfigImageFinding]] = None
+        config_findings: Optional[List[ConfigImageFinding]] = None,
+        primary_package_name: Optional[str] = None,
+        git_repo_url: Optional[str] = None,
+        doc_url: Optional[str] = None,
+        package_version: Optional[str] = None,
+        package_ecosystem: Optional[str] = None,
     ) -> str:
-        traffic_emoji = "🟢" if summary.recommendation == RecommendationTrafficLight.GO else ("🟡" if summary.recommendation == RecommendationTrafficLight.CAUTION else "🔴")
+        rec_val = summary.recommendation.value
+        traffic_emoji = "🟢" if "Minimal" in rec_val else (
+            "🔵" if "Minor" in rec_val else (
+                "🟡" if "Moderate" in rec_val else (
+                    "🟠" if "Significant" in rec_val else "🟣"
+                )
+            )
+        )
         
-        md = f"""# Executive Porting Feasibility Assessment: {request.project_name}
+        has_custom_project = request.project_name and request.project_name not in ["Customer Migration Triage", "Migration_Triage", "Workload Migration", "Report"]
+        if has_custom_project and primary_package_name and primary_package_name.lower() not in request.project_name.lower():
+            display_title = f"{request.project_name} ({primary_package_name})"
+        elif has_custom_project:
+            display_title = request.project_name
+        elif primary_package_name:
+            display_title = f"Porting Qualification: {primary_package_name}"
+        else:
+            display_title = "Customer Migration Triage"
+
+        md = f"""# Executive Porting Feasibility Assessment: {display_title}
 
 **Target Architecture:** IBM Power (`ppc64le`)  
 **Target Operating System:** {request.target_os.value.upper()} on {request.target_platform.value.upper()}  
+**Primary Target Component:** `{primary_package_name or 'Multi-Component Stack'}` (Version: `{package_version or 'latest'}`)  
+**GitHub Repository:** [{git_repo_url or 'Not specified'}]({git_repo_url or '#'})  
+**Documentation Link:** [{doc_url or 'Not specified'}]({doc_url or '#'})  
 **Assessment Date:** 2026-09-09  
 **Triage Confidence:** High (Deterministic Probing + Deep Transitive Dependency Audit + SIMD Instruction Scaling)
 
@@ -543,8 +768,8 @@ class TriageAgent:
 | Metric | Assessment Result |
 | :--- | :--- |
 | **Porting Readiness Score** | **{summary.readiness_score_pct}%** |
-| **Pre-Sales Recommendation** | **{traffic_emoji} {summary.recommendation.value}** |
-| **Total Person Days** | **{summary.min_total_person_days} – {summary.max_total_person_days} Person-Days** |
+| **Sales Recommendation Tier** | **{traffic_emoji} {summary.recommendation.value}** |
+| **Estimated Porting Sizing** | **{summary.fibonacci_effort_pd} Person-Days (Fibonacci Sized)** |
 | **Total Components Analyzed** | **{summary.total_packages}** ({summary.native_count} Native, {summary.agnostic_count} Script/Bytecode, {summary.substitute_count} Substitute, {summary.unported_count} Unported) |
 | **Transitive Build Dependencies Scoped** | **{summary.unported_transitive_deps_count} unported build-time requirements uncovered** |
 | **Test Dependencies Unresolved** | **{summary.test_deps_unresolved_count} unported test suites/harnesses** |
@@ -556,7 +781,7 @@ class TriageAgent:
 
 ## 2. Key Technical Findings & Sizing Breakdown
 
-> **Effort Sizing Methodology:** Sizing estimates cover end-to-end environment provisioning, source build verification, test staging, and regression sign-off on target Power architecture. All estimates are rounded to integer person-days.
+> **Effort Sizing Methodology:** Sizing estimates utilize a single Fibonacci-calibrated ceiling (e.g. 5→8, 26→34, 34→55) covering environment provisioning, source compilation, transitive dependencies, SIMD/VSX adaptation, and test validation on IBM Power architecture. All estimates are rounded to integer person-days.
 
 """
         # Section 2.1: Version Warnings (Sub-Task 1)

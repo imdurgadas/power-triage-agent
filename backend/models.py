@@ -30,10 +30,16 @@ class AvailabilityStatus(str, Enum):
     BLOCKER = "blocker"
 
 
-class RecommendationTrafficLight(str, Enum):
-    GO = "GO"
-    CAUTION = "CAUTION"
-    HIGH_RISK = "HIGH_RISK"
+class SalesRecommendationTier(str, Enum):
+    MINIMAL_EFFORT = "Minimal Effort"
+    MINOR_EFFORT = "Minor Effort"
+    MODERATE_EFFORT = "Moderate Effort"
+    SIGNIFICANT_EFFORT = "Significant Effort"
+    NOT_POSSIBLE_AS_IS = "Not Possible As-Is (Alternative Required)"
+
+
+# Backward compatibility alias
+RecommendationTrafficLight = SalesRecommendationTier
 
 
 class SIMDPortingComplexity(str, Enum):
@@ -125,6 +131,8 @@ class PackageTriageResult(BaseModel):
     tier_description: str
     evidence_source: Optional[str] = None
     evidence_url: Optional[str] = None
+    git_repo_url: Optional[str] = None
+    doc_url: Optional[str] = None
     substitute_package: Optional[str] = None
     version_warning: Optional[str] = None
     
@@ -157,10 +165,11 @@ class TriageSummary(BaseModel):
     unported_count: int
     blocker_count: int
     readiness_score_pct: float
-    recommendation: RecommendationTrafficLight
+    recommendation: SalesRecommendationTier
     recommendation_reason: str
-    min_total_person_days: int
-    max_total_person_days: int
+    fibonacci_effort_pd: int = 0
+    min_total_person_days: int = 0
+    max_total_person_days: int = 0
     unported_transitive_deps_count: int
     test_deps_unresolved_count: int = 0
 
@@ -168,7 +177,7 @@ class TriageSummary(BaseModel):
 class AgentStep(BaseModel):
     step_id: int
     agent_name: str
-    action_type: str  # "plan", "lookup", "deep_scan", "llm_reasoning", "synthesis"
+    action_type: str  # "plan", "lookup", "deep_scan", "llm_reasoning", "synthesis", "url_inference"
     target: str
     thought: str
     detail: Optional[str] = None
@@ -183,8 +192,9 @@ class TriageRequest(BaseModel):
     
     # Flexible input fields
     raw_manifest: Optional[str] = None
-    manifest_type: Optional[str] = "auto"  # "sbom", "dockerfile", "requirements", "text", "auto"
+    manifest_type: Optional[str] = "auto"  # "sbom", "dockerfile", "requirements", "text", "auto", "url"
     git_repo_url: Optional[str] = None
+    doc_url: Optional[str] = None
     packages_list: Optional[List[Dict[str, str]]] = None
     
     # LLM config override (optional)
@@ -200,3 +210,9 @@ class TriageResponse(BaseModel):
     agent_steps: List[AgentStep]
     executive_brief_markdown: str
     export_csv_data: Optional[str] = None
+    primary_package_name: Optional[str] = None
+    git_repo_url: Optional[str] = None
+    doc_url: Optional[str] = None
+    source_url: Optional[str] = None
+    package_ecosystem: Optional[str] = None
+    package_version: Optional[str] = None

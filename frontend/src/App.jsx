@@ -172,6 +172,7 @@ export default function App() {
       {/* Executive Deliverables Modal */}
       {showExportModal && triageResult && (
         <ExportModal 
+          triageData={triageResult}
           markdownContent={triageResult.executive_brief_markdown} 
           csvData={triageResult.export_csv_data}
           projectName={triageResult.project_name}

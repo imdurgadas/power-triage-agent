@@ -2,9 +2,10 @@ import json
 import logging
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, Response
 from .models import TriageRequest, TriageResponse
 from .agent import TriageAgent
+from .pdf_generator import ExecutivePDFGenerator
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("main")
@@ -133,3 +134,24 @@ async def triage_workload_stream(request: TriageRequest):
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "Connection": "keep-alive"}
     )
+
+
+@app.post("/api/export/pdf")
+async def export_executive_pdf(report_data: dict):
+    """Generates an executive-ready, polished PDF qualification memo from triage results."""
+    try:
+        pdf_bytes = ExecutivePDFGenerator.generate(report_data)
+        target_name = report_data.get("primary_package_name") or report_data.get("project_name", "Migration_Triage")
+        safe_name = "".join(c if c.isalnum() or c in ("-", "_") else "_" for c in target_name)
+        return Response(
+            content=pdf_bytes,
+            media_type="application/pdf",
+            headers={
+                "Content-Disposition": f'attachment; filename="IBM_Power_Feasibility_{safe_name}.pdf"',
+                "Content-Type": "application/pdf"
+            }
+        )
+    except Exception as e:
+        logger.error(f"PDF generation failed: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Failed to generate executive PDF: {str(e)}")
+

@@ -247,5 +247,102 @@ def test_api_triage_flow_with_gaps():
     assert "executive_brief_markdown" in data
     # Verify version warning was captured for nginx:1.25
     assert any(p.get("version_warning") is not None for p in data["packages"])
-    # Verify Total Person Days is present
-    assert "Total Person Days" in data["executive_brief_markdown"]
+    # Verify Fibonacci Person Days is present in the brief
+    assert "Person-Days" in data["executive_brief_markdown"]
+    assert "Estimated Porting Sizing" in data["executive_brief_markdown"]
+    assert "fibonacci_effort_pd" in data["summary"]
+
+
+def test_fibonacci_effort_calculation():
+    """Verify single-value Fibonacci effort mapping strictly greater than base effort."""
+    from backend.agent import next_fibonacci_effort
+    assert next_fibonacci_effort(0) == 0
+    assert next_fibonacci_effort(1) == 2
+    assert next_fibonacci_effort(2) == 3
+    assert next_fibonacci_effort(5) == 8   # User's explicit rule: 5 -> 8
+    assert next_fibonacci_effort(26) == 34
+    assert next_fibonacci_effort(34) == 55
+
+
+def test_positive_sales_recommendations():
+    """Verify positive, effort-based sales recommendation tiers."""
+    from backend.models import SalesRecommendationTier
+    assert SalesRecommendationTier.MINIMAL_EFFORT == "Minimal Effort"
+    assert SalesRecommendationTier.MINOR_EFFORT == "Minor Effort"
+    assert SalesRecommendationTier.MODERATE_EFFORT == "Moderate Effort"
+    assert SalesRecommendationTier.SIGNIFICANT_EFFORT == "Significant Effort"
+    assert SalesRecommendationTier.NOT_POSSIBLE_AS_IS == "Not Possible As-Is (Alternative Required)"
+
+
+def test_export_executive_pdf_endpoint():
+    """Verify /api/export/pdf returns a valid binary PDF containing package name, GitHub URL, and documentation link."""
+    sample_report = {
+        "project_name": "RocksDB Migration",
+        "primary_package_name": "rocksdb",
+        "git_repo_url": "https://github.com/facebook/rocksdb",
+        "doc_url": "https://rocksdb.org",
+        "package_ecosystem": "native_c",
+        "package_version": "8.6",
+        "target_os": "RHEL9",
+        "target_platform": "OPENSHIFT",
+        "summary": {
+            "total_packages": 3,
+            "native_count": 2,
+            "agnostic_count": 0,
+            "substitute_count": 0,
+            "unported_count": 1,
+            "blocker_count": 0,
+            "readiness_score_pct": 76.5,
+            "recommendation": "Minor Effort",
+            "recommendation_reason": "High readiness (76.5%). Light build verification estimated at 8 Person-Days.",
+            "fibonacci_effort_pd": 8,
+            "min_total_person_days": 8,
+            "max_total_person_days": 8,
+            "unported_transitive_deps_count": 1,
+            "test_deps_unresolved_count": 1
+        },
+        "packages": [
+            {
+                "package_name": "rocksdb",
+                "requested_version": "8.6",
+                "ecosystem": "native_c",
+                "status": "unported_build_required",
+                "tier_description": "Requires source build",
+                "build_system": "CMake",
+                "total_effort_pd": 5,
+                "git_repo_url": "https://github.com/facebook/rocksdb",
+                "doc_url": "https://rocksdb.org",
+                "arch_sensitivity": {
+                    "has_simd_avx": True,
+                    "simd_instruction_count": 120,
+                    "simd_porting_complexity": "SIMDE_COMPATIBLE",
+                    "remediation_strategy": "Include simde/x86/avx2.h headers."
+                }
+            }
+        ]
+    }
+    response = client.post("/api/export/pdf", json=sample_report)
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "application/pdf"
+    assert response.content.startswith(b"%PDF-")
+    # Verify package name and provenance URLs are embedded in PDF content
+    pdf_bytes = response.content
+    assert b"rocksdb" in pdf_bytes
+    assert b"facebook/rocksdb" in pdf_bytes
+    assert b"rocksdb.org" in pdf_bytes
+
+
+def test_url_extractor_heuristics():
+    """Verify URLExtractor parses GitHub and package website URLs."""
+    from backend.url_extractor import URLExtractor
+    assert URLExtractor.is_url("https://github.com/facebook/rocksdb") is True
+    assert URLExtractor.is_url("https://rocksdb.org") is True
+    assert URLExtractor.is_url("torch==2.1.0\nnginx") is False
+
+    import asyncio
+    async def _test():
+        pkgs, title, note = await URLExtractor.extract_from_url("https://github.com/facebook/rocksdb")
+        names = [p["name"].lower() for p in pkgs]
+        assert "rocksdb" in names
+    asyncio.run(_test())
+
