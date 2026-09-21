@@ -52,32 +52,18 @@ export default function InputSection({ onRunTriage, isRunning, presets, activePr
   // Sync with selected preset
   useEffect(() => {
     if (activePreset) {
-      setActiveTab('text');
+      setActiveInputTab(0); // switch to Text/File tab
       setManifestText(activePreset.content);
       setManifestType(activePreset.manifest_type);
       // Map legacy preset target_os + target_platform to the combined environment key
-      const os = activePreset.target_os || 'rhel9';
-      const plat = activePreset.target_platform || 'ocp';
-      const envKey = `${os}_${plat === 'ocp' ? 'ocp' : 'baremetal'}`;
+      const os = activePreset.target_os || activePreset.target_environment?.split('_')[0] || 'rhel9';
+      const plat = activePreset.target_platform || (activePreset.target_environment?.includes('ocp') ? 'ocp' : 'baremetal');
+      const envKey = activePreset.target_environment || `${os}_${plat === 'ocp' ? 'ocp' : 'baremetal'}`;
       if (['rhel9_ocp','rhel10_ocp','rhel9_baremetal','rhel10_baremetal'].includes(envKey)) {
         setTargetEnvironment(envKey);
       }
     }
   }, [activePreset]);
-
-  const urlPresets = [
-    { name: "RocksDB (GitHub)", url: "https://github.com/facebook/rocksdb", os: "rhel9", platform: "baremetal" },
-    { name: "RocksDB (Docs Website)", url: "https://rocksdb.org", os: "rhel9", platform: "powervm" },
-    { name: "Redis Engine (GitHub)", url: "https://github.com/redis/redis", os: "rhel9", platform: "ocp" },
-    { name: "FastAPI Framework", url: "https://github.com/tiangolo/fastapi", os: "rhel9", platform: "ocp" },
-  ];
-
-  const handleSelectUrlPreset = (p) => {
-    setActiveTab('url');
-    setInputUrl(p.url);
-    setTargetOs(p.os);
-    setTargetPlatform(p.platform);
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -104,7 +90,7 @@ export default function InputSection({ onRunTriage, isRunning, presets, activePr
     const reader = new FileReader();
     reader.onload = (event) => {
       setManifestText(event.target.result);
-      setActiveTab('text');
+      setActiveInputTab(0); // switch to Text/File tab
       if (file.name.endsWith('.json')) setManifestType('sbom');
       else if (file.name.toLowerCase().includes('docker')) setManifestType('dockerfile');
       else if (file.name.endsWith('.txt')) setManifestType('requirements');

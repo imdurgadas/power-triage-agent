@@ -28,8 +28,9 @@ services:
     container_name: ibm-power-triage-frontend
     restart: unless-stopped
     ports:
-      # UBI nginx runs on 8080 (non-root); bind to localhost only
-      - "127.0.0.1:8080:8080"
+      # Bind to all local interfaces so browsers resolving localhost to ::1 can connect.
+      # The backend API port remains locked to 127.0.0.1 (never browser-accessible directly).
+      - "0.0.0.0:8080:8080"
     depends_on:
       backend:
         condition: service_healthy
