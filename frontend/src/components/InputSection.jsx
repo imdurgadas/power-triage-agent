@@ -1,10 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { Play, Sparkles, UploadCloud, Layers, Cpu, Server, Key, FileText, Globe, GitBranch, Terminal } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  Tile,
+  Button,
+  TextArea,
+  Select,
+  SelectItem,
+  Tag,
+  InlineLoading,
+  PasswordInput,
+  Tabs,
+  Tab,
+  TabList,
+  TabPanels,
+  TabPanel,
+  InlineNotification,
+} from '@carbon/react';
+import {
+  Play,
+  CloudUpload,
+  Key,
+  Chip,
+  Layers,
+  Flash,
+  Image,
+  TrashCan,
+  DocumentBlank,
+} from '@carbon/icons-react';
+
+const ACCEPTED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
+const MAX_IMAGE_BYTES = 10 * 1024 * 1024; // 10 MB
 
 export default function InputSection({ onRunTriage, isRunning, presets, activePreset, onSelectPreset }) {
-  const [activeTab, setActiveTab] = useState('text'); // 'text' or 'url'
-  const [targetOs, setTargetOs] = useState('rhel9');
-  const [targetPlatform, setTargetPlatform] = useState('ocp');
+  const [targetEnvironment, setTargetEnvironment] = useState('rhel9_ocp');
+  const [deliverableType, setDeliverableType] = useState('container');
   const [triageDepth, setTriageDepth] = useState('deep');
   const [manifestText, setManifestText] = useState('');
   const [manifestType, setManifestType] = useState('auto');
@@ -12,14 +40,28 @@ export default function InputSection({ onRunTriage, isRunning, presets, activePr
   const [geminiKey, setGeminiKey] = useState('');
   const [showKeyInput, setShowKeyInput] = useState(false);
 
+  // Image upload state
+  const [imageDataBase64, setImageDataBase64] = useState(null);
+  const [imageMediaType, setImageMediaType] = useState('image/png');
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+  const [imageFileName, setImageFileName] = useState('');
+  const [imageError, setImageError] = useState('');
+  const [activeInputTab, setActiveInputTab] = useState(0); // 0 = text, 1 = image
+  const imageDropRef = useRef(null);
+
   // Sync with selected preset
   useEffect(() => {
     if (activePreset) {
       setActiveTab('text');
       setManifestText(activePreset.content);
-      setTargetOs(activePreset.target_os);
-      setTargetPlatform(activePreset.target_platform);
       setManifestType(activePreset.manifest_type);
+      // Map legacy preset target_os + target_platform to the combined environment key
+      const os = activePreset.target_os || 'rhel9';
+      const plat = activePreset.target_platform || 'ocp';
+      const envKey = `${os}_${plat === 'ocp' ? 'ocp' : 'baremetal'}`;
+      if (['rhel9_ocp','rhel10_ocp','rhel9_baremetal','rhel10_baremetal'].includes(envKey)) {
+        setTargetEnvironment(envKey);
+      }
     }
   }, [activePreset]);
 
@@ -39,49 +81,24 @@ export default function InputSection({ onRunTriage, isRunning, presets, activePr
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (activeTab === 'text') {
-      if (!manifestText.trim()) return;
-      onRunTriage({
-        project_name: activePreset ? activePreset.name : "Custom Workload Migration",
-        target_os: targetOs,
-        target_platform: targetPlatform,
-        triage_depth: triageDepth,
-        raw_manifest: manifestText,
-        manifest_type: manifestType,
-        gemini_api_key: geminiKey || null
-      });
-    } else {
-      if (!inputUrl.trim()) return;
-      const raw = inputUrl.trim();
-      const isGithub = raw.includes('github.com');
-      let extractedPkgName = 'URL Inferred Workload';
-      try {
-        const clean = raw.replace(/^https?:\/\//, '').replace(/\/$/, '');
-        const parts = clean.split('/');
-        if (isGithub && parts.length >= 3) {
-          extractedPkgName = parts[2].replace(/\.git$/, '');
-        } else if (parts.length >= 1) {
-          extractedPkgName = parts[0].split('.')[0];
-        }
-      } catch (err) {
-        extractedPkgName = 'URL Inferred Workload';
-      }
+    const hasText = manifestText.trim().length > 0;
+    const hasImage = !!imageDataBase64;
+    if (!hasText && !hasImage) return;
 
-      onRunTriage({
-        project_name: `${extractedPkgName} Porting Qualification`,
-        target_os: targetOs,
-        target_platform: targetPlatform,
-        triage_depth: triageDepth,
-        raw_manifest: raw,
-        manifest_type: "url",
-        doc_url: !isGithub ? raw : null,
-        git_repo_url: isGithub ? raw : null,
-        gemini_api_key: geminiKey || null
-      });
-    }
+    onRunTriage({
+      project_name: activePreset ? activePreset.name : 'Custom Workload Migration',
+      target_environment: targetEnvironment,
+      deliverable_type: deliverableType,
+      triage_depth: triageDepth,
+      raw_manifest: hasText ? manifestText : null,
+      manifest_type: manifestType,
+      gemini_api_key: geminiKey || null,
+      image_data_base64: imageDataBase64 || null,
+      image_media_type: imageMediaType,
+    });
   };
 
-  const handleFileUpload = (e) => {
+  const handleTextFileUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
@@ -96,226 +113,331 @@ export default function InputSection({ onRunTriage, isRunning, presets, activePr
     reader.readAsText(file);
   };
 
+  const processImageFile = (file) => {
+    setImageError('');
+    if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+      setImageError(`Unsupported file type: ${file.type}. Please upload PNG, JPEG, WebP, or GIF.`);
+      return;
+    }
+    if (file.size > MAX_IMAGE_BYTES) {
+      setImageError(`Image is too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Maximum is 10 MB.`);
+      return;
+    }
+    setImageFileName(file.name);
+    setImageMediaType(file.type);
+    // Build preview URL
+    const previewUrl = URL.createObjectURL(file);
+    setImagePreviewUrl(previewUrl);
+    // Read as base64 (strip data URI prefix)
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const dataUri = ev.target.result;
+      const base64 = dataUri.split(',')[1];
+      setImageDataBase64(base64);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleImageFileInput = (e) => {
+    const file = e.target.files[0];
+    if (file) processImageFile(file);
+    // Reset so the same file can be re-selected
+    e.target.value = '';
+  };
+
+  const handleImageDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    imageDropRef.current?.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file) processImageFile(file);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    imageDropRef.current?.classList.add('drag-over');
+  };
+
+  const handleDragLeave = () => {
+    imageDropRef.current?.classList.remove('drag-over');
+  };
+
+  const clearImage = () => {
+    if (imagePreviewUrl) URL.revokeObjectURL(imagePreviewUrl);
+    setImageDataBase64(null);
+    setImagePreviewUrl(null);
+    setImageFileName('');
+    setImageMediaType('image/png');
+    setImageError('');
+  };
+
+  const canSubmit = !isRunning && (manifestText.trim().length > 0 || !!imageDataBase64);
+
   return (
-    <div className="glass-card" id="input-section">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+    <Tile id="input-section">
+      {/* Section heading */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.25rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.25rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.55rem' }}>
-            <Cpu size={21} color="#10b981" /> Workload Assessment Parameters
+          <p className="cds--label" style={{ marginBottom: '0.25rem' }}>ppc64le AI Pre-Sales</p>
+          <h2 className="cds--productive-heading-04" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Chip size={20} /> Workload Assessment Parameters
           </h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginTop: '0.2rem' }}>
-            Ingest manifests, unstructured email text, or directly provide a GitHub / documentation URL to infer dependencies.
+          <p className="cds--body-short-01" style={{ marginTop: '0.25rem', color: 'var(--cds-text-secondary)' }}>
+            Upload manifests or screenshots, select target Power environment, and let the agent scope availability and build-time dependencies.
           </p>
         </div>
-        <button 
-          type="button" 
-          className="btn btn-secondary" 
-          style={{ fontSize: '0.78rem', padding: '0.45rem 0.8rem' }}
+        <Button
+          kind="ghost"
+          size="sm"
+          renderIcon={Key}
           onClick={() => setShowKeyInput(!showKeyInput)}
         >
-          <Key size={14} color="#06b6d4" /> {geminiKey ? "Gemini Key Configured" : "API Key Override"}
-        </button>
+          {geminiKey ? 'Gemini Key Configured' : 'API Key Override'}
+        </Button>
       </div>
 
+      {/* Optional API key */}
       {showKeyInput && (
-        <div style={{ background: 'rgba(16, 185, 129, 0.07)', border: '1px solid var(--border-focus)', padding: '0.85rem', borderRadius: 'var(--radius-md)', marginBottom: '1.2rem' }}>
-          <label className="form-label">
-            <span>Google Gemini API Key (Optional live LLM override)</span>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>Prototype runs in autonomous simulation mode if blank</span>
-          </label>
-          <input 
-            type="password" 
-            className="form-control" 
-            placeholder="AIzaSy..." 
-            value={geminiKey} 
-            onChange={(e) => setGeminiKey(e.target.value)} 
+        <Tile style={{ background: 'var(--cds-layer-02)', marginBottom: '1.25rem' }}>
+          <PasswordInput
+            id="gemini-key-input"
+            labelText="Google Gemini API Key (Optional live LLM override)"
+            helperText="Prototype runs in autonomous simulation mode if blank"
+            placeholder="AIzaSy..."
+            value={geminiKey}
+            onChange={(e) => setGeminiKey(e.target.value)}
           />
-        </div>
+        </Tile>
       )}
 
-      {/* Input Mode Selector Tabs */}
-      <div className="tabs-header">
-        <button
-          type="button"
-          className={`tab-btn ${activeTab === 'text' ? 'active' : ''}`}
-          onClick={() => setActiveTab('text')}
-        >
-          <FileText size={15} /> Manifest / Free-Form Text / Email
-        </button>
-        <button
-          type="button"
-          className={`tab-btn ${activeTab === 'url' ? 'active' : ''}`}
-          onClick={() => setActiveTab('url')}
-        >
-          <Globe size={15} /> GitHub Repo or Documentation URL
-        </button>
-      </div>
-
-      {/* Preset Selectors Bar */}
-      {activeTab === 'text' ? (
-        <div className="presets-bar">
-          <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-dim)', marginRight: '0.25rem' }}>
-            Quick Stack Presets:
-          </span>
+      {/* Quick test scenario chips */}
+      {presets.length > 0 && (
+        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center', marginBottom: '1.25rem' }}>
+          <span className="cds--label">Quick Test Scenarios:</span>
           {presets.map((preset) => (
-            <button
+            <Tag
               key={preset.id}
-              type="button"
-              className={`preset-chip ${activePreset?.id === preset.id ? 'active' : ''}`}
+              type={activePreset?.id === preset.id ? 'blue' : 'gray'}
+              size="md"
+              style={{ cursor: 'pointer' }}
               onClick={() => onSelectPreset(preset)}
             >
-              <Sparkles size={13} /> {preset.name}
-            </button>
-          ))}
-        </div>
-      ) : (
-        <div className="presets-bar">
-          <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-dim)', marginRight: '0.25rem' }}>
-            Sample Repository & Docs URLs:
-          </span>
-          {urlPresets.map((p, idx) => (
-            <button
-              key={idx}
-              type="button"
-              className={`preset-chip ${inputUrl === p.url ? 'active' : ''}`}
-              onClick={() => handleSelectUrlPreset(p)}
-            >
-              <GitBranch size={13} /> {p.name}
-            </button>
+              {preset.name}
+            </Tag>
           ))}
         </div>
       )}
 
+      {/* Main form */}
       <form onSubmit={handleSubmit}>
-        <div className="input-grid">
-          {/* Main Input Pane */}
-          {activeTab === 'text' ? (
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <div className="form-label">
-                <span className="form-label-title">
-                  <FileText size={15} color="#10b981" /> Application Dependency Manifest / Free-form Text
-                </span>
-                <label style={{ color: '#06b6d4', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                  <UploadCloud size={14} /> Upload File (SBOM / Dockerfile / txt)
-                  <input type="file" style={{ display: 'none' }} onChange={handleFileUpload} />
-                </label>
-              </div>
-              <textarea
-                className="form-control"
-                id="manifest-input"
-                rows={9}
-                value={manifestText}
-                onChange={(e) => setManifestText(e.target.value)}
-                placeholder="Paste Dockerfile, SBOM JSON, requirements.txt, or unstructured notes (e.g. 'Customer is moving nginx:1.24, redis:7.2, and custom RocksDB storage with AVX2')..."
-                required
-              />
-            </div>
-          ) : (
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <div className="form-label">
-                <span className="form-label-title">
-                  <Globe size={15} color="#06b6d4" /> GitHub Repository or Documentation Website URL
-                </span>
-                <span style={{ color: 'var(--text-dim)', fontSize: '0.78rem' }}>LLM automatically crawls & infers library needs</span>
-              </div>
-              <input
-                type="url"
-                className="form-control"
-                id="url-input"
-                value={inputUrl}
-                onChange={(e) => setInputUrl(e.target.value)}
-                placeholder="https://github.com/facebook/rocksdb or https://rocksdb.org"
-                required
-                style={{ fontSize: '0.95rem', padding: '0.85rem 1rem' }}
-              />
-              <div style={{ marginTop: '0.85rem', padding: '1rem', background: 'rgba(6, 182, 212, 0.06)', borderRadius: 'var(--radius-md)', border: '1px solid rgba(6, 182, 212, 0.2)', fontSize: '0.84rem', color: 'var(--text-muted)', lineHeight: 1.6 }}>
-                <p style={{ fontWeight: 600, color: '#67e8f9', marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <span>💡 Autonomous Dependency Discovery</span>
-                </p>
-                <p>
-                  The triage agent will fetch repository manifests (<code>requirements.txt</code>, <code>CMakeLists.txt</code>, <code>package.json</code>, <code>Dockerfile</code>) or documentation specifications from the provided URL, infer exact library versions and build requirements via Gemini LLM, and qualify each against IBM Power (<code>ppc64le</code>).
-                </p>
-              </div>
-            </div>
-          )}
+        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem' }}>
 
-          {/* Target Architecture Parameters */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label" htmlFor="target-os-select">
-                <span className="form-label-title">
-                  <Server size={15} color="#06b6d4" /> Target OS (ppc64le)
-                </span>
-              </label>
-              <select 
-                id="target-os-select" 
-                className="form-control" 
-                value={targetOs} 
-                onChange={(e) => setTargetOs(e.target.value)}
-              >
-                <option value="rhel9">Red Hat Enterprise Linux 9 (ppc64le)</option>
-                <option value="rhel8">Red Hat Enterprise Linux 8 (ppc64le)</option>
-                <option value="ubuntu24">Ubuntu 24.04 LTS Ports (ppc64le)</option>
-                <option value="ubuntu22">Ubuntu 22.04 LTS Ports (ppc64le)</option>
-                <option value="sles15">SUSE Linux Enterprise Server 15</option>
-              </select>
-            </div>
+          {/* Left column: tabbed manifest / image input */}
+          <div>
+            <Tabs selectedIndex={activeInputTab} onChange={({ selectedIndex }) => setActiveInputTab(selectedIndex)}>
+              <TabList aria-label="Input method">
+                <Tab renderIcon={DocumentBlank}>Text / File</Tab>
+                <Tab renderIcon={Image}>Image Upload</Tab>
+              </TabList>
 
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label" htmlFor="target-platform-select">
-                <span className="form-label-title">
-                  <Layers size={15} color="#10b981" /> Target Platform Runtime
-                </span>
-              </label>
-              <select 
-                id="target-platform-select" 
-                className="form-control" 
-                value={targetPlatform} 
-                onChange={(e) => setTargetPlatform(e.target.value)}
-              >
-                <option value="ocp">Red Hat OpenShift on Power (OCP)</option>
-                <option value="powervm">PowerVM LPAR (Linux Native)</option>
-                <option value="baremetal">Bare Metal Power Server</option>
-              </select>
-            </div>
+              <TabPanels>
+                {/* ── Tab 0: text manifest ── */}
+                <TabPanel style={{ padding: '1rem 0 0' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
+                    <label className="cds--label" htmlFor="manifest-input">
+                      Application Dependency Manifest / Stack Specification
+                    </label>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer', color: 'var(--cds-link-primary)', fontSize: '0.875rem' }}>
+                      <CloudUpload size={16} /> Upload File
+                      <input type="file" style={{ display: 'none' }} onChange={handleTextFileUpload} />
+                    </label>
+                  </div>
+                  <TextArea
+                    id="manifest-input"
+                    labelText=""
+                    hideLabel
+                    rows={9}
+                    value={manifestText}
+                    onChange={(e) => setManifestText(e.target.value)}
+                    placeholder="Paste Dockerfile, SBOM (JSON), requirements.txt, or unstructured description (e.g. 'nginx:1.24, redis, custom C++ dsp library with AVX2')..."
+                    style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.85rem' }}
+                  />
+                </TabPanel>
 
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label" htmlFor="triage-depth-select">
-                <span className="form-label-title">
-                  <Cpu size={15} color="#8b5cf6" /> Triage Depth Mode
-                </span>
-              </label>
-              <select 
-                id="triage-depth-select" 
-                className="form-control" 
-                value={triageDepth} 
-                onChange={(e) => setTriageDepth(e.target.value)}
-              >
-                <option value="deep">Deep Build & Transitive Dependency Scoping (Recommended)</option>
-                <option value="express">Express Triage (Registry lookup only)</option>
-              </select>
-            </div>
+                {/* ── Tab 1: image upload ── */}
+                <TabPanel style={{ padding: '1rem 0 0' }}>
+                  {imageError && (
+                    <InlineNotification
+                      kind="error"
+                      title="Upload error:"
+                      subtitle={imageError}
+                      lowContrast
+                      style={{ marginBottom: '0.75rem' }}
+                      onCloseButtonClick={() => setImageError('')}
+                    />
+                  )}
 
-            <button 
-              type="submit" 
-              className="btn btn-primary" 
-              id="run-triage-btn"
-              disabled={isRunning || (activeTab === 'text' ? !manifestText.trim() : !inputUrl.trim())}
-              style={{ marginTop: 'auto', padding: '0.9rem' }}
+                  {imagePreviewUrl ? (
+                    /* Preview state */
+                    <div style={{ border: '1px solid var(--cds-border-subtle-01)', borderRadius: '2px', overflow: 'hidden' }}>
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          padding: '0.5rem 0.75rem',
+                          background: 'var(--cds-layer-02)',
+                          borderBottom: '1px solid var(--cds-border-subtle-01)',
+                        }}
+                      >
+                        <span className="cds--label" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                          <Image size={14} /> {imageFileName}
+                        </span>
+                        <Button
+                          kind="ghost"
+                          size="sm"
+                          renderIcon={TrashCan}
+                          iconDescription="Remove image"
+                          hasIconOnly
+                          tooltipPosition="left"
+                          onClick={clearImage}
+                        />
+                      </div>
+                      <img
+                        src={imagePreviewUrl}
+                        alt="Uploaded manifest"
+                        style={{ width: '100%', maxHeight: '300px', objectFit: 'contain', background: 'var(--cds-layer-01)', display: 'block' }}
+                      />
+                      <p className="cds--helper-text-01" style={{ padding: '0.4rem 0.75rem' }}>
+                        Gemini Vision will extract dependency text from this image before triage analysis.
+                      </p>
+                    </div>
+                  ) : (
+                    /* Drop zone */
+                    <div
+                      ref={imageDropRef}
+                      onDrop={handleImageDrop}
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      style={{
+                        border: '2px dashed var(--cds-border-subtle-01)',
+                        borderRadius: '2px',
+                        minHeight: '220px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.75rem',
+                        cursor: 'pointer',
+                        transition: 'border-color 0.15s, background 0.15s',
+                        padding: '2rem',
+                      }}
+                    >
+                      <Image size={40} style={{ color: 'var(--cds-text-secondary)' }} />
+                      <p className="cds--body-short-01" style={{ color: 'var(--cds-text-secondary)', textAlign: 'center' }}>
+                        Drag &amp; drop a screenshot here, or click to browse
+                      </p>
+                      <p className="cds--helper-text-01" style={{ textAlign: 'center' }}>
+                        PNG · JPEG · WebP · GIF &nbsp;|&nbsp; Max 10 MB
+                        <br />
+                        e.g. screenshot of a Dockerfile, requirements.txt, or architecture diagram
+                      </p>
+                      <label>
+                        <Button kind="tertiary" size="sm" renderIcon={CloudUpload} as="span">
+                          Choose Image
+                        </Button>
+                        <input
+                          type="file"
+                          accept={ACCEPTED_IMAGE_TYPES.join(',')}
+                          style={{ display: 'none' }}
+                          onChange={handleImageFileInput}
+                        />
+                      </label>
+                    </div>
+                  )}
+
+                  {/* Optional: also allow typed context alongside the image */}
+                  <div style={{ marginTop: '0.75rem' }}>
+                    <TextArea
+                      id="image-context-input"
+                      labelText="Additional context (optional)"
+                      helperText="Add any notes about what's in the image, or extra packages not visible."
+                      rows={3}
+                      value={manifestText}
+                      onChange={(e) => setManifestText(e.target.value)}
+                      placeholder="e.g. 'This is from our CI pipeline — also include libssl-dev and libffi-dev'"
+                      style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.85rem' }}
+                    />
+                  </div>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
+          </div>
+
+          {/* Right column: target parameters + submit */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <Select
+              id="target-env-select"
+              labelText={<span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Chip size={14} /> Target Environment (ppc64le)</span>}
+              value={targetEnvironment}
+              onChange={(e) => setTargetEnvironment(e.target.value)}
             >
-              {isRunning ? (
-                <>
-                  <div className="spinner" /> Agentic Triage in Progress...
-                </>
-              ) : (
-                <>
-                  <Play size={16} fill="white" /> Launch Power Porting Triage
-                </>
-              )}
-            </button>
+              <SelectItem value="rhel9_ocp"        text="RHEL 9 on OpenShift (ppc64le)" />
+              <SelectItem value="rhel10_ocp"       text="RHEL 10 on OpenShift (ppc64le)" />
+              <SelectItem value="rhel9_baremetal"  text="RHEL 9 Bare Metal / PowerVM (ppc64le)" />
+              <SelectItem value="rhel10_baremetal" text="RHEL 10 Bare Metal / PowerVM (ppc64le)" />
+            </Select>
+
+            <Select
+              id="deliverable-type-select"
+              labelText={<span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Layers size={14} /> Deliverable Type</span>}
+              value={deliverableType}
+              onChange={(e) => setDeliverableType(e.target.value)}
+              helperText="Match availability against the artefact type you intend to deploy."
+            >
+              <SelectItem value="container"    text="Container — OCI/Docker image" />
+              <SelectItem value="build"        text="Build — compiled binary, RPM, or wheel" />
+              <SelectItem value="build_script" text="Build Script — IBM ppc64le build recipe" />
+            </Select>
+
+            <Select
+              id="triage-depth-select"
+              labelText={<span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}><Flash size={14} /> Triage Depth Mode</span>}
+              value={triageDepth}
+              onChange={(e) => setTriageDepth(e.target.value)}
+            >
+              <SelectItem value="deep" text="Deep Build & Transitive Dependency Scoping (Recommended)" />
+              <SelectItem value="express" text="Express Triage (Registry lookup only)" />
+            </Select>
+
+            {/* Active input indicator */}
+            {(imageDataBase64 || manifestText.trim()) && (
+              <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+                {imageDataBase64 && <Tag type="purple" size="sm"><Image size={12} style={{ marginRight: '3px' }} /> Image ready</Tag>}
+                {manifestText.trim() && <Tag type="teal" size="sm"><DocumentBlank size={12} style={{ marginRight: '3px' }} /> Text ready</Tag>}
+              </div>
+            )}
+
+            {isRunning ? (
+              <InlineLoading
+                description="Agentic Triage in Progress..."
+                status="active"
+                style={{ marginTop: 'auto' }}
+              />
+            ) : (
+              <Button
+                type="submit"
+                id="run-triage-btn"
+                renderIcon={Play}
+                disabled={!canSubmit}
+                style={{ marginTop: 'auto', width: '100%', maxWidth: '100%' }}
+              >
+                Launch Power Porting Triage
+              </Button>
+            )}
           </div>
         </div>
       </form>
-    </div>
+    </Tile>
   );
 }

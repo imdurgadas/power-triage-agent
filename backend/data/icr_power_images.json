@@ -1,0 +1,3346 @@
+{
+  "metadata": {
+    "source": "https://github.com/seth-priya/ICR-Power-Image-Tracker/blob/main/docs/index.md",
+    "fetched_at": "2026-09-10T12:38:46.700169+00:00",
+    "total_entries": 195,
+    "total_images": 107
+  },
+  "lookup": {
+    "opensearch-dashboards": [
+      {
+        "image_name": "opensearch-dashboards-ppc64le",
+        "canonical_name": "opensearch-dashboards",
+        "tag": "3.6.0",
+        "full_ref": "icr.io/ppc64le-oss/opensearch-dashboards-ppc64le:3.6.0",
+        "license": "",
+        "last_published": "Aug 24, 2026"
+      }
+    ],
+    "langflow": [
+      {
+        "image_name": "langflow-ppc64le",
+        "canonical_name": "langflow",
+        "tag": "v1.9.6",
+        "full_ref": "icr.io/ppc64le-oss/langflow-ppc64le:v1.9.6",
+        "license": "MIT",
+        "last_published": "Aug 21, 2026"
+      },
+      {
+        "image_name": "langflow-ppc64le",
+        "canonical_name": "langflow",
+        "tag": "v1.7.3",
+        "full_ref": "icr.io/ppc64le-oss/langflow-ppc64le:v1.7.3",
+        "license": "MIT",
+        "last_published": "March 9, 2026"
+      }
+    ],
+    "openrag-opensearch": [
+      {
+        "image_name": "openrag-opensearch-ppc64le",
+        "canonical_name": "openrag-opensearch",
+        "tag": "0.6.0",
+        "full_ref": "icr.io/ppc64le-oss/openrag-opensearch-ppc64le:0.6.0",
+        "license": "",
+        "last_published": "Aug 13, 2026"
+      }
+    ],
+    "ollama": [
+      {
+        "image_name": "ollama-ppc64le",
+        "canonical_name": "ollama",
+        "tag": "v0.32.7",
+        "full_ref": "icr.io/ppc64le-oss/ollama-ppc64le:v0.32.7",
+        "license": "MIT",
+        "last_published": "Aug 12, 2026"
+      },
+      {
+        "image_name": "ollama-ppc64le",
+        "canonical_name": "ollama",
+        "tag": "v0.24.0",
+        "full_ref": "icr.io/ppc64le-oss/ollama-ppc64le:v0.24.0",
+        "license": "MIT",
+        "last_published": "Jul 1, 2026"
+      },
+      {
+        "image_name": "ollama-ppc64le",
+        "canonical_name": "ollama",
+        "tag": "v0.17.6",
+        "full_ref": "icr.io/ppc64le-oss/ollama-ppc64le:v0.17.6",
+        "license": "MIT",
+        "last_published": "Mar 10, 2026"
+      },
+      {
+        "image_name": "ollama-ppc64le",
+        "canonical_name": "ollama",
+        "tag": "v0.13.5",
+        "full_ref": "icr.io/ppc64le-oss/ollama-ppc64le:v0.13.5",
+        "license": "MIT",
+        "last_published": "Jan 1, 2026"
+      },
+      {
+        "image_name": "ollama-ppc64le",
+        "canonical_name": "ollama",
+        "tag": "v0.13.1",
+        "full_ref": "icr.io/ppc64le-oss/ollama-ppc64le:v0.13.1",
+        "license": "MIT",
+        "last_published": "Dec 3, 2025"
+      }
+    ],
+    "openrag-backend": [
+      {
+        "image_name": "openrag-backend-ppc64le",
+        "canonical_name": "openrag-backend",
+        "tag": "0.6.0",
+        "full_ref": "icr.io/ppc64le-oss/openrag-backend-ppc64le:0.6.0",
+        "license": "",
+        "last_published": "Aug 12, 2026"
+      }
+    ],
+    "openrag-frontend": [
+      {
+        "image_name": "openrag-frontend-ppc64le",
+        "canonical_name": "openrag-frontend",
+        "tag": "0.6.0",
+        "full_ref": "icr.io/ppc64le-oss/openrag-frontend-ppc64le:0.6.0",
+        "license": "",
+        "last_published": "Aug 12, 2026"
+      }
+    ],
+    "zookeeper": [
+      {
+        "image_name": "zookeeper-ppc64le",
+        "canonical_name": "zookeeper",
+        "tag": "3.9.5",
+        "full_ref": "icr.io/ppc64le-oss/zookeeper-ppc64le:3.9.5",
+        "license": "Apache License 2.0",
+        "last_published": "Aug 25, 2026"
+      },
+      {
+        "image_name": "zookeeper-ppc64le",
+        "canonical_name": "zookeeper",
+        "tag": "v3.9.3-debian-12-r19-bv",
+        "full_ref": "icr.io/ppc64le-oss/zookeeper-ppc64le:v3.9.3-debian-12-r19-bv",
+        "license": "Apache License 2.0",
+        "last_published": "Nov 14, 2025"
+      },
+      {
+        "image_name": "zookeeper-ppc64le",
+        "canonical_name": "zookeeper",
+        "tag": "v3.9.3-bv",
+        "full_ref": "icr.io/ppc64le-oss/zookeeper-ppc64le:v3.9.3-bv",
+        "license": "Apache License 2.0",
+        "last_published": "May 16, 2025"
+      },
+      {
+        "image_name": "zookeeper-ppc64le",
+        "canonical_name": "zookeeper",
+        "tag": "v0.2.14-pravega",
+        "full_ref": "icr.io/ppc64le-oss/zookeeper-ppc64le:v0.2.14-pravega",
+        "license": "Apache License 2.0",
+        "last_published": "Aug 7, 2023"
+      },
+      {
+        "image_name": "zookeeper-ppc64le",
+        "canonical_name": "zookeeper",
+        "tag": "3.5.10",
+        "full_ref": "icr.io/ppc64le-oss/zookeeper-ppc64le:3.5.10",
+        "license": "Apache License 2.0",
+        "last_published": "April 17, 2023"
+      },
+      {
+        "image_name": "zookeeper-ppc64le",
+        "canonical_name": "zookeeper",
+        "tag": "v3.7.0-bv",
+        "full_ref": "icr.io/ppc64le-oss/zookeeper-ppc64le:v3.7.0-bv",
+        "license": "Apache License 2.0",
+        "last_published": "Oct 11, 2022"
+      },
+      {
+        "image_name": "zookeeper-ppc64le",
+        "canonical_name": "zookeeper",
+        "tag": "v3.8.0-bv",
+        "full_ref": "icr.io/ppc64le-oss/zookeeper-ppc64le:v3.8.0-bv",
+        "license": "Apache License 2.0",
+        "last_published": "Oct 4, 2022"
+      }
+    ],
+    "pulsar": [
+      {
+        "image_name": "pulsar-ppc64le",
+        "canonical_name": "pulsar",
+        "tag": "4.2.3",
+        "full_ref": "icr.io/ppc64le-oss/pulsar-ppc64le:4.2.3",
+        "license": "Apache-2.0",
+        "last_published": "Sep 1, 2026"
+      }
+    ],
+    "opensearch": [
+      {
+        "image_name": "opensearch-ppc64le",
+        "canonical_name": "opensearch",
+        "tag": "3.6.0",
+        "full_ref": "icr.io/ppc64le-oss/opensearch-ppc64le:3.6.0",
+        "license": "Apache License 2.0",
+        "last_published": "Jul 31, 2026"
+      },
+      {
+        "image_name": "opensearch-ppc64le",
+        "canonical_name": "opensearch",
+        "tag": "3.5.0",
+        "full_ref": "icr.io/ppc64le-oss/opensearch-ppc64le:3.5.0",
+        "license": "Apache License 2.0",
+        "last_published": "June 24, 2026"
+      },
+      {
+        "image_name": "opensearch-ppc64le",
+        "canonical_name": "opensearch",
+        "tag": "2.12.0",
+        "full_ref": "icr.io/ppc64le-oss/opensearch-ppc64le:2.12.0",
+        "license": "Apache License 2.0",
+        "last_published": "April 16, 2024"
+      },
+      {
+        "image_name": "opensearch-ppc64le",
+        "canonical_name": "opensearch",
+        "tag": "3.3.0",
+        "full_ref": "icr.io/ppc64le-oss/opensearch-ppc64le:3.3.0",
+        "license": "Apache License 2.0",
+        "last_published": "Feb 26, 2026"
+      }
+    ],
+    "cass-management-api": [
+      {
+        "image_name": "cass-management-api-ppc64le",
+        "canonical_name": "cass-management-api",
+        "tag": "4.1.11",
+        "full_ref": "icr.io/ppc64le-oss/cass-management-api-ppc64le:4.1.11",
+        "license": "Apache License 2.0",
+        "last_published": "Aug 14, 2026"
+      },
+      {
+        "image_name": "cass-management-api-ppc64le",
+        "canonical_name": "cass-management-api",
+        "tag": "4.1.2",
+        "full_ref": "icr.io/ppc64le-oss/cass-management-api-ppc64le:4.1.2",
+        "license": "Apache License 2.0",
+        "last_published": "July 22, 2024"
+      },
+      {
+        "image_name": "cass-management-api-ppc64le",
+        "canonical_name": "cass-management-api",
+        "tag": "4.0.7",
+        "full_ref": "icr.io/ppc64le-oss/cass-management-api-ppc64le:4.0.7",
+        "license": "Apache License 2.0",
+        "last_published": "Aug 29, 2023"
+      }
+    ],
+    "hapi-fhir": [
+      {
+        "image_name": "hapi-fhir-ppc64le",
+        "canonical_name": "hapi-fhir",
+        "tag": "8.10.0",
+        "full_ref": "icr.io/ppc64le-oss/hapi-fhir-ppc64le:8.10.0",
+        "license": "",
+        "last_published": "Jul 21, 2026"
+      }
+    ],
+    "litellm": [
+      {
+        "image_name": "litellm-ppc64le",
+        "canonical_name": "litellm",
+        "tag": "1.92.0",
+        "full_ref": "icr.io/ppc64le-oss/litellm-ppc64le:1.92.0",
+        "license": "MIT",
+        "last_published": "Jul 28, 2026"
+      }
+    ],
+    "vllm": [
+      {
+        "image_name": "vllm-ppc64le",
+        "canonical_name": "vllm",
+        "tag": "0.24.0",
+        "full_ref": "icr.io/ppc64le-oss/vllm-ppc64le:0.24.0",
+        "license": "Apache-2.0",
+        "last_published": "Jul 13, 2026"
+      },
+      {
+        "image_name": "vllm-ppc64le",
+        "canonical_name": "vllm",
+        "tag": "0.21.0",
+        "full_ref": "icr.io/ppc64le-oss/vllm-ppc64le:0.21.0",
+        "license": "Apache-2.0",
+        "last_published": "Jul 3, 2026"
+      },
+      {
+        "image_name": "vllm-ppc64le",
+        "canonical_name": "vllm",
+        "tag": "0.23.0",
+        "full_ref": "icr.io/ppc64le-oss/vllm-ppc64le:0.23.0",
+        "license": "Apache-2.0",
+        "last_published": "Jul 2, 2026"
+      },
+      {
+        "image_name": "vllm-ppc64le",
+        "canonical_name": "vllm",
+        "tag": "0.22.1",
+        "full_ref": "icr.io/ppc64le-oss/vllm-ppc64le:0.22.1",
+        "license": "Apache-2.0",
+        "last_published": "Jul 1, 2026"
+      },
+      {
+        "image_name": "vllm-ppc64le",
+        "canonical_name": "vllm",
+        "tag": "0.19.1",
+        "full_ref": "icr.io/ppc64le-oss/vllm-ppc64le:0.19.1",
+        "license": "Apache-2.0",
+        "last_published": "June 9, 2026"
+      },
+      {
+        "image_name": "vllm-ppc64le",
+        "canonical_name": "vllm",
+        "tag": "0.18.0",
+        "full_ref": "icr.io/ppc64le-oss/vllm-ppc64le:0.18.0",
+        "license": "Apache-2.0",
+        "last_published": "Apr 13, 2026"
+      },
+      {
+        "image_name": "vllm-ppc64le",
+        "canonical_name": "vllm",
+        "tag": "0.10.1.dev852.gee01645db.d20250827",
+        "full_ref": "icr.io/ppc64le-oss/vllm-ppc64le:0.10.1.dev852.gee01645db.d20250827",
+        "license": "Apache-2.0",
+        "last_published": "September 11, 2025"
+      },
+      {
+        "image_name": "vllm-ppc64le",
+        "canonical_name": "vllm",
+        "tag": "0.9.1",
+        "full_ref": "icr.io/ppc64le-oss/vllm-ppc64le:0.9.1",
+        "license": "Apache-2.0",
+        "last_published": "August 18, 2025"
+      }
+    ],
+    "agentstack-rag": [
+      {
+        "image_name": "agentstack-rag-ppc64le",
+        "canonical_name": "agentstack-rag",
+        "tag": "0.4.3",
+        "full_ref": "icr.io/ppc64le-oss/agentstack-rag-ppc64le:0.4.3",
+        "license": "Apache-2.0",
+        "last_published": "July 17, 2026"
+      }
+    ],
+    "agentstack-chat": [
+      {
+        "image_name": "agentstack-chat-ppc64le",
+        "canonical_name": "agentstack-chat",
+        "tag": "0.4.3",
+        "full_ref": "icr.io/ppc64le-oss/agentstack-chat-ppc64le:0.4.3",
+        "license": "Apache-2.0",
+        "last_published": "July 17, 2026"
+      }
+    ],
+    "agentstack-server": [
+      {
+        "image_name": "agentstack-server-ppc64le",
+        "canonical_name": "agentstack-server",
+        "tag": "0.4.3",
+        "full_ref": "icr.io/ppc64le-oss/agentstack-server-ppc64le:0.4.3",
+        "license": "Apache-2.0",
+        "last_published": "July 17, 2026"
+      }
+    ],
+    "agentstack-form": [
+      {
+        "image_name": "agentstack-form-ppc64le",
+        "canonical_name": "agentstack-form",
+        "tag": "0.4.3",
+        "full_ref": "icr.io/ppc64le-oss/agentstack-form-ppc64le:0.4.3",
+        "license": "Apache-2.0",
+        "last_published": "July 17, 2026"
+      }
+    ],
+    "mongodb": [
+      {
+        "image_name": "mongodb-ppc64le",
+        "canonical_name": "mongodb",
+        "tag": "8.3.1",
+        "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:8.3.1",
+        "license": "Server Side Public License v1.0",
+        "last_published": "June 9, 2026"
+      },
+      {
+        "image_name": "mongodb-ppc64le",
+        "canonical_name": "mongodb",
+        "tag": "7.0.25",
+        "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:7.0.25",
+        "license": "Server Side Public License v1.0",
+        "last_published": "December 17, 2025"
+      },
+      {
+        "image_name": "mongodb-ppc64le",
+        "canonical_name": "mongodb",
+        "tag": "6.0.13-bv",
+        "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:6.0.13-bv",
+        "license": "Server Side Public License v1.0",
+        "last_published": "Nov 21, 2024"
+      },
+      {
+        "image_name": "mongodb-ppc64le",
+        "canonical_name": "mongodb",
+        "tag": "5.0.26",
+        "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:5.0.26",
+        "license": "Server Side Public License v1.0",
+        "last_published": "April 9, 2024"
+      },
+      {
+        "image_name": "mongodb-ppc64le",
+        "canonical_name": "mongodb",
+        "tag": "6.0.13",
+        "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:6.0.13",
+        "license": "Server Side Public License v1.0",
+        "last_published": "April 9, 2024"
+      },
+      {
+        "image_name": "mongodb-ppc64le",
+        "canonical_name": "mongodb",
+        "tag": "5.0.21",
+        "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:5.0.21",
+        "license": "Server Side Public License v1.0",
+        "last_published": "Oct 16, 2023"
+      },
+      {
+        "image_name": "mongodb-ppc64le",
+        "canonical_name": "mongodb",
+        "tag": "5.0.20",
+        "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:5.0.20",
+        "license": "Server Side Public License v1.0",
+        "last_published": "Oct 9, 2023"
+      },
+      {
+        "image_name": "mongodb-ppc64le",
+        "canonical_name": "mongodb",
+        "tag": "4.4.24",
+        "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:4.4.24",
+        "license": "Server Side Public License v1.0",
+        "last_published": "Oct 9, 2023"
+      },
+      {
+        "image_name": "mongodb-ppc64le",
+        "canonical_name": "mongodb",
+        "tag": "4.4.18",
+        "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:4.4.18",
+        "license": "Server Side Public License v1.0",
+        "last_published": "Jan 16, 2023"
+      },
+      {
+        "image_name": "mongodb-ppc64le",
+        "canonical_name": "mongodb",
+        "tag": "4.4.17",
+        "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:4.4.17",
+        "license": "Server Side Public License v1.0",
+        "last_published": "Oct 18, 2022"
+      }
+    ],
+    "clickhouse": [
+      {
+        "image_name": "clickhouse-ppc64le",
+        "canonical_name": "clickhouse",
+        "tag": "v26.3.9.8-lts",
+        "full_ref": "icr.io/ppc64le-oss/clickhouse-ppc64le:v26.3.9.8-lts",
+        "license": "Apache-2.0",
+        "last_published": "July 1, 2026"
+      }
+    ],
+    "kafka": [
+      {
+        "image_name": "kafka-ppc64le",
+        "canonical_name": "kafka",
+        "tag": "4.1.0-bv",
+        "full_ref": "icr.io/ppc64le-oss/kafka-ppc64le:4.1.0-bv",
+        "license": "Apache-2.0",
+        "last_published": "June 10, 2026"
+      }
+    ],
+    "envoy": [
+      {
+        "image_name": "envoy-ppc64le",
+        "canonical_name": "envoy",
+        "tag": "1.36.5",
+        "full_ref": "icr.io/ppc64le-oss/envoy-ppc64le:1.36.5",
+        "license": "Apache License 2.0",
+        "last_published": "June 8, 2026"
+      },
+      {
+        "image_name": "envoy-ppc64le",
+        "canonical_name": "envoy",
+        "tag": "1.34.0",
+        "full_ref": "icr.io/ppc64le-oss/envoy-ppc64le:1.34.0",
+        "license": "Apache License 2.0",
+        "last_published": "May 20. 2025"
+      },
+      {
+        "image_name": "envoy-ppc64le",
+        "canonical_name": "envoy",
+        "tag": "1.29.3",
+        "full_ref": "icr.io/ppc64le-oss/envoy-ppc64le:1.29.3",
+        "license": "Apache License 2.0",
+        "last_published": "April 16, 2024"
+      },
+      {
+        "image_name": "envoy-ppc64le",
+        "canonical_name": "envoy",
+        "tag": "1.29.0",
+        "full_ref": "icr.io/ppc64le-oss/envoy-ppc64le:1.29.0",
+        "license": "Apache License 2.0",
+        "last_published": "Feb 7, 2024"
+      }
+    ],
+    "grafana-operator": [
+      {
+        "image_name": "grafana-operator-ppc64le",
+        "canonical_name": "grafana-operator",
+        "tag": "5.22.2",
+        "full_ref": "icr.io/ppc64le-oss/grafana-operator-ppc64le:5.22.2",
+        "license": "Apache-2.0",
+        "last_published": "June 5, 2026"
+      }
+    ],
+    "redis-operator": [
+      {
+        "image_name": "redis-operator-ppc64le",
+        "canonical_name": "redis-operator",
+        "tag": "v0.24.0",
+        "full_ref": "icr.io/ppc64le-oss/redis-operator-ppc64le:v0.24.0",
+        "license": "Apache-2.0",
+        "last_published": "May 22, 2026"
+      }
+    ],
+    "openresty": [
+      {
+        "image_name": "openresty-ppc64le",
+        "canonical_name": "openresty",
+        "tag": "1.27.1.2-11-alpine",
+        "full_ref": "icr.io/ppc64le-oss/openresty-ppc64le:1.27.1.2-11-alpine",
+        "license": "BSD-2-Clause",
+        "last_published": "May 14, 2026"
+      }
+    ],
+    "ansible-acme-test-container": [
+      {
+        "image_name": "ansible-acme-test-container-ppc64le",
+        "canonical_name": "ansible-acme-test-container",
+        "tag": "2.3.0",
+        "full_ref": "icr.io/ppc64le-oss/ansible-acme-test-container-ppc64le:2.3.0",
+        "license": "GPL-3.0, Apache License 2.0",
+        "last_published": "June 10, 2026"
+      }
+    ],
+    "redis-exporter": [
+      {
+        "image_name": "redis-exporter-ppc64le",
+        "canonical_name": "redis-exporter",
+        "tag": "1.81.0",
+        "full_ref": "icr.io/ppc64le-oss/redis-exporter-ppc64le:1.81.0",
+        "license": "MIT",
+        "last_published": "May 14, 2026"
+      }
+    ],
+    "activemq-artemis-broker": [
+      {
+        "image_name": "activemq-artemis-broker-ppc64le",
+        "canonical_name": "activemq-artemis-broker",
+        "tag": "latest",
+        "full_ref": "icr.io/ppc64le-oss/activemq-artemis-broker-ppc64le:latest",
+        "license": "Apache-2.0",
+        "last_published": "Apr 16, 2026"
+      },
+      {
+        "image_name": "activemq-artemis-broker-ppc64le",
+        "canonical_name": "activemq-artemis-broker",
+        "tag": "2.0.2",
+        "full_ref": "icr.io/ppc64le-oss/activemq-artemis-broker-ppc64le:2.0.2",
+        "license": "Apache-2.0",
+        "last_published": "September 9, 2025"
+      }
+    ],
+    "opa": [
+      {
+        "image_name": "opa-ppc64le",
+        "canonical_name": "opa",
+        "tag": "v1.15.1",
+        "full_ref": "icr.io/ppc64le-oss/opa-ppc64le:v1.15.1",
+        "license": "Apache-2.0",
+        "last_published": "May 29, 2026"
+      }
+    ],
+    "graphql-engine": [
+      {
+        "image_name": "graphql-engine-ppc64le",
+        "canonical_name": "graphql-engine",
+        "tag": "v2.48.14",
+        "full_ref": "icr.io/ppc64le-oss/graphql-engine-ppc64le:v2.48.14",
+        "license": "MIT",
+        "last_published": "Apr 5, 2026"
+      },
+      {
+        "image_name": "graphql-engine-ppc64le",
+        "canonical_name": "graphql-engine",
+        "tag": "2.45.2",
+        "full_ref": "icr.io/ppc64le-oss/graphql-engine-ppc64le:2.45.2",
+        "license": "MIT",
+        "last_published": "June 19, 2025"
+      }
+    ],
+    "ansible-nios-test-container": [
+      {
+        "image_name": "ansible-nios-test-container-ppc64le",
+        "canonical_name": "ansible-nios-test-container",
+        "tag": "7.0.0",
+        "full_ref": "icr.io/ppc64le-oss/ansible-nios-test-container-ppc64le:7.0.0",
+        "license": "GPL-3.0",
+        "last_published": "April 17, 2026"
+      }
+    ],
+    "fluent-bit": [
+      {
+        "image_name": "fluent-bit-ppc64le",
+        "canonical_name": "fluent-bit",
+        "tag": "4.0.13",
+        "full_ref": "icr.io/ppc64le-oss/fluent-bit-ppc64le:4.0.13",
+        "license": "Apache License 2.0",
+        "last_published": "March 27, 2026"
+      },
+      {
+        "image_name": "fluent-bit-ppc64le",
+        "canonical_name": "fluent-bit",
+        "tag": "v2.1.10",
+        "full_ref": "icr.io/ppc64le-oss/fluent-bit-ppc64le:v2.1.10",
+        "license": "Apache License 2.0",
+        "last_published": "Oct 20, 2023"
+      },
+      {
+        "image_name": "fluent-bit-ppc64le",
+        "canonical_name": "fluent-bit",
+        "tag": "v2.0.11",
+        "full_ref": "icr.io/ppc64le-oss/fluent-bit-ppc64le:v2.0.11",
+        "license": "Apache License 2.0",
+        "last_published": "Jun 19, 2023"
+      }
+    ],
+    "catboost": [
+      {
+        "image_name": "catboost-ppc64le",
+        "canonical_name": "catboost",
+        "tag": "1.2.7",
+        "full_ref": "icr.io/ppc64le-oss/catboost-ppc64le:1.2.7",
+        "license": "Apache-2.0",
+        "last_published": "Mar 15, 2026"
+      }
+    ],
+    "seaweedfs": [
+      {
+        "image_name": "seaweedfs-ppc64le",
+        "canonical_name": "seaweedfs",
+        "tag": "4.08",
+        "full_ref": "icr.io/ppc64le-oss/seaweedfs-ppc64le:4.08",
+        "license": "Apache-2.0",
+        "last_published": "Feb 27, 2026"
+      }
+    ],
+    "docling-serve": [
+      {
+        "image_name": "docling-serve-ppc64le",
+        "canonical_name": "docling-serve",
+        "tag": "1.9.0",
+        "full_ref": "icr.io/ppc64le-oss/docling-serve-ppc64le:1.9.0",
+        "license": "MIT",
+        "last_published": "April 10. 2026"
+      }
+    ],
+    "litellm-pgvector": [
+      {
+        "image_name": "litellm-pgvector-ppc64le",
+        "canonical_name": "litellm-pgvector",
+        "tag": "0.0.1",
+        "full_ref": "icr.io/ppc64le-oss/litellm-pgvector-ppc64le:0.0.1",
+        "license": "MIT",
+        "last_published": "Feb 17, 2026"
+      }
+    ],
+    "http-test-container": [
+      {
+        "image_name": "http-test-container-ppc64le",
+        "canonical_name": "http-test-container",
+        "tag": "3.5.0",
+        "full_ref": "icr.io/ppc64le-oss/http-test-container-ppc64le:3.5.0",
+        "license": "GPL v3.0",
+        "last_published": "Feb 13, 2026"
+      }
+    ],
+    "ansible-utility-container": [
+      {
+        "image_name": "ansible-utility-container-ppc64le",
+        "canonical_name": "ansible-utility-container",
+        "tag": "3.4.0",
+        "full_ref": "icr.io/ppc64le-oss/ansible-utility-container-ppc64le:3.4.0",
+        "license": "GPL-v3.0",
+        "last_published": "Feb 13, 2026"
+      }
+    ],
+    "open-webui": [
+      {
+        "image_name": "open-webui-ppc64le",
+        "canonical_name": "open-webui",
+        "tag": "0.7.2",
+        "full_ref": "icr.io/ppc64le-oss/open-webui-ppc64le:0.7.2",
+        "license": "OpenWebUI License",
+        "last_published": "July 1, 2026"
+      }
+    ],
+    "valkey": [
+      {
+        "image_name": "valkey-ppc64le",
+        "canonical_name": "valkey",
+        "tag": "9.0.1-bv",
+        "full_ref": "icr.io/ppc64le-oss/valkey-ppc64le:9.0.1-bv",
+        "license": "BSD-3-Clause",
+        "last_published": "March 9, 2026"
+      },
+      {
+        "image_name": "valkey-ppc64le",
+        "canonical_name": "valkey",
+        "tag": "9.0.1",
+        "full_ref": "icr.io/ppc64le-oss/valkey-ppc64le:9.0.1",
+        "license": "BSD-3-Clause",
+        "last_published": "Jan 27, 2026"
+      }
+    ],
+    "milvus": [
+      {
+        "image_name": "milvus-ppc64le",
+        "canonical_name": "milvus",
+        "tag": "v2.6.5",
+        "full_ref": "icr.io/ppc64le-oss/milvus-ppc64le:v2.6.5",
+        "license": "Apache License 2.0",
+        "last_published": "Jan 27, 2025"
+      },
+      {
+        "image_name": "milvus-ppc64le",
+        "canonical_name": "milvus",
+        "tag": "v2.5.3",
+        "full_ref": "icr.io/ppc64le-oss/milvus-ppc64le:v2.5.3",
+        "license": "Apache License 2.0",
+        "last_published": "June 26, 2025"
+      },
+      {
+        "image_name": "milvus-ppc64le",
+        "canonical_name": "milvus",
+        "tag": "v2.4.11",
+        "full_ref": "icr.io/ppc64le-oss/milvus-ppc64le:v2.4.11",
+        "license": "Apache License 2.0",
+        "last_published": "Nov 28, 2024"
+      },
+      {
+        "image_name": "milvus-ppc64le",
+        "canonical_name": "milvus",
+        "tag": "v2.3.3",
+        "full_ref": "icr.io/ppc64le-oss/milvus-ppc64le:v2.3.3",
+        "license": "Apache License 2.0",
+        "last_published": "April 2, 2024"
+      }
+    ],
+    "traefik": [
+      {
+        "image_name": "traefik-ppc64le",
+        "canonical_name": "traefik",
+        "tag": "v3.3",
+        "full_ref": "icr.io/ppc64le-oss/traefik-ppc64le:v3.3",
+        "license": "MIT",
+        "last_published": "March 27, 2026"
+      }
+    ],
+    "infinispan-server": [
+      {
+        "image_name": "infinispan-server-ppc64le",
+        "canonical_name": "infinispan-server",
+        "tag": "16.0.1",
+        "full_ref": "icr.io/ppc64le-oss/infinispan-server-ppc64le:16.0.1",
+        "license": "",
+        "last_published": "Dec 9, 2025"
+      }
+    ],
+    "opensearch-operator": [
+      {
+        "image_name": "opensearch-operator-ppc64le",
+        "canonical_name": "opensearch-operator",
+        "tag": "3.2.0",
+        "full_ref": "icr.io/ppc64le-oss/opensearch-operator-ppc64le:3.2.0",
+        "license": "Apache-2.0",
+        "last_published": "Feb 17, 2026"
+      }
+    ],
+    "rocketmq": [
+      {
+        "image_name": "rocketmq-ppc64le",
+        "canonical_name": "rocketmq",
+        "tag": "5.3.3",
+        "full_ref": "icr.io/ppc64le-oss/rocketmq-ppc64le:5.3.3",
+        "license": "Apache-2.0",
+        "last_published": "December 9, 2025"
+      }
+    ],
+    "docling": [
+      {
+        "image_name": "docling-ppc64le",
+        "canonical_name": "docling",
+        "tag": "2.60.1",
+        "full_ref": "icr.io/ppc64le-oss/docling-ppc64le:2.60.1",
+        "license": "",
+        "last_published": "Nov 24, 2025"
+      }
+    ],
+    "elasticsearch": [
+      {
+        "image_name": "elasticsearch-ppc64le",
+        "canonical_name": "elasticsearch",
+        "tag": "7.17.28",
+        "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:7.17.28",
+        "license": "Server Side Public License V1 and Elastic License 2.0",
+        "last_published": "Nov 14th, 2025"
+      },
+      {
+        "image_name": "elasticsearch-ppc64le",
+        "canonical_name": "elasticsearch",
+        "tag": "7.17.20",
+        "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:7.17.20",
+        "license": "Server Side Public License V1 and Elastic License 2.0",
+        "last_published": "April 25, 2025"
+      },
+      {
+        "image_name": "elasticsearch-ppc64le",
+        "canonical_name": "elasticsearch",
+        "tag": "7.17.14",
+        "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:7.17.14",
+        "license": "Server Side Public License V1 and Elastic License 2.0",
+        "last_published": "July 18th, 2024"
+      },
+      {
+        "image_name": "elasticsearch-ppc64le",
+        "canonical_name": "elasticsearch",
+        "tag": "7.17.13",
+        "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:7.17.13",
+        "license": "Server Side Public License V1 and Elastic License 2.0",
+        "last_published": "Oct 25, 2023"
+      },
+      {
+        "image_name": "elasticsearch-ppc64le",
+        "canonical_name": "elasticsearch",
+        "tag": "7.16.3",
+        "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:7.16.3",
+        "license": "Server Side Public License V1 and Elastic License 2.0",
+        "last_published": "Aug 7, 2023"
+      },
+      {
+        "image_name": "elasticsearch-ppc64le",
+        "canonical_name": "elasticsearch",
+        "tag": "7.17.10",
+        "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:7.17.10",
+        "license": "Server Side Public License V1 and Elastic License 2.0",
+        "last_published": "Aug 7, 2023"
+      },
+      {
+        "image_name": "elasticsearch-ppc64le",
+        "canonical_name": "elasticsearch",
+        "tag": "7.17.3",
+        "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:7.17.3",
+        "license": "Server Side Public License V1 and Elastic License 2.0",
+        "last_published": "Nov 28, 2023"
+      },
+      {
+        "image_name": "elasticsearch-ppc64le",
+        "canonical_name": "elasticsearch",
+        "tag": "8.3.3",
+        "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:8.3.3",
+        "license": "Server Side Public License V1 and Elastic License 2.0",
+        "last_published": "Oct 18, 2023"
+      },
+      {
+        "image_name": "elasticsearch-ppc64le",
+        "canonical_name": "elasticsearch",
+        "tag": "v8.1.0",
+        "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:v8.1.0",
+        "license": "Server Side Public License V1 and Elastic License 2.0",
+        "last_published": "March 27, 2023"
+      },
+      {
+        "image_name": "elasticsearch-ppc64le",
+        "canonical_name": "elasticsearch",
+        "tag": "7.12.0",
+        "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:7.12.0",
+        "license": "Server Side Public License V1 and Elastic License 2.0",
+        "last_published": "Jan 21, 2022"
+      },
+      {
+        "image_name": "elasticsearch-ppc64le",
+        "canonical_name": "elasticsearch",
+        "tag": "v7.8.0",
+        "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:v7.8.0",
+        "license": "Server Side Public License V1 and Elastic License 2.0",
+        "last_published": "March 27, 2023"
+      }
+    ],
+    "openssh-server": [
+      {
+        "image_name": "openssh-server-ppc64le",
+        "canonical_name": "openssh-server",
+        "tag": "8.4_p1-r3-ls48",
+        "full_ref": "icr.io/ppc64le-oss/openssh-server-ppc64le:8.4_p1-r3-ls48",
+        "license": "",
+        "last_published": "Nov 5, 2025"
+      },
+      {
+        "image_name": "openssh-server-ppc64le",
+        "canonical_name": "openssh-server",
+        "tag": "8.1_p1-r0-ls20",
+        "full_ref": "icr.io/ppc64le-oss/openssh-server-ppc64le:8.1_p1-r0-ls20",
+        "license": "",
+        "last_published": "Nov 3, 2025"
+      }
+    ],
+    "neo4j": [
+      {
+        "image_name": "neo4j-ppc64le",
+        "canonical_name": "neo4j",
+        "tag": "5.26.0",
+        "full_ref": "icr.io/ppc64le-oss/neo4j-ppc64le:5.26.0",
+        "license": "GNU General Public License v3.0",
+        "last_published": "August 11, 2025"
+      },
+      {
+        "image_name": "neo4j-ppc64le",
+        "canonical_name": "neo4j",
+        "tag": "5.9.0",
+        "full_ref": "icr.io/ppc64le-oss/neo4j-ppc64le:5.9.0",
+        "license": "GNU General Public License v3.0",
+        "last_published": "Nov 24, 20O23"
+      }
+    ],
+    "contextionary": [
+      {
+        "image_name": "contextionary-ppc64le",
+        "canonical_name": "contextionary",
+        "tag": "1.2.1",
+        "full_ref": "icr.io/ppc64le-oss/weaviate/contextionary-ppc64le:1.2.1",
+        "license": "BSD-3-Clause",
+        "last_published": "August 11, 2025"
+      }
+    ],
+    "k8s-hub": [
+      {
+        "image_name": "k8s-hub-ppc64le",
+        "canonical_name": "k8s-hub",
+        "tag": "4.1.0",
+        "full_ref": "icr.io/ppc64le-oss/jupyterhub/k8s-hub-ppc64le:4.1.0",
+        "license": "BSD-3-Clause",
+        "last_published": "August 11, 2025"
+      }
+    ],
+    "qdrant": [
+      {
+        "image_name": "qdrant-ppc64le",
+        "canonical_name": "qdrant",
+        "tag": "1.14.1",
+        "full_ref": "icr.io/ppc64le-oss/qdrant-ppc64le:1.14.1",
+        "license": "Apache-2.0",
+        "last_published": "September 9, 2025"
+      }
+    ],
+    "weaviate": [
+      {
+        "image_name": "weaviate-ppc64le",
+        "canonical_name": "weaviate",
+        "tag": "1.31.1",
+        "full_ref": "icr.io/ppc64le-oss/weaviate-ppc64le:1.31.1",
+        "license": "BSD-3-Clause",
+        "last_published": "July 30, 2025"
+      }
+    ],
+    "configurable-http-proxy": [
+      {
+        "image_name": "configurable-http-proxy-ppc64le",
+        "canonical_name": "configurable-http-proxy",
+        "tag": "v4.6.2",
+        "full_ref": "icr.io/ppc64le-oss/configurable-http-proxy-ppc64le:v4.6.2",
+        "license": "BSD-3-Clause",
+        "last_published": "July 16, 2025ope"
+      }
+    ],
+    "lra-coordinator-quarkus-jvm": [
+      {
+        "image_name": "lra-coordinator-quarkus-jvm",
+        "canonical_name": "lra-coordinator-quarkus-jvm",
+        "tag": "latest",
+        "full_ref": "icr.io/ppc64le-oss/quarkus/lra-coordinator-quarkus-jvm:latest",
+        "license": "LGPL-2.1",
+        "last_published": "June 26, 2025"
+      }
+    ],
+    "nats-boot-config": [
+      {
+        "image_name": "nats-boot-config-ppc64le",
+        "canonical_name": "nats-boot-config",
+        "tag": "0.16.0",
+        "full_ref": "icr.io/ppc64le-oss/nats-boot-config-ppc64le:0.16.0",
+        "license": "Apache v2.0",
+        "last_published": "June 26, 2025"
+      }
+    ],
+    "nats-server-config-reloader": [
+      {
+        "image_name": "nats-server-config-reloader-ppc64le",
+        "canonical_name": "nats-server-config-reloader",
+        "tag": "0.16.0",
+        "full_ref": "icr.io/ppc64le-oss/nats-server-config-reloader-ppc64le:0.16.0",
+        "license": "Apache v2.0",
+        "last_published": "June 26, 2025"
+      }
+    ],
+    "jetstream-controller": [
+      {
+        "image_name": "jetstream-controller-ppc64le",
+        "canonical_name": "jetstream-controller",
+        "tag": "0.16.0",
+        "full_ref": "icr.io/ppc64le-oss/jetstream-controller-ppc64le:0.16.0",
+        "license": "Apache v2.0",
+        "last_published": "June 26, 2025"
+      }
+    ],
+    "keda": [
+      {
+        "image_name": "keda",
+        "canonical_name": "keda",
+        "tag": "2.16.1-webhook",
+        "full_ref": "icr.io/ppc64le-oss/keda:2.16.1-webhook",
+        "license": "Apache License 2.0",
+        "last_published": "Dec 15, 2025"
+      },
+      {
+        "image_name": "keda",
+        "canonical_name": "keda",
+        "tag": "2.16.1-adapter",
+        "full_ref": "icr.io/ppc64le-oss/keda:2.16.1-adapter",
+        "license": "Apache License 2.0",
+        "last_published": "Dec 15, 2025"
+      },
+      {
+        "image_name": "keda",
+        "canonical_name": "keda",
+        "tag": "2.16.1",
+        "full_ref": "icr.io/ppc64le-oss/keda:2.16.1",
+        "license": "Apache License 2.0",
+        "last_published": "Dec 15, 2025"
+      },
+      {
+        "image_name": "keda",
+        "canonical_name": "keda",
+        "tag": "2.11.2-webhook",
+        "full_ref": "icr.io/ppc64le-oss/keda:2.11.2-webhook",
+        "license": "Apache License 2.0",
+        "last_published": "Sept 7, 2023"
+      },
+      {
+        "image_name": "keda",
+        "canonical_name": "keda",
+        "tag": "2.11.2-adapter",
+        "full_ref": "icr.io/ppc64le-oss/keda:2.11.2-adapter",
+        "license": "Apache License 2.0",
+        "last_published": "Sept 7, 2023"
+      },
+      {
+        "image_name": "keda",
+        "canonical_name": "keda",
+        "tag": "2.11.2",
+        "full_ref": "icr.io/ppc64le-oss/keda:2.11.2",
+        "license": "Apache License 2.0",
+        "last_published": "Sept 7, 2023"
+      }
+    ],
+    "redis": [
+      {
+        "image_name": "redis-ppc64le",
+        "canonical_name": "redis",
+        "tag": "v7.4.2-bv",
+        "full_ref": "icr.io/ppc64le-oss/redis-ppc64le:v7.4.2-bv",
+        "license": "BSD-3-Clause",
+        "last_published": "April 25, 2025"
+      },
+      {
+        "image_name": "redis-ppc64le",
+        "canonical_name": "redis",
+        "tag": "v7.2.5-bv-ubi8",
+        "full_ref": "icr.io/ppc64le-oss/redis-ppc64le:v7.2.5-bv-ubi8",
+        "license": "BSD-3-Clause",
+        "last_published": "Aug 12, 2024"
+      },
+      {
+        "image_name": "redis-ppc64le",
+        "canonical_name": "redis",
+        "tag": "v7.2.5-bv",
+        "full_ref": "icr.io/ppc64le-oss/redis-ppc64le:v7.2.5-bv",
+        "license": "BSD-3-Clause",
+        "last_published": "Aug 2, 2024"
+      },
+      {
+        "image_name": "redis-ppc64le",
+        "canonical_name": "redis",
+        "tag": "v7.2.1-bv",
+        "full_ref": "icr.io/ppc64le-oss/redis-ppc64le:v7.2.1-bv",
+        "license": "BSD-3-Clause",
+        "last_published": "Oct 25, 2023"
+      },
+      {
+        "image_name": "redis-ppc64le",
+        "canonical_name": "redis",
+        "tag": "v7.0.12-bv",
+        "full_ref": "icr.io/ppc64le-oss/redis-ppc64le:v7.0.12-bv",
+        "license": "BSD-3-Clause",
+        "last_published": "Aug 7, 2023"
+      },
+      {
+        "image_name": "redis-ppc64le",
+        "canonical_name": "redis",
+        "tag": "v7.0.4-bv",
+        "full_ref": "icr.io/ppc64le-oss/redis-ppc64le:v7.0.4-bv",
+        "license": "BSD-3-Clause",
+        "last_published": "Dec 27, 2022"
+      },
+      {
+        "image_name": "redis-ppc64le",
+        "canonical_name": "redis",
+        "tag": "v6.2.6-bv",
+        "full_ref": "icr.io/ppc64le-oss/redis-ppc64le:v6.2.6-bv",
+        "license": "BSD-3-Clause",
+        "last_published": "Oct 11, 2022"
+      }
+    ],
+    "kong": [
+      {
+        "image_name": "kong-ppc64le",
+        "canonical_name": "kong",
+        "tag": "3.9.0",
+        "full_ref": "icr.io/ppc64le-oss/kong-ppc64le:3.9.0",
+        "license": "Apache License 2.0",
+        "last_published": "March 26, 2024"
+      },
+      {
+        "image_name": "kong-ppc64le",
+        "canonical_name": "kong",
+        "tag": "3.3.0",
+        "full_ref": "icr.io/ppc64le-oss/kong-ppc64le:3.3.0",
+        "license": "Apache License 2.0",
+        "last_published": "Nov 24, 2023"
+      }
+    ],
+    "azurite": [
+      {
+        "image_name": "azurite-ppc64le",
+        "canonical_name": "azurite",
+        "tag": "1.1",
+        "full_ref": "icr.io/ppc64le-oss/azurite-ppc64le:1.1",
+        "license": "MIT",
+        "last_published": "May 27, 2025"
+      }
+    ],
+    "postgresql": [
+      {
+        "image_name": "postgresql-ppc64le",
+        "canonical_name": "postgresql",
+        "tag": "16.3",
+        "full_ref": "icr.io/ppc64le-oss/postgresql-ppc64le:16.3",
+        "license": "PostgreSQL License Apache License 2.0",
+        "last_published": "May 27, 2025"
+      },
+      {
+        "image_name": "postgresql",
+        "canonical_name": "postgresql",
+        "tag": "v15.10.0-bv",
+        "full_ref": "icr.io/ppc64le-oss/postgresql:v15.10.0-bv",
+        "license": "PostgreSQL License Apache License 2.0",
+        "last_published": "March 26. 2025"
+      },
+      {
+        "image_name": "postgresql",
+        "canonical_name": "postgresql",
+        "tag": "v14.13.0-bv",
+        "full_ref": "icr.io/ppc64le-oss/postgresql:v14.13.0-bv",
+        "license": "PostgreSQL License Apache License 2.0",
+        "last_published": "Dec 5, 2024"
+      },
+      {
+        "image_name": "postgresql",
+        "canonical_name": "postgresql",
+        "tag": "v14.12.0-bv",
+        "full_ref": "icr.io/ppc64le-oss/postgresql:v14.12.0-bv",
+        "license": "PostgreSQL License Apache License 2.0",
+        "last_published": "July 9, 2024"
+      },
+      {
+        "image_name": "postgresql",
+        "canonical_name": "postgresql",
+        "tag": "v14.9.0-bv",
+        "full_ref": "icr.io/ppc64le-oss/postgresql:v14.9.0-bv",
+        "license": "PostgreSQL License Apache License 2.0",
+        "last_published": "Oct 17, 2023"
+      },
+      {
+        "image_name": "postgresql",
+        "canonical_name": "postgresql",
+        "tag": "v14.6.0",
+        "full_ref": "icr.io/ppc64le-oss/postgresql:v14.6.0",
+        "license": "PostgreSQL License Apache License 2.0",
+        "last_published": "Jan 9, 2023"
+      }
+    ],
+    "fluentd-kubernetes-daemonset": [
+      {
+        "image_name": "fluentd-kubernetes-daemonset-ppc64le",
+        "canonical_name": "fluentd-kubernetes-daemonset",
+        "tag": "v1.14.3-debian-forward-1.0",
+        "full_ref": "icr.io/ppc64le-oss/fluentd-kubernetes-daemonset-ppc64le:v1.14.3-debian-forward-1.0",
+        "license": "Apache-2.0",
+        "last_published": "March 17, 2025"
+      }
+    ],
+    "pgbouncer": [
+      {
+        "image_name": "pgbouncer-ppc64le",
+        "canonical_name": "pgbouncer",
+        "tag": "1.23.0",
+        "full_ref": "icr.io/ppc64le-oss/cloudnative-pg/pgbouncer-ppc64le:1.23.0",
+        "license": "Apache-2.0",
+        "last_published": "March 17, 2025"
+      }
+    ],
+    "keycloak": [
+      {
+        "image_name": "keycloak-ppc64le",
+        "canonical_name": "keycloak",
+        "tag": "v26.0.5-bv",
+        "full_ref": "icr.io/ppc64le-oss/keycloak-ppc64le:v26.0.5-bv",
+        "license": "Apache-2.0",
+        "last_published": "March 27, 2025"
+      }
+    ],
+    "rocketchat": [
+      {
+        "image_name": "rocketchat-ppc64le",
+        "canonical_name": "rocketchat",
+        "tag": "6.11.1",
+        "full_ref": "icr.io/ppc64le-oss/rocketchat-ppc64le:6.11.1",
+        "license": "MIT",
+        "last_published": "Nov 21, 2024"
+      }
+    ],
+    "vault": [
+      {
+        "image_name": "vault-ppc64le",
+        "canonical_name": "vault",
+        "tag": "v1.14.8",
+        "full_ref": "icr.io/ppc64le-oss/vault-ppc64le:v1.14.8",
+        "license": "Mozilla Public License, version 2.0",
+        "last_published": "Aug 2, 2024"
+      },
+      {
+        "image_name": "vault-ppc64le",
+        "canonical_name": "vault",
+        "tag": "v1.14.4",
+        "full_ref": "icr.io/ppc64le-oss/vault-ppc64le:v1.14.4",
+        "license": "Mozilla Public License, version 2.0",
+        "last_published": "Oct 26, 2023"
+      },
+      {
+        "image_name": "vault-ppc64le",
+        "canonical_name": "vault",
+        "tag": "v1.13.4",
+        "full_ref": "icr.io/ppc64le-oss/vault-ppc64le:v1.13.4",
+        "license": "Mozilla Public License, version 2.0",
+        "last_published": "Aug 7, 2023"
+      },
+      {
+        "image_name": "vault-ppc64le",
+        "canonical_name": "vault",
+        "tag": "v1.13.1",
+        "full_ref": "icr.io/ppc64le-oss/vault-ppc64le:v1.13.1",
+        "license": "Mozilla Public License, version 2.0",
+        "last_published": "May 31, 2023"
+      },
+      {
+        "image_name": "vault-ppc64le",
+        "canonical_name": "vault",
+        "tag": "v1.5.3",
+        "full_ref": "icr.io/ppc64le-oss/vault-ppc64le:v1.5.3",
+        "license": "Mozilla Public License, version 2.0",
+        "last_published": "Oct 12, 2022"
+      },
+      {
+        "image_name": "vault-ppc64le",
+        "canonical_name": "vault",
+        "tag": "v1.9.9",
+        "full_ref": "icr.io/ppc64le-oss/vault-ppc64le:v1.9.9",
+        "license": "Mozilla Public License, version 2.0",
+        "last_published": "Oct 18, 2022"
+      },
+      {
+        "image_name": "vault-ppc64le",
+        "canonical_name": "vault",
+        "tag": "v1.9.1",
+        "full_ref": "icr.io/ppc64le-oss/vault-ppc64le:v1.9.1",
+        "license": "Mozilla Public License, version 2.0",
+        "last_published": "Mar 26, 2023"
+      }
+    ],
+    "eck-operator": [
+      {
+        "image_name": "eck-operator-ppc64le",
+        "canonical_name": "eck-operator",
+        "tag": "2.9.0",
+        "full_ref": "icr.io/ppc64le-oss/eck-operator-ppc64le:2.9.0",
+        "license": "Elastic License 2.0",
+        "last_published": "Aug 7, 2024"
+      },
+      {
+        "image_name": "eck-operator-ppc64le",
+        "canonical_name": "eck-operator",
+        "tag": "2.5.0-v1.10.0",
+        "full_ref": "icr.io/ppc64le-oss/eck-operator-ppc64le:2.5.0-v1.10.0",
+        "license": "Elastic License 2.0",
+        "last_published": "Aug 29, 2023"
+      }
+    ],
+    "cass-operator": [
+      {
+        "image_name": "cass-operator-ppc64le",
+        "canonical_name": "cass-operator",
+        "tag": "v1.19.0",
+        "full_ref": "icr.io/ppc64le-oss/cass-operator-ppc64le:v1.19.0",
+        "license": "Apache License 2.0",
+        "last_published": "July 18th, 2024"
+      },
+      {
+        "image_name": "cass-operator-ppc64le",
+        "canonical_name": "cass-operator",
+        "tag": "v1.14.0",
+        "full_ref": "icr.io/ppc64le-oss/cass-operator-ppc64le:v1.14.0",
+        "license": "Apache License 2.0",
+        "last_published": "Aug 29, 2023"
+      }
+    ],
+    "k8ssandra-client": [
+      {
+        "image_name": "k8ssandra-client-ppc64le",
+        "canonical_name": "k8ssandra-client",
+        "tag": "v0.2.2",
+        "full_ref": "icr.io/ppc64le-oss/k8ssandra-client-ppc64le:v0.2.2",
+        "license": "Apache License 2.0",
+        "last_published": "July 29, 2024"
+      }
+    ],
+    "system-logger": [
+      {
+        "image_name": "system-logger-ppc64le",
+        "canonical_name": "system-logger",
+        "tag": "v1.19.0",
+        "full_ref": "icr.io/ppc64le-oss/system-logger-ppc64le:v1.19.0",
+        "license": "Apache License 2.0",
+        "last_published": "July 18, 2024"
+      },
+      {
+        "image_name": "system-logger-ppc64le",
+        "canonical_name": "system-logger",
+        "tag": "v1.14.0",
+        "full_ref": "icr.io/ppc64le-oss/system-logger-ppc64le:v1.14.0",
+        "license": "Apache License 2.0",
+        "last_published": "Aug 29, 2023"
+      }
+    ],
+    "postgres-operator": [
+      {
+        "image_name": "postgres-operator-ppc64le",
+        "canonical_name": "postgres-operator",
+        "tag": "v15.7",
+        "full_ref": "icr.io/ppc64le-oss/postgres-operator-ppc64le:v15.7",
+        "license": "MIT License",
+        "last_published": "July 18, 2024"
+      },
+      {
+        "image_name": "postgres-operator-ppc64le",
+        "canonical_name": "postgres-operator",
+        "tag": "v1.10.0",
+        "full_ref": "icr.io/ppc64le-oss/postgres-operator-ppc64le:v1.10.0",
+        "license": "MIT License",
+        "last_published": "Aug 29, 2023"
+      }
+    ],
+    "logstash": [
+      {
+        "image_name": "logstash-ppc64le",
+        "canonical_name": "logstash",
+        "tag": "8.11.3",
+        "full_ref": "icr.io/ppc64le-oss/logstash-ppc64le:8.11.3",
+        "license": "Apache License 2.0 OR Elastic License 2.0 Note: \"x-pack\" is under the Elastic License and not available for Power",
+        "last_published": "April 9, 2024"
+      },
+      {
+        "image_name": "logstash-ppc64le",
+        "canonical_name": "logstash",
+        "tag": "v7.6.0",
+        "full_ref": "icr.io/ppc64le-oss/logstash-ppc64le:v7.6.0",
+        "license": "Apache License 2.0 OR Elastic License 2.0 Note: \"x-pack\" is under the Elastic License and not available for Power",
+        "last_published": "March 27, 2023"
+      }
+    ],
+    "rust": [
+      {
+        "image_name": "rust-ppc64le",
+        "canonical_name": "rust",
+        "tag": "1.66.1",
+        "full_ref": "icr.io/ppc64le-oss/rust-ppc64le:1.66.1",
+        "license": "MIT License",
+        "last_published": "April 2, 2024"
+      }
+    ],
+    "cassandra": [
+      {
+        "image_name": "cassandra-ppc64le",
+        "canonical_name": "cassandra",
+        "tag": "4.1.3",
+        "full_ref": "icr.io/ppc64le-oss/cassandra-ppc64le:4.1.3",
+        "license": "Apache License 2.0",
+        "last_published": "April 2, 2024"
+      }
+    ],
+    "vault-k8s": [
+      {
+        "image_name": "vault-k8s-ppc64le",
+        "canonical_name": "vault-k8s",
+        "tag": "1.2.1",
+        "full_ref": "icr.io/ppc64le-oss/vault-k8s-ppc64le:1.2.1",
+        "license": "Mozilla Public License, version 2.0",
+        "last_published": "Oct 18, 2023"
+      }
+    ],
+    "filebrowser": [
+      {
+        "image_name": "filebrowser-ppc64le",
+        "canonical_name": "filebrowser",
+        "tag": "v2.24.2",
+        "full_ref": "icr.io/ppc64le-oss/filebrowser-ppc64le:v2.24.2",
+        "license": "Apache License 2.0",
+        "last_published": "Nov 24, 2023"
+      }
+    ],
+    "cass-config-builder": [
+      {
+        "image_name": "cass-config-builder-ppc64le",
+        "canonical_name": "cass-config-builder",
+        "tag": "1.0.4",
+        "full_ref": "icr.io/ppc64le-oss/cass-config-builder-ppc64le:1.0.4",
+        "license": "Apache License 2.0",
+        "last_published": "Aug 29, 2023"
+      }
+    ],
+    "spilo": [
+      {
+        "image_name": "spilo-ppc64le",
+        "canonical_name": "spilo",
+        "tag": "3.0-p1",
+        "full_ref": "icr.io/ppc64le-oss/spilo-ppc64le:3.0-p1",
+        "license": "Apache License 2.0",
+        "last_published": "Aug 29, 2023"
+      }
+    ],
+    "zookeeper-operator": [
+      {
+        "image_name": "zookeeper-operator-ppc64le",
+        "canonical_name": "zookeeper-operator",
+        "tag": "0.2.14-pravega",
+        "full_ref": "icr.io/ppc64le-oss/zookeeper-operator-ppc64le:0.2.14-pravega",
+        "license": "Apache License 2.0",
+        "last_published": "Aug 25, 2023"
+      }
+    ],
+    "grafana-mimir-rules-action": [
+      {
+        "image_name": "grafana-mimir-rules-action-ppc64le",
+        "canonical_name": "grafana-mimir-rules-action",
+        "tag": "2.9.0",
+        "full_ref": "icr.io/ppc64le-oss/grafana-mimir-rules-action-ppc64le:2.9.0",
+        "license": "GNU AFFERO GPL v3.0",
+        "last_published": "Nov 24, 2023"
+      }
+    ],
+    "grafana-query-tee": [
+      {
+        "image_name": "grafana-query-tee-ppc64le",
+        "canonical_name": "grafana-query-tee",
+        "tag": "2.9.0",
+        "full_ref": "icr.io/ppc64le-oss/grafana-query-tee-ppc64le:2.9.0",
+        "license": "GNU AFFERO GPL v3.0",
+        "last_published": "Nov 24, 2023"
+      }
+    ],
+    "grafana-mimirtool": [
+      {
+        "image_name": "grafana-mimirtool-ppc64le",
+        "canonical_name": "grafana-mimirtool",
+        "tag": "2.9.0",
+        "full_ref": "icr.io/ppc64le-oss/grafana-mimirtool-ppc64le:2.9.0",
+        "license": "GNU AFFERO GPL v3.0",
+        "last_published": "Nov 24, 2023"
+      }
+    ],
+    "grafana-mimir": [
+      {
+        "image_name": "grafana-mimir-ppc64le",
+        "canonical_name": "grafana-mimir",
+        "tag": "2.9.0",
+        "full_ref": "icr.io/ppc64le-oss/grafana-mimir-ppc64le:2.9.0",
+        "license": "GNU AFFERO GPL v3.0",
+        "last_published": "Nov 24, 2023"
+      }
+    ],
+    "grafana-mimir-continuous-test": [
+      {
+        "image_name": "grafana-mimir-continuous-test-ppc64le",
+        "canonical_name": "grafana-mimir-continuous-test",
+        "tag": "2.9.0",
+        "full_ref": "icr.io/ppc64le-oss/grafana-mimir-continuous-test-ppc64le:2.9.0",
+        "license": "GNU AFFERO GPL v3.0",
+        "last_published": "Nov 24, 2023"
+      }
+    ],
+    "grafana-mimir-build-image": [
+      {
+        "image_name": "grafana-mimir-build-image-ppc64le",
+        "canonical_name": "grafana-mimir-build-image",
+        "tag": "2.9.0",
+        "full_ref": "icr.io/ppc64le-oss/grafana-mimir-build-image-ppc64le:2.9.0",
+        "license": "GNU AFFERO GPL v3.0",
+        "last_published": "Nov 24, 2023"
+      }
+    ],
+    "jetty": [
+      {
+        "image_name": "jetty-ppc64le",
+        "canonical_name": "jetty",
+        "tag": "11.0.15-jdk17",
+        "full_ref": "icr.io/ppc64le-oss/jetty-ppc64le:11.0.15-jdk17",
+        "license": "Eclipse Public License v2.0",
+        "last_published": "Jun 5, 2023"
+      }
+    ],
+    "pd-server": [
+      {
+        "image_name": "pd-server-ppc64le",
+        "canonical_name": "pd-server",
+        "tag": "v7.1.0",
+        "full_ref": "icr.io/ppc64le-oss/pd-server-ppc64le:v7.1.0",
+        "license": "Apache License 2.0",
+        "last_published": "Jun 5, 2023"
+      }
+    ],
+    "nomad": [
+      {
+        "image_name": "nomad",
+        "canonical_name": "nomad",
+        "tag": "v1.4.2",
+        "full_ref": "icr.io/ppc64le-oss/nomad:v1.4.2",
+        "license": "Mozilla Public License, version 2.0",
+        "last_published": "Feb 28, 2023"
+      }
+    ],
+    "datadog-agent": [
+      {
+        "image_name": "datadog-agent",
+        "canonical_name": "datadog-agent",
+        "tag": "7.39.0",
+        "full_ref": "icr.io/ppc64le-oss/datadog-agent:7.39.0",
+        "license": "Apache License 2.0",
+        "last_published": "Feb 28, 2023"
+      }
+    ],
+    "telegraph": [
+      {
+        "image_name": "telegraph-ppc64le",
+        "canonical_name": "telegraph",
+        "tag": "1.24.4",
+        "full_ref": "icr.io/ppc64le-oss/telegraph-ppc64le:1.24.4",
+        "license": "MIT License",
+        "last_published": "Feb 15, 2023"
+      }
+    ],
+    "proj": [
+      {
+        "image_name": "proj-ppc64le",
+        "canonical_name": "proj",
+        "tag": "9.1.1",
+        "full_ref": "icr.io/ppc64le-oss/proj-ppc64le:9.1.1",
+        "license": "MIT License",
+        "last_published": "Feb 12, 2023"
+      }
+    ],
+    "orientdb": [
+      {
+        "image_name": "orientdb-ppc64le",
+        "canonical_name": "orientdb",
+        "tag": "v3.2.12",
+        "full_ref": "icr.io/ppc64le-oss/orientdb-ppc64le:v3.2.12",
+        "license": "Apache License 2.0",
+        "last_published": "Feb 12, 2023"
+      }
+    ],
+    "rethinkdb": [
+      {
+        "image_name": "rethinkdb-ppc64le",
+        "canonical_name": "rethinkdb",
+        "tag": "v2.4.3",
+        "full_ref": "icr.io/ppc64le-oss/rethinkdb-ppc64le:v2.4.3",
+        "license": "Apache License 2.0",
+        "last_published": "Jun 1, 2023"
+      }
+    ],
+    "glassfish": [
+      {
+        "image_name": "glassfish-ppc64le",
+        "canonical_name": "glassfish",
+        "tag": "v6.2.5",
+        "full_ref": "icr.io/ppc64le-oss/glassfish-ppc64le:v6.2.5",
+        "license": "Eclipse Public License v2.0",
+        "last_published": "Jun 13, 2023"
+      }
+    ],
+    "consul": [
+      {
+        "image_name": "consul-ppc64le",
+        "canonical_name": "consul",
+        "tag": "1.1.28",
+        "full_ref": "icr.io/ppc64le-oss/consul-ppc64le:1.1.28",
+        "license": "Mozilla Public License, version 2.0",
+        "last_published": "Jan 30, 2023"
+      },
+      {
+        "image_name": "consul-ppc64le",
+        "canonical_name": "consul",
+        "tag": "1.9.4",
+        "full_ref": "icr.io/ppc64le-oss/consul-ppc64le:1.9.4",
+        "license": "Mozilla Public License, version 2.0",
+        "last_published": "March 26, 2023"
+      }
+    ],
+    "tidb": [
+      {
+        "image_name": "tidb-ppc64le",
+        "canonical_name": "tidb",
+        "tag": "6.4.0",
+        "full_ref": "icr.io/ppc64le-oss/tidb-ppc64le:6.4.0",
+        "license": "Apache License 2.0",
+        "last_published": "Fevb 1, 2023"
+      }
+    ],
+    "rabbitmq-exporter": [
+      {
+        "image_name": "rabbitmq-exporter-ppc64le",
+        "canonical_name": "rabbitmq-exporter",
+        "tag": "1.0.0-RC19",
+        "full_ref": "icr.io/ppc64le-oss/rabbitmq-exporter-ppc64le:1.0.0-RC19",
+        "license": "MIT License",
+        "last_published": "Jun 1, 2023"
+      }
+    ],
+    "jupyter-base-notebook": [
+      {
+        "image_name": "jupyter-base-notebook-ppc64le",
+        "canonical_name": "jupyter-base-notebook",
+        "tag": "v6.4.12",
+        "full_ref": "icr.io/ppc64le-oss/jupyter-base-notebook-ppc64le:v6.4.12",
+        "license": "BSD-3-Clause",
+        "last_published": "Feb 10, 2023"
+      }
+    ],
+    "influxdb": [
+      {
+        "image_name": "influxdb-ppc64le",
+        "canonical_name": "influxdb",
+        "tag": "v2.5.1",
+        "full_ref": "icr.io/ppc64le-oss/influxdb-ppc64le:v2.5.1",
+        "license": "MIT License",
+        "last_published": "Feb 13, 2023"
+      }
+    ],
+    "rocksdb": [
+      {
+        "image_name": "rocksdb-ppc64le",
+        "canonical_name": "rocksdb",
+        "tag": "7.7.3",
+        "full_ref": "icr.io/ppc64le-oss/rocksdb-ppc64le:7.7.3",
+        "license": "Apache License 2.0 AND GNU General Public License v2.0",
+        "last_published": "Jan 29, 2023"
+      }
+    ],
+    "kibana": [
+      {
+        "image_name": "kibana-ppc64le",
+        "canonical_name": "kibana",
+        "tag": "8.5.0",
+        "full_ref": "icr.io/ppc64le-oss/kibana-ppc64le:8.5.0",
+        "license": "Server Side Public License V1 and Elastic License 2.0",
+        "last_published": "Feb 14,2023"
+      },
+      {
+        "image_name": "kibana-ppc64le",
+        "canonical_name": "kibana",
+        "tag": "v7.17.2",
+        "full_ref": "icr.io/ppc64le-oss/kibana-ppc64le:v7.17.2",
+        "license": "Server Side Public License V1 and Elastic License 2.0",
+        "last_published": "March 27, 2023"
+      },
+      {
+        "image_name": "kibana-ppc64le",
+        "canonical_name": "kibana",
+        "tag": "8.1.0",
+        "full_ref": "icr.io/ppc64le-oss/kibana-ppc64le:8.1.0",
+        "license": "Server Side Public License V1 and Elastic License 2.0",
+        "last_published": "Jan 4, 2023"
+      },
+      {
+        "image_name": "kibana-ppc64le",
+        "canonical_name": "kibana",
+        "tag": "v7.9.1",
+        "full_ref": "icr.io/ppc64le-oss/kibana-ppc64le:v7.9.1",
+        "license": "Server Side Public License V1 and Elastic License 2.0",
+        "last_published": "March 27, 2023"
+      }
+    ],
+    "filebeat": [
+      {
+        "image_name": "filebeat-ppc64le",
+        "canonical_name": "filebeat",
+        "tag": "v8.5.0",
+        "full_ref": "icr.io/ppc64le-oss/filebeat-ppc64le:v8.5.0",
+        "license": "Apache License 2.0 OR Elastic License 2.0 Note: \"x-pack\" is under the Elastic License and not available for Power",
+        "last_published": "Jan 29, 2023"
+      }
+    ],
+    "cockroach": [
+      {
+        "image_name": "cockroach-ppc64le",
+        "canonical_name": "cockroach",
+        "tag": "v22.1.5-ubi8",
+        "full_ref": "icr.io/ppc64le-oss/cockroach-ppc64le:v22.1.5-ubi8",
+        "license": "Business Source License 1.1 (BSL) AND CockroachDB Community License (CCL) AND MIT license AND BSD-style licenses",
+        "last_published": "Mar 22, 2023"
+      }
+    ],
+    "gitea": [
+      {
+        "image_name": "gitea-ppc64le",
+        "canonical_name": "gitea",
+        "tag": "1.16.7",
+        "full_ref": "icr.io/ppc64le-oss/gitea-ppc64le:1.16.7",
+        "license": "MIT License",
+        "last_published": "July 7, 2022"
+      }
+    ],
+    "fluentd-elasticsearch": [
+      {
+        "image_name": "fluentd-elasticsearch-ppc64le",
+        "canonical_name": "fluentd-elasticsearch",
+        "tag": "1.14.5-ES7.17",
+        "full_ref": "icr.io/ppc64le-oss/fluentd-elasticsearch-ppc64le:1.14.5-ES7.17",
+        "license": "Apache License 2.0 AND ( Apache License 2.0 OR Elastic License 2.0)",
+        "last_published": "March 27, 2023"
+      },
+      {
+        "image_name": "fluentd-elasticsearch-ppc64le",
+        "canonical_name": "fluentd-elasticsearch",
+        "tag": "1.14.5",
+        "full_ref": "icr.io/ppc64le-oss/fluentd-elasticsearch-ppc64le:1.14.5",
+        "license": "Apache License 2.0 AND ( Apache License 2.0 OR Elastic License 2.0)",
+        "last_published": "March 27, 2023"
+      }
+    ],
+    "nfs-client-provisioner": [
+      {
+        "image_name": "nfs-client-provisioner-ppc64le",
+        "canonical_name": "nfs-client-provisioner",
+        "tag": "latest",
+        "full_ref": "icr.io/ppc64le-oss/nfs-client-provisioner-ppc64le:latest",
+        "license": "",
+        "last_published": "Jan 9, 2021"
+      }
+    ]
+  },
+  "entries": [
+    {
+      "image_name": "opensearch-dashboards-ppc64le",
+      "canonical_name": "opensearch-dashboards",
+      "tag": "3.6.0",
+      "full_ref": "icr.io/ppc64le-oss/opensearch-dashboards-ppc64le:3.6.0",
+      "license": "",
+      "last_published": "Aug 24, 2026"
+    },
+    {
+      "image_name": "langflow-ppc64le",
+      "canonical_name": "langflow",
+      "tag": "v1.9.6",
+      "full_ref": "icr.io/ppc64le-oss/langflow-ppc64le:v1.9.6",
+      "license": "MIT",
+      "last_published": "Aug 21, 2026"
+    },
+    {
+      "image_name": "openrag-opensearch-ppc64le",
+      "canonical_name": "openrag-opensearch",
+      "tag": "0.6.0",
+      "full_ref": "icr.io/ppc64le-oss/openrag-opensearch-ppc64le:0.6.0",
+      "license": "",
+      "last_published": "Aug 13, 2026"
+    },
+    {
+      "image_name": "ollama-ppc64le",
+      "canonical_name": "ollama",
+      "tag": "v0.32.7",
+      "full_ref": "icr.io/ppc64le-oss/ollama-ppc64le:v0.32.7",
+      "license": "MIT",
+      "last_published": "Aug 12, 2026"
+    },
+    {
+      "image_name": "openrag-backend-ppc64le",
+      "canonical_name": "openrag-backend",
+      "tag": "0.6.0",
+      "full_ref": "icr.io/ppc64le-oss/openrag-backend-ppc64le:0.6.0",
+      "license": "",
+      "last_published": "Aug 12, 2026"
+    },
+    {
+      "image_name": "openrag-frontend-ppc64le",
+      "canonical_name": "openrag-frontend",
+      "tag": "0.6.0",
+      "full_ref": "icr.io/ppc64le-oss/openrag-frontend-ppc64le:0.6.0",
+      "license": "",
+      "last_published": "Aug 12, 2026"
+    },
+    {
+      "image_name": "zookeeper-ppc64le",
+      "canonical_name": "zookeeper",
+      "tag": "3.9.5",
+      "full_ref": "icr.io/ppc64le-oss/zookeeper-ppc64le:3.9.5",
+      "license": "Apache License 2.0",
+      "last_published": "Aug 25, 2026"
+    },
+    {
+      "image_name": "pulsar-ppc64le",
+      "canonical_name": "pulsar",
+      "tag": "4.2.3",
+      "full_ref": "icr.io/ppc64le-oss/pulsar-ppc64le:4.2.3",
+      "license": "Apache-2.0",
+      "last_published": "Sep 1, 2026"
+    },
+    {
+      "image_name": "opensearch-ppc64le",
+      "canonical_name": "opensearch",
+      "tag": "3.6.0",
+      "full_ref": "icr.io/ppc64le-oss/opensearch-ppc64le:3.6.0",
+      "license": "Apache License 2.0",
+      "last_published": "Jul 31, 2026"
+    },
+    {
+      "image_name": "cass-management-api-ppc64le",
+      "canonical_name": "cass-management-api",
+      "tag": "4.1.11",
+      "full_ref": "icr.io/ppc64le-oss/cass-management-api-ppc64le:4.1.11",
+      "license": "Apache License 2.0",
+      "last_published": "Aug 14, 2026"
+    },
+    {
+      "image_name": "hapi-fhir-ppc64le",
+      "canonical_name": "hapi-fhir",
+      "tag": "8.10.0",
+      "full_ref": "icr.io/ppc64le-oss/hapi-fhir-ppc64le:8.10.0",
+      "license": "",
+      "last_published": "Jul 21, 2026"
+    },
+    {
+      "image_name": "litellm-ppc64le",
+      "canonical_name": "litellm",
+      "tag": "1.92.0",
+      "full_ref": "icr.io/ppc64le-oss/litellm-ppc64le:1.92.0",
+      "license": "MIT",
+      "last_published": "Jul 28, 2026"
+    },
+    {
+      "image_name": "vllm-ppc64le",
+      "canonical_name": "vllm",
+      "tag": "0.24.0",
+      "full_ref": "icr.io/ppc64le-oss/vllm-ppc64le:0.24.0",
+      "license": "Apache-2.0",
+      "last_published": "Jul 13, 2026"
+    },
+    {
+      "image_name": "agentstack-rag-ppc64le",
+      "canonical_name": "agentstack-rag",
+      "tag": "0.4.3",
+      "full_ref": "icr.io/ppc64le-oss/agentstack-rag-ppc64le:0.4.3",
+      "license": "Apache-2.0",
+      "last_published": "July 17, 2026"
+    },
+    {
+      "image_name": "agentstack-chat-ppc64le",
+      "canonical_name": "agentstack-chat",
+      "tag": "0.4.3",
+      "full_ref": "icr.io/ppc64le-oss/agentstack-chat-ppc64le:0.4.3",
+      "license": "Apache-2.0",
+      "last_published": "July 17, 2026"
+    },
+    {
+      "image_name": "agentstack-server-ppc64le",
+      "canonical_name": "agentstack-server",
+      "tag": "0.4.3",
+      "full_ref": "icr.io/ppc64le-oss/agentstack-server-ppc64le:0.4.3",
+      "license": "Apache-2.0",
+      "last_published": "July 17, 2026"
+    },
+    {
+      "image_name": "agentstack-form-ppc64le",
+      "canonical_name": "agentstack-form",
+      "tag": "0.4.3",
+      "full_ref": "icr.io/ppc64le-oss/agentstack-form-ppc64le:0.4.3",
+      "license": "Apache-2.0",
+      "last_published": "July 17, 2026"
+    },
+    {
+      "image_name": "vllm-ppc64le",
+      "canonical_name": "vllm",
+      "tag": "0.21.0",
+      "full_ref": "icr.io/ppc64le-oss/vllm-ppc64le:0.21.0",
+      "license": "Apache-2.0",
+      "last_published": "Jul 3, 2026"
+    },
+    {
+      "image_name": "vllm-ppc64le",
+      "canonical_name": "vllm",
+      "tag": "0.23.0",
+      "full_ref": "icr.io/ppc64le-oss/vllm-ppc64le:0.23.0",
+      "license": "Apache-2.0",
+      "last_published": "Jul 2, 2026"
+    },
+    {
+      "image_name": "vllm-ppc64le",
+      "canonical_name": "vllm",
+      "tag": "0.22.1",
+      "full_ref": "icr.io/ppc64le-oss/vllm-ppc64le:0.22.1",
+      "license": "Apache-2.0",
+      "last_published": "Jul 1, 2026"
+    },
+    {
+      "image_name": "ollama-ppc64le",
+      "canonical_name": "ollama",
+      "tag": "v0.24.0",
+      "full_ref": "icr.io/ppc64le-oss/ollama-ppc64le:v0.24.0",
+      "license": "MIT",
+      "last_published": "Jul 1, 2026"
+    },
+    {
+      "image_name": "opensearch-ppc64le",
+      "canonical_name": "opensearch",
+      "tag": "3.5.0",
+      "full_ref": "icr.io/ppc64le-oss/opensearch-ppc64le:3.5.0",
+      "license": "Apache License 2.0",
+      "last_published": "June 24, 2026"
+    },
+    {
+      "image_name": "mongodb-ppc64le",
+      "canonical_name": "mongodb",
+      "tag": "8.3.1",
+      "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:8.3.1",
+      "license": "Server Side Public License v1.0",
+      "last_published": "June 9, 2026"
+    },
+    {
+      "image_name": "clickhouse-ppc64le",
+      "canonical_name": "clickhouse",
+      "tag": "v26.3.9.8-lts",
+      "full_ref": "icr.io/ppc64le-oss/clickhouse-ppc64le:v26.3.9.8-lts",
+      "license": "Apache-2.0",
+      "last_published": "July 1, 2026"
+    },
+    {
+      "image_name": "kafka-ppc64le",
+      "canonical_name": "kafka",
+      "tag": "4.1.0-bv",
+      "full_ref": "icr.io/ppc64le-oss/kafka-ppc64le:4.1.0-bv",
+      "license": "Apache-2.0",
+      "last_published": "June 10, 2026"
+    },
+    {
+      "image_name": "envoy-ppc64le",
+      "canonical_name": "envoy",
+      "tag": "1.36.5",
+      "full_ref": "icr.io/ppc64le-oss/envoy-ppc64le:1.36.5",
+      "license": "Apache License 2.0",
+      "last_published": "June 8, 2026"
+    },
+    {
+      "image_name": "vllm-ppc64le",
+      "canonical_name": "vllm",
+      "tag": "0.19.1",
+      "full_ref": "icr.io/ppc64le-oss/vllm-ppc64le:0.19.1",
+      "license": "Apache-2.0",
+      "last_published": "June 9, 2026"
+    },
+    {
+      "image_name": "grafana-operator-ppc64le",
+      "canonical_name": "grafana-operator",
+      "tag": "5.22.2",
+      "full_ref": "icr.io/ppc64le-oss/grafana-operator-ppc64le:5.22.2",
+      "license": "Apache-2.0",
+      "last_published": "June 5, 2026"
+    },
+    {
+      "image_name": "redis-operator-ppc64le",
+      "canonical_name": "redis-operator",
+      "tag": "v0.24.0",
+      "full_ref": "icr.io/ppc64le-oss/redis-operator-ppc64le:v0.24.0",
+      "license": "Apache-2.0",
+      "last_published": "May 22, 2026"
+    },
+    {
+      "image_name": "openresty-ppc64le",
+      "canonical_name": "openresty",
+      "tag": "1.27.1.2-11-alpine",
+      "full_ref": "icr.io/ppc64le-oss/openresty-ppc64le:1.27.1.2-11-alpine",
+      "license": "BSD-2-Clause",
+      "last_published": "May 14, 2026"
+    },
+    {
+      "image_name": "ansible-acme-test-container-ppc64le",
+      "canonical_name": "ansible-acme-test-container",
+      "tag": "2.3.0",
+      "full_ref": "icr.io/ppc64le-oss/ansible-acme-test-container-ppc64le:2.3.0",
+      "license": "GPL-3.0, Apache License 2.0",
+      "last_published": "June 10, 2026"
+    },
+    {
+      "image_name": "redis-exporter-ppc64le",
+      "canonical_name": "redis-exporter",
+      "tag": "1.81.0",
+      "full_ref": "icr.io/ppc64le-oss/redis-exporter-ppc64le:1.81.0",
+      "license": "MIT",
+      "last_published": "May 14, 2026"
+    },
+    {
+      "image_name": "activemq-artemis-broker-ppc64le",
+      "canonical_name": "activemq-artemis-broker",
+      "tag": "latest",
+      "full_ref": "icr.io/ppc64le-oss/activemq-artemis-broker-ppc64le:latest",
+      "license": "Apache-2.0",
+      "last_published": "Apr 16, 2026"
+    },
+    {
+      "image_name": "vllm-ppc64le",
+      "canonical_name": "vllm",
+      "tag": "0.18.0",
+      "full_ref": "icr.io/ppc64le-oss/vllm-ppc64le:0.18.0",
+      "license": "Apache-2.0",
+      "last_published": "Apr 13, 2026"
+    },
+    {
+      "image_name": "opa-ppc64le",
+      "canonical_name": "opa",
+      "tag": "v1.15.1",
+      "full_ref": "icr.io/ppc64le-oss/opa-ppc64le:v1.15.1",
+      "license": "Apache-2.0",
+      "last_published": "May 29, 2026"
+    },
+    {
+      "image_name": "graphql-engine-ppc64le",
+      "canonical_name": "graphql-engine",
+      "tag": "v2.48.14",
+      "full_ref": "icr.io/ppc64le-oss/graphql-engine-ppc64le:v2.48.14",
+      "license": "MIT",
+      "last_published": "Apr 5, 2026"
+    },
+    {
+      "image_name": "ollama-ppc64le",
+      "canonical_name": "ollama",
+      "tag": "v0.17.6",
+      "full_ref": "icr.io/ppc64le-oss/ollama-ppc64le:v0.17.6",
+      "license": "MIT",
+      "last_published": "Mar 10, 2026"
+    },
+    {
+      "image_name": "ansible-nios-test-container-ppc64le",
+      "canonical_name": "ansible-nios-test-container",
+      "tag": "7.0.0",
+      "full_ref": "icr.io/ppc64le-oss/ansible-nios-test-container-ppc64le:7.0.0",
+      "license": "GPL-3.0",
+      "last_published": "April 17, 2026"
+    },
+    {
+      "image_name": "fluent-bit-ppc64le",
+      "canonical_name": "fluent-bit",
+      "tag": "4.0.13",
+      "full_ref": "icr.io/ppc64le-oss/fluent-bit-ppc64le:4.0.13",
+      "license": "Apache License 2.0",
+      "last_published": "March 27, 2026"
+    },
+    {
+      "image_name": "catboost-ppc64le",
+      "canonical_name": "catboost",
+      "tag": "1.2.7",
+      "full_ref": "icr.io/ppc64le-oss/catboost-ppc64le:1.2.7",
+      "license": "Apache-2.0",
+      "last_published": "Mar 15, 2026"
+    },
+    {
+      "image_name": "seaweedfs-ppc64le",
+      "canonical_name": "seaweedfs",
+      "tag": "4.08",
+      "full_ref": "icr.io/ppc64le-oss/seaweedfs-ppc64le:4.08",
+      "license": "Apache-2.0",
+      "last_published": "Feb 27, 2026"
+    },
+    {
+      "image_name": "langflow-ppc64le",
+      "canonical_name": "langflow",
+      "tag": "v1.7.3",
+      "full_ref": "icr.io/ppc64le-oss/langflow-ppc64le:v1.7.3",
+      "license": "MIT",
+      "last_published": "March 9, 2026"
+    },
+    {
+      "image_name": "docling-serve-ppc64le",
+      "canonical_name": "docling-serve",
+      "tag": "1.9.0",
+      "full_ref": "icr.io/ppc64le-oss/docling-serve-ppc64le:1.9.0",
+      "license": "MIT",
+      "last_published": "April 10. 2026"
+    },
+    {
+      "image_name": "litellm-pgvector-ppc64le",
+      "canonical_name": "litellm-pgvector",
+      "tag": "0.0.1",
+      "full_ref": "icr.io/ppc64le-oss/litellm-pgvector-ppc64le:0.0.1",
+      "license": "MIT",
+      "last_published": "Feb 17, 2026"
+    },
+    {
+      "image_name": "http-test-container-ppc64le",
+      "canonical_name": "http-test-container",
+      "tag": "3.5.0",
+      "full_ref": "icr.io/ppc64le-oss/http-test-container-ppc64le:3.5.0",
+      "license": "GPL v3.0",
+      "last_published": "Feb 13, 2026"
+    },
+    {
+      "image_name": "ansible-utility-container-ppc64le",
+      "canonical_name": "ansible-utility-container",
+      "tag": "3.4.0",
+      "full_ref": "icr.io/ppc64le-oss/ansible-utility-container-ppc64le:3.4.0",
+      "license": "GPL-v3.0",
+      "last_published": "Feb 13, 2026"
+    },
+    {
+      "image_name": "open-webui-ppc64le",
+      "canonical_name": "open-webui",
+      "tag": "0.7.2",
+      "full_ref": "icr.io/ppc64le-oss/open-webui-ppc64le:0.7.2",
+      "license": "OpenWebUI License",
+      "last_published": "July 1, 2026"
+    },
+    {
+      "image_name": "valkey-ppc64le",
+      "canonical_name": "valkey",
+      "tag": "9.0.1-bv",
+      "full_ref": "icr.io/ppc64le-oss/valkey-ppc64le:9.0.1-bv",
+      "license": "BSD-3-Clause",
+      "last_published": "March 9, 2026"
+    },
+    {
+      "image_name": "ollama-ppc64le",
+      "canonical_name": "ollama",
+      "tag": "v0.13.5",
+      "full_ref": "icr.io/ppc64le-oss/ollama-ppc64le:v0.13.5",
+      "license": "MIT",
+      "last_published": "Jan 1, 2026"
+    },
+    {
+      "image_name": "valkey-ppc64le",
+      "canonical_name": "valkey",
+      "tag": "9.0.1",
+      "full_ref": "icr.io/ppc64le-oss/valkey-ppc64le:9.0.1",
+      "license": "BSD-3-Clause",
+      "last_published": "Jan 27, 2026"
+    },
+    {
+      "image_name": "milvus-ppc64le",
+      "canonical_name": "milvus",
+      "tag": "v2.6.5",
+      "full_ref": "icr.io/ppc64le-oss/milvus-ppc64le:v2.6.5",
+      "license": "Apache License 2.0",
+      "last_published": "Jan 27, 2025"
+    },
+    {
+      "image_name": "mongodb-ppc64le",
+      "canonical_name": "mongodb",
+      "tag": "7.0.25",
+      "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:7.0.25",
+      "license": "Server Side Public License v1.0",
+      "last_published": "December 17, 2025"
+    },
+    {
+      "image_name": "traefik-ppc64le",
+      "canonical_name": "traefik",
+      "tag": "v3.3",
+      "full_ref": "icr.io/ppc64le-oss/traefik-ppc64le:v3.3",
+      "license": "MIT",
+      "last_published": "March 27, 2026"
+    },
+    {
+      "image_name": "infinispan-server-ppc64le",
+      "canonical_name": "infinispan-server",
+      "tag": "16.0.1",
+      "full_ref": "icr.io/ppc64le-oss/infinispan-server-ppc64le:16.0.1",
+      "license": "",
+      "last_published": "Dec 9, 2025"
+    },
+    {
+      "image_name": "opensearch-operator-ppc64le",
+      "canonical_name": "opensearch-operator",
+      "tag": "3.2.0",
+      "full_ref": "icr.io/ppc64le-oss/opensearch-operator-ppc64le:3.2.0",
+      "license": "Apache-2.0",
+      "last_published": "Feb 17, 2026"
+    },
+    {
+      "image_name": "ollama-ppc64le",
+      "canonical_name": "ollama",
+      "tag": "v0.13.1",
+      "full_ref": "icr.io/ppc64le-oss/ollama-ppc64le:v0.13.1",
+      "license": "MIT",
+      "last_published": "Dec 3, 2025"
+    },
+    {
+      "image_name": "rocketmq-ppc64le",
+      "canonical_name": "rocketmq",
+      "tag": "5.3.3",
+      "full_ref": "icr.io/ppc64le-oss/rocketmq-ppc64le:5.3.3",
+      "license": "Apache-2.0",
+      "last_published": "December 9, 2025"
+    },
+    {
+      "image_name": "docling-ppc64le",
+      "canonical_name": "docling",
+      "tag": "2.60.1",
+      "full_ref": "icr.io/ppc64le-oss/docling-ppc64le:2.60.1",
+      "license": "",
+      "last_published": "Nov 24, 2025"
+    },
+    {
+      "image_name": "elasticsearch-ppc64le",
+      "canonical_name": "elasticsearch",
+      "tag": "7.17.28",
+      "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:7.17.28",
+      "license": "Server Side Public License V1 and Elastic License 2.0",
+      "last_published": "Nov 14th, 2025"
+    },
+    {
+      "image_name": "openssh-server-ppc64le",
+      "canonical_name": "openssh-server",
+      "tag": "8.4_p1-r3-ls48",
+      "full_ref": "icr.io/ppc64le-oss/openssh-server-ppc64le:8.4_p1-r3-ls48",
+      "license": "",
+      "last_published": "Nov 5, 2025"
+    },
+    {
+      "image_name": "openssh-server-ppc64le",
+      "canonical_name": "openssh-server",
+      "tag": "8.1_p1-r0-ls20",
+      "full_ref": "icr.io/ppc64le-oss/openssh-server-ppc64le:8.1_p1-r0-ls20",
+      "license": "",
+      "last_published": "Nov 3, 2025"
+    },
+    {
+      "image_name": "zookeeper-ppc64le",
+      "canonical_name": "zookeeper",
+      "tag": "v3.9.3-debian-12-r19-bv",
+      "full_ref": "icr.io/ppc64le-oss/zookeeper-ppc64le:v3.9.3-debian-12-r19-bv",
+      "license": "Apache License 2.0",
+      "last_published": "Nov 14, 2025"
+    },
+    {
+      "image_name": "vllm-ppc64le",
+      "canonical_name": "vllm",
+      "tag": "0.10.1.dev852.gee01645db.d20250827",
+      "full_ref": "icr.io/ppc64le-oss/vllm-ppc64le:0.10.1.dev852.gee01645db.d20250827",
+      "license": "Apache-2.0",
+      "last_published": "September 11, 2025"
+    },
+    {
+      "image_name": "neo4j-ppc64le",
+      "canonical_name": "neo4j",
+      "tag": "5.26.0",
+      "full_ref": "icr.io/ppc64le-oss/neo4j-ppc64le:5.26.0",
+      "license": "GNU General Public License v3.0",
+      "last_published": "August 11, 2025"
+    },
+    {
+      "image_name": "contextionary-ppc64le",
+      "canonical_name": "contextionary",
+      "tag": "1.2.1",
+      "full_ref": "icr.io/ppc64le-oss/weaviate/contextionary-ppc64le:1.2.1",
+      "license": "BSD-3-Clause",
+      "last_published": "August 11, 2025"
+    },
+    {
+      "image_name": "activemq-artemis-broker-ppc64le",
+      "canonical_name": "activemq-artemis-broker",
+      "tag": "2.0.2",
+      "full_ref": "icr.io/ppc64le-oss/activemq-artemis-broker-ppc64le:2.0.2",
+      "license": "Apache-2.0",
+      "last_published": "September 9, 2025"
+    },
+    {
+      "image_name": "k8s-hub-ppc64le",
+      "canonical_name": "k8s-hub",
+      "tag": "4.1.0",
+      "full_ref": "icr.io/ppc64le-oss/jupyterhub/k8s-hub-ppc64le:4.1.0",
+      "license": "BSD-3-Clause",
+      "last_published": "August 11, 2025"
+    },
+    {
+      "image_name": "qdrant-ppc64le",
+      "canonical_name": "qdrant",
+      "tag": "1.14.1",
+      "full_ref": "icr.io/ppc64le-oss/qdrant-ppc64le:1.14.1",
+      "license": "Apache-2.0",
+      "last_published": "September 9, 2025"
+    },
+    {
+      "image_name": "weaviate-ppc64le",
+      "canonical_name": "weaviate",
+      "tag": "1.31.1",
+      "full_ref": "icr.io/ppc64le-oss/weaviate-ppc64le:1.31.1",
+      "license": "BSD-3-Clause",
+      "last_published": "July 30, 2025"
+    },
+    {
+      "image_name": "vllm-ppc64le",
+      "canonical_name": "vllm",
+      "tag": "0.9.1",
+      "full_ref": "icr.io/ppc64le-oss/vllm-ppc64le:0.9.1",
+      "license": "Apache-2.0",
+      "last_published": "August 18, 2025"
+    },
+    {
+      "image_name": "configurable-http-proxy-ppc64le",
+      "canonical_name": "configurable-http-proxy",
+      "tag": "v4.6.2",
+      "full_ref": "icr.io/ppc64le-oss/configurable-http-proxy-ppc64le:v4.6.2",
+      "license": "BSD-3-Clause",
+      "last_published": "July 16, 2025ope"
+    },
+    {
+      "image_name": "lra-coordinator-quarkus-jvm",
+      "canonical_name": "lra-coordinator-quarkus-jvm",
+      "tag": "latest",
+      "full_ref": "icr.io/ppc64le-oss/quarkus/lra-coordinator-quarkus-jvm:latest",
+      "license": "LGPL-2.1",
+      "last_published": "June 26, 2025"
+    },
+    {
+      "image_name": "nats-boot-config-ppc64le",
+      "canonical_name": "nats-boot-config",
+      "tag": "0.16.0",
+      "full_ref": "icr.io/ppc64le-oss/nats-boot-config-ppc64le:0.16.0",
+      "license": "Apache v2.0",
+      "last_published": "June 26, 2025"
+    },
+    {
+      "image_name": "nats-server-config-reloader-ppc64le",
+      "canonical_name": "nats-server-config-reloader",
+      "tag": "0.16.0",
+      "full_ref": "icr.io/ppc64le-oss/nats-server-config-reloader-ppc64le:0.16.0",
+      "license": "Apache v2.0",
+      "last_published": "June 26, 2025"
+    },
+    {
+      "image_name": "jetstream-controller-ppc64le",
+      "canonical_name": "jetstream-controller",
+      "tag": "0.16.0",
+      "full_ref": "icr.io/ppc64le-oss/jetstream-controller-ppc64le:0.16.0",
+      "license": "Apache v2.0",
+      "last_published": "June 26, 2025"
+    },
+    {
+      "image_name": "graphql-engine-ppc64le",
+      "canonical_name": "graphql-engine",
+      "tag": "2.45.2",
+      "full_ref": "icr.io/ppc64le-oss/graphql-engine-ppc64le:2.45.2",
+      "license": "MIT",
+      "last_published": "June 19, 2025"
+    },
+    {
+      "image_name": "keda",
+      "canonical_name": "keda",
+      "tag": "2.16.1-webhook",
+      "full_ref": "icr.io/ppc64le-oss/keda:2.16.1-webhook",
+      "license": "Apache License 2.0",
+      "last_published": "Dec 15, 2025"
+    },
+    {
+      "image_name": "keda",
+      "canonical_name": "keda",
+      "tag": "2.16.1-adapter",
+      "full_ref": "icr.io/ppc64le-oss/keda:2.16.1-adapter",
+      "license": "Apache License 2.0",
+      "last_published": "Dec 15, 2025"
+    },
+    {
+      "image_name": "keda",
+      "canonical_name": "keda",
+      "tag": "2.16.1",
+      "full_ref": "icr.io/ppc64le-oss/keda:2.16.1",
+      "license": "Apache License 2.0",
+      "last_published": "Dec 15, 2025"
+    },
+    {
+      "image_name": "envoy-ppc64le",
+      "canonical_name": "envoy",
+      "tag": "1.34.0",
+      "full_ref": "icr.io/ppc64le-oss/envoy-ppc64le:1.34.0",
+      "license": "Apache License 2.0",
+      "last_published": "May 20. 2025"
+    },
+    {
+      "image_name": "zookeeper-ppc64le",
+      "canonical_name": "zookeeper",
+      "tag": "v3.9.3-bv",
+      "full_ref": "icr.io/ppc64le-oss/zookeeper-ppc64le:v3.9.3-bv",
+      "license": "Apache License 2.0",
+      "last_published": "May 16, 2025"
+    },
+    {
+      "image_name": "elasticsearch-ppc64le",
+      "canonical_name": "elasticsearch",
+      "tag": "7.17.20",
+      "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:7.17.20",
+      "license": "Server Side Public License V1 and Elastic License 2.0",
+      "last_published": "April 25, 2025"
+    },
+    {
+      "image_name": "redis-ppc64le",
+      "canonical_name": "redis",
+      "tag": "v7.4.2-bv",
+      "full_ref": "icr.io/ppc64le-oss/redis-ppc64le:v7.4.2-bv",
+      "license": "BSD-3-Clause",
+      "last_published": "April 25, 2025"
+    },
+    {
+      "image_name": "milvus-ppc64le",
+      "canonical_name": "milvus",
+      "tag": "v2.5.3",
+      "full_ref": "icr.io/ppc64le-oss/milvus-ppc64le:v2.5.3",
+      "license": "Apache License 2.0",
+      "last_published": "June 26, 2025"
+    },
+    {
+      "image_name": "kong-ppc64le",
+      "canonical_name": "kong",
+      "tag": "3.9.0",
+      "full_ref": "icr.io/ppc64le-oss/kong-ppc64le:3.9.0",
+      "license": "Apache License 2.0",
+      "last_published": "March 26, 2024"
+    },
+    {
+      "image_name": "azurite-ppc64le",
+      "canonical_name": "azurite",
+      "tag": "1.1",
+      "full_ref": "icr.io/ppc64le-oss/azurite-ppc64le:1.1",
+      "license": "MIT",
+      "last_published": "May 27, 2025"
+    },
+    {
+      "image_name": "postgresql-ppc64le",
+      "canonical_name": "postgresql",
+      "tag": "16.3",
+      "full_ref": "icr.io/ppc64le-oss/postgresql-ppc64le:16.3",
+      "license": "PostgreSQL License Apache License 2.0",
+      "last_published": "May 27, 2025"
+    },
+    {
+      "image_name": "fluentd-kubernetes-daemonset-ppc64le",
+      "canonical_name": "fluentd-kubernetes-daemonset",
+      "tag": "v1.14.3-debian-forward-1.0",
+      "full_ref": "icr.io/ppc64le-oss/fluentd-kubernetes-daemonset-ppc64le:v1.14.3-debian-forward-1.0",
+      "license": "Apache-2.0",
+      "last_published": "March 17, 2025"
+    },
+    {
+      "image_name": "pgbouncer-ppc64le",
+      "canonical_name": "pgbouncer",
+      "tag": "1.23.0",
+      "full_ref": "icr.io/ppc64le-oss/cloudnative-pg/pgbouncer-ppc64le:1.23.0",
+      "license": "Apache-2.0",
+      "last_published": "March 17, 2025"
+    },
+    {
+      "image_name": "keycloak-ppc64le",
+      "canonical_name": "keycloak",
+      "tag": "v26.0.5-bv",
+      "full_ref": "icr.io/ppc64le-oss/keycloak-ppc64le:v26.0.5-bv",
+      "license": "Apache-2.0",
+      "last_published": "March 27, 2025"
+    },
+    {
+      "image_name": "postgresql",
+      "canonical_name": "postgresql",
+      "tag": "v15.10.0-bv",
+      "full_ref": "icr.io/ppc64le-oss/postgresql:v15.10.0-bv",
+      "license": "PostgreSQL License Apache License 2.0",
+      "last_published": "March 26. 2025"
+    },
+    {
+      "image_name": "milvus-ppc64le",
+      "canonical_name": "milvus",
+      "tag": "v2.4.11",
+      "full_ref": "icr.io/ppc64le-oss/milvus-ppc64le:v2.4.11",
+      "license": "Apache License 2.0",
+      "last_published": "Nov 28, 2024"
+    },
+    {
+      "image_name": "mongodb-ppc64le",
+      "canonical_name": "mongodb",
+      "tag": "6.0.13-bv",
+      "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:6.0.13-bv",
+      "license": "Server Side Public License v1.0",
+      "last_published": "Nov 21, 2024"
+    },
+    {
+      "image_name": "postgresql",
+      "canonical_name": "postgresql",
+      "tag": "v14.13.0-bv",
+      "full_ref": "icr.io/ppc64le-oss/postgresql:v14.13.0-bv",
+      "license": "PostgreSQL License Apache License 2.0",
+      "last_published": "Dec 5, 2024"
+    },
+    {
+      "image_name": "rocketchat-ppc64le",
+      "canonical_name": "rocketchat",
+      "tag": "6.11.1",
+      "full_ref": "icr.io/ppc64le-oss/rocketchat-ppc64le:6.11.1",
+      "license": "MIT",
+      "last_published": "Nov 21, 2024"
+    },
+    {
+      "image_name": "redis-ppc64le",
+      "canonical_name": "redis",
+      "tag": "v7.2.5-bv-ubi8",
+      "full_ref": "icr.io/ppc64le-oss/redis-ppc64le:v7.2.5-bv-ubi8",
+      "license": "BSD-3-Clause",
+      "last_published": "Aug 12, 2024"
+    },
+    {
+      "image_name": "redis-ppc64le",
+      "canonical_name": "redis",
+      "tag": "v7.2.5-bv",
+      "full_ref": "icr.io/ppc64le-oss/redis-ppc64le:v7.2.5-bv",
+      "license": "BSD-3-Clause",
+      "last_published": "Aug 2, 2024"
+    },
+    {
+      "image_name": "vault-ppc64le",
+      "canonical_name": "vault",
+      "tag": "v1.14.8",
+      "full_ref": "icr.io/ppc64le-oss/vault-ppc64le:v1.14.8",
+      "license": "Mozilla Public License, version 2.0",
+      "last_published": "Aug 2, 2024"
+    },
+    {
+      "image_name": "postgresql",
+      "canonical_name": "postgresql",
+      "tag": "v14.12.0-bv",
+      "full_ref": "icr.io/ppc64le-oss/postgresql:v14.12.0-bv",
+      "license": "PostgreSQL License Apache License 2.0",
+      "last_published": "July 9, 2024"
+    },
+    {
+      "image_name": "eck-operator-ppc64le",
+      "canonical_name": "eck-operator",
+      "tag": "2.9.0",
+      "full_ref": "icr.io/ppc64le-oss/eck-operator-ppc64le:2.9.0",
+      "license": "Elastic License 2.0",
+      "last_published": "Aug 7, 2024"
+    },
+    {
+      "image_name": "cass-operator-ppc64le",
+      "canonical_name": "cass-operator",
+      "tag": "v1.19.0",
+      "full_ref": "icr.io/ppc64le-oss/cass-operator-ppc64le:v1.19.0",
+      "license": "Apache License 2.0",
+      "last_published": "July 18th, 2024"
+    },
+    {
+      "image_name": "k8ssandra-client-ppc64le",
+      "canonical_name": "k8ssandra-client",
+      "tag": "v0.2.2",
+      "full_ref": "icr.io/ppc64le-oss/k8ssandra-client-ppc64le:v0.2.2",
+      "license": "Apache License 2.0",
+      "last_published": "July 29, 2024"
+    },
+    {
+      "image_name": "system-logger-ppc64le",
+      "canonical_name": "system-logger",
+      "tag": "v1.19.0",
+      "full_ref": "icr.io/ppc64le-oss/system-logger-ppc64le:v1.19.0",
+      "license": "Apache License 2.0",
+      "last_published": "July 18, 2024"
+    },
+    {
+      "image_name": "postgres-operator-ppc64le",
+      "canonical_name": "postgres-operator",
+      "tag": "v15.7",
+      "full_ref": "icr.io/ppc64le-oss/postgres-operator-ppc64le:v15.7",
+      "license": "MIT License",
+      "last_published": "July 18, 2024"
+    },
+    {
+      "image_name": "elasticsearch-ppc64le",
+      "canonical_name": "elasticsearch",
+      "tag": "7.17.14",
+      "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:7.17.14",
+      "license": "Server Side Public License V1 and Elastic License 2.0",
+      "last_published": "July 18th, 2024"
+    },
+    {
+      "image_name": "cass-management-api-ppc64le",
+      "canonical_name": "cass-management-api",
+      "tag": "4.1.2",
+      "full_ref": "icr.io/ppc64le-oss/cass-management-api-ppc64le:4.1.2",
+      "license": "Apache License 2.0",
+      "last_published": "July 22, 2024"
+    },
+    {
+      "image_name": "envoy-ppc64le",
+      "canonical_name": "envoy",
+      "tag": "1.29.3",
+      "full_ref": "icr.io/ppc64le-oss/envoy-ppc64le:1.29.3",
+      "license": "Apache License 2.0",
+      "last_published": "April 16, 2024"
+    },
+    {
+      "image_name": "logstash-ppc64le",
+      "canonical_name": "logstash",
+      "tag": "8.11.3",
+      "full_ref": "icr.io/ppc64le-oss/logstash-ppc64le:8.11.3",
+      "license": "Apache License 2.0 OR Elastic License 2.0 Note: \"x-pack\" is under the Elastic License and not available for Power",
+      "last_published": "April 9, 2024"
+    },
+    {
+      "image_name": "opensearch-ppc64le",
+      "canonical_name": "opensearch",
+      "tag": "2.12.0",
+      "full_ref": "icr.io/ppc64le-oss/opensearch-ppc64le:2.12.0",
+      "license": "Apache License 2.0",
+      "last_published": "April 16, 2024"
+    },
+    {
+      "image_name": "mongodb-ppc64le",
+      "canonical_name": "mongodb",
+      "tag": "5.0.26",
+      "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:5.0.26",
+      "license": "Server Side Public License v1.0",
+      "last_published": "April 9, 2024"
+    },
+    {
+      "image_name": "rust-ppc64le",
+      "canonical_name": "rust",
+      "tag": "1.66.1",
+      "full_ref": "icr.io/ppc64le-oss/rust-ppc64le:1.66.1",
+      "license": "MIT License",
+      "last_published": "April 2, 2024"
+    },
+    {
+      "image_name": "cassandra-ppc64le",
+      "canonical_name": "cassandra",
+      "tag": "4.1.3",
+      "full_ref": "icr.io/ppc64le-oss/cassandra-ppc64le:4.1.3",
+      "license": "Apache License 2.0",
+      "last_published": "April 2, 2024"
+    },
+    {
+      "image_name": "mongodb-ppc64le",
+      "canonical_name": "mongodb",
+      "tag": "6.0.13",
+      "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:6.0.13",
+      "license": "Server Side Public License v1.0",
+      "last_published": "April 9, 2024"
+    },
+    {
+      "image_name": "envoy-ppc64le",
+      "canonical_name": "envoy",
+      "tag": "1.29.0",
+      "full_ref": "icr.io/ppc64le-oss/envoy-ppc64le:1.29.0",
+      "license": "Apache License 2.0",
+      "last_published": "Feb 7, 2024"
+    },
+    {
+      "image_name": "milvus-ppc64le",
+      "canonical_name": "milvus",
+      "tag": "v2.3.3",
+      "full_ref": "icr.io/ppc64le-oss/milvus-ppc64le:v2.3.3",
+      "license": "Apache License 2.0",
+      "last_published": "April 2, 2024"
+    },
+    {
+      "image_name": "kong-ppc64le",
+      "canonical_name": "kong",
+      "tag": "3.3.0",
+      "full_ref": "icr.io/ppc64le-oss/kong-ppc64le:3.3.0",
+      "license": "Apache License 2.0",
+      "last_published": "Nov 24, 2023"
+    },
+    {
+      "image_name": "neo4j-ppc64le",
+      "canonical_name": "neo4j",
+      "tag": "5.9.0",
+      "full_ref": "icr.io/ppc64le-oss/neo4j-ppc64le:5.9.0",
+      "license": "GNU General Public License v3.0",
+      "last_published": "Nov 24, 20O23"
+    },
+    {
+      "image_name": "elasticsearch-ppc64le",
+      "canonical_name": "elasticsearch",
+      "tag": "7.17.13",
+      "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:7.17.13",
+      "license": "Server Side Public License V1 and Elastic License 2.0",
+      "last_published": "Oct 25, 2023"
+    },
+    {
+      "image_name": "redis-ppc64le",
+      "canonical_name": "redis",
+      "tag": "v7.2.1-bv",
+      "full_ref": "icr.io/ppc64le-oss/redis-ppc64le:v7.2.1-bv",
+      "license": "BSD-3-Clause",
+      "last_published": "Oct 25, 2023"
+    },
+    {
+      "image_name": "postgresql",
+      "canonical_name": "postgresql",
+      "tag": "v14.9.0-bv",
+      "full_ref": "icr.io/ppc64le-oss/postgresql:v14.9.0-bv",
+      "license": "PostgreSQL License Apache License 2.0",
+      "last_published": "Oct 17, 2023"
+    },
+    {
+      "image_name": "vault-ppc64le",
+      "canonical_name": "vault",
+      "tag": "v1.14.4",
+      "full_ref": "icr.io/ppc64le-oss/vault-ppc64le:v1.14.4",
+      "license": "Mozilla Public License, version 2.0",
+      "last_published": "Oct 26, 2023"
+    },
+    {
+      "image_name": "fluent-bit-ppc64le",
+      "canonical_name": "fluent-bit",
+      "tag": "v2.1.10",
+      "full_ref": "icr.io/ppc64le-oss/fluent-bit-ppc64le:v2.1.10",
+      "license": "Apache License 2.0",
+      "last_published": "Oct 20, 2023"
+    },
+    {
+      "image_name": "mongodb-ppc64le",
+      "canonical_name": "mongodb",
+      "tag": "5.0.21",
+      "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:5.0.21",
+      "license": "Server Side Public License v1.0",
+      "last_published": "Oct 16, 2023"
+    },
+    {
+      "image_name": "vault-k8s-ppc64le",
+      "canonical_name": "vault-k8s",
+      "tag": "1.2.1",
+      "full_ref": "icr.io/ppc64le-oss/vault-k8s-ppc64le:1.2.1",
+      "license": "Mozilla Public License, version 2.0",
+      "last_published": "Oct 18, 2023"
+    },
+    {
+      "image_name": "mongodb-ppc64le",
+      "canonical_name": "mongodb",
+      "tag": "5.0.20",
+      "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:5.0.20",
+      "license": "Server Side Public License v1.0",
+      "last_published": "Oct 9, 2023"
+    },
+    {
+      "image_name": "mongodb-ppc64le",
+      "canonical_name": "mongodb",
+      "tag": "4.4.24",
+      "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:4.4.24",
+      "license": "Server Side Public License v1.0",
+      "last_published": "Oct 9, 2023"
+    },
+    {
+      "image_name": "keda",
+      "canonical_name": "keda",
+      "tag": "2.11.2-webhook",
+      "full_ref": "icr.io/ppc64le-oss/keda:2.11.2-webhook",
+      "license": "Apache License 2.0",
+      "last_published": "Sept 7, 2023"
+    },
+    {
+      "image_name": "keda",
+      "canonical_name": "keda",
+      "tag": "2.11.2-adapter",
+      "full_ref": "icr.io/ppc64le-oss/keda:2.11.2-adapter",
+      "license": "Apache License 2.0",
+      "last_published": "Sept 7, 2023"
+    },
+    {
+      "image_name": "keda",
+      "canonical_name": "keda",
+      "tag": "2.11.2",
+      "full_ref": "icr.io/ppc64le-oss/keda:2.11.2",
+      "license": "Apache License 2.0",
+      "last_published": "Sept 7, 2023"
+    },
+    {
+      "image_name": "filebrowser-ppc64le",
+      "canonical_name": "filebrowser",
+      "tag": "v2.24.2",
+      "full_ref": "icr.io/ppc64le-oss/filebrowser-ppc64le:v2.24.2",
+      "license": "Apache License 2.0",
+      "last_published": "Nov 24, 2023"
+    },
+    {
+      "image_name": "cass-management-api-ppc64le",
+      "canonical_name": "cass-management-api",
+      "tag": "4.0.7",
+      "full_ref": "icr.io/ppc64le-oss/cass-management-api-ppc64le:4.0.7",
+      "license": "Apache License 2.0",
+      "last_published": "Aug 29, 2023"
+    },
+    {
+      "image_name": "cass-config-builder-ppc64le",
+      "canonical_name": "cass-config-builder",
+      "tag": "1.0.4",
+      "full_ref": "icr.io/ppc64le-oss/cass-config-builder-ppc64le:1.0.4",
+      "license": "Apache License 2.0",
+      "last_published": "Aug 29, 2023"
+    },
+    {
+      "image_name": "system-logger-ppc64le",
+      "canonical_name": "system-logger",
+      "tag": "v1.14.0",
+      "full_ref": "icr.io/ppc64le-oss/system-logger-ppc64le:v1.14.0",
+      "license": "Apache License 2.0",
+      "last_published": "Aug 29, 2023"
+    },
+    {
+      "image_name": "cass-operator-ppc64le",
+      "canonical_name": "cass-operator",
+      "tag": "v1.14.0",
+      "full_ref": "icr.io/ppc64le-oss/cass-operator-ppc64le:v1.14.0",
+      "license": "Apache License 2.0",
+      "last_published": "Aug 29, 2023"
+    },
+    {
+      "image_name": "spilo-ppc64le",
+      "canonical_name": "spilo",
+      "tag": "3.0-p1",
+      "full_ref": "icr.io/ppc64le-oss/spilo-ppc64le:3.0-p1",
+      "license": "Apache License 2.0",
+      "last_published": "Aug 29, 2023"
+    },
+    {
+      "image_name": "postgres-operator-ppc64le",
+      "canonical_name": "postgres-operator",
+      "tag": "v1.10.0",
+      "full_ref": "icr.io/ppc64le-oss/postgres-operator-ppc64le:v1.10.0",
+      "license": "MIT License",
+      "last_published": "Aug 29, 2023"
+    },
+    {
+      "image_name": "zookeeper-operator-ppc64le",
+      "canonical_name": "zookeeper-operator",
+      "tag": "0.2.14-pravega",
+      "full_ref": "icr.io/ppc64le-oss/zookeeper-operator-ppc64le:0.2.14-pravega",
+      "license": "Apache License 2.0",
+      "last_published": "Aug 25, 2023"
+    },
+    {
+      "image_name": "zookeeper-ppc64le",
+      "canonical_name": "zookeeper",
+      "tag": "v0.2.14-pravega",
+      "full_ref": "icr.io/ppc64le-oss/zookeeper-ppc64le:v0.2.14-pravega",
+      "license": "Apache License 2.0",
+      "last_published": "Aug 7, 2023"
+    },
+    {
+      "image_name": "elasticsearch-ppc64le",
+      "canonical_name": "elasticsearch",
+      "tag": "7.16.3",
+      "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:7.16.3",
+      "license": "Server Side Public License V1 and Elastic License 2.0",
+      "last_published": "Aug 7, 2023"
+    },
+    {
+      "image_name": "elasticsearch-ppc64le",
+      "canonical_name": "elasticsearch",
+      "tag": "7.17.10",
+      "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:7.17.10",
+      "license": "Server Side Public License V1 and Elastic License 2.0",
+      "last_published": "Aug 7, 2023"
+    },
+    {
+      "image_name": "vault-ppc64le",
+      "canonical_name": "vault",
+      "tag": "v1.13.4",
+      "full_ref": "icr.io/ppc64le-oss/vault-ppc64le:v1.13.4",
+      "license": "Mozilla Public License, version 2.0",
+      "last_published": "Aug 7, 2023"
+    },
+    {
+      "image_name": "redis-ppc64le",
+      "canonical_name": "redis",
+      "tag": "v7.0.12-bv",
+      "full_ref": "icr.io/ppc64le-oss/redis-ppc64le:v7.0.12-bv",
+      "license": "BSD-3-Clause",
+      "last_published": "Aug 7, 2023"
+    },
+    {
+      "image_name": "grafana-mimir-rules-action-ppc64le",
+      "canonical_name": "grafana-mimir-rules-action",
+      "tag": "2.9.0",
+      "full_ref": "icr.io/ppc64le-oss/grafana-mimir-rules-action-ppc64le:2.9.0",
+      "license": "GNU AFFERO GPL v3.0",
+      "last_published": "Nov 24, 2023"
+    },
+    {
+      "image_name": "grafana-query-tee-ppc64le",
+      "canonical_name": "grafana-query-tee",
+      "tag": "2.9.0",
+      "full_ref": "icr.io/ppc64le-oss/grafana-query-tee-ppc64le:2.9.0",
+      "license": "GNU AFFERO GPL v3.0",
+      "last_published": "Nov 24, 2023"
+    },
+    {
+      "image_name": "grafana-mimirtool-ppc64le",
+      "canonical_name": "grafana-mimirtool",
+      "tag": "2.9.0",
+      "full_ref": "icr.io/ppc64le-oss/grafana-mimirtool-ppc64le:2.9.0",
+      "license": "GNU AFFERO GPL v3.0",
+      "last_published": "Nov 24, 2023"
+    },
+    {
+      "image_name": "grafana-mimir-ppc64le",
+      "canonical_name": "grafana-mimir",
+      "tag": "2.9.0",
+      "full_ref": "icr.io/ppc64le-oss/grafana-mimir-ppc64le:2.9.0",
+      "license": "GNU AFFERO GPL v3.0",
+      "last_published": "Nov 24, 2023"
+    },
+    {
+      "image_name": "grafana-mimir-continuous-test-ppc64le",
+      "canonical_name": "grafana-mimir-continuous-test",
+      "tag": "2.9.0",
+      "full_ref": "icr.io/ppc64le-oss/grafana-mimir-continuous-test-ppc64le:2.9.0",
+      "license": "GNU AFFERO GPL v3.0",
+      "last_published": "Nov 24, 2023"
+    },
+    {
+      "image_name": "grafana-mimir-build-image-ppc64le",
+      "canonical_name": "grafana-mimir-build-image",
+      "tag": "2.9.0",
+      "full_ref": "icr.io/ppc64le-oss/grafana-mimir-build-image-ppc64le:2.9.0",
+      "license": "GNU AFFERO GPL v3.0",
+      "last_published": "Nov 24, 2023"
+    },
+    {
+      "image_name": "fluent-bit-ppc64le",
+      "canonical_name": "fluent-bit",
+      "tag": "v2.0.11",
+      "full_ref": "icr.io/ppc64le-oss/fluent-bit-ppc64le:v2.0.11",
+      "license": "Apache License 2.0",
+      "last_published": "Jun 19, 2023"
+    },
+    {
+      "image_name": "jetty-ppc64le",
+      "canonical_name": "jetty",
+      "tag": "11.0.15-jdk17",
+      "full_ref": "icr.io/ppc64le-oss/jetty-ppc64le:11.0.15-jdk17",
+      "license": "Eclipse Public License v2.0",
+      "last_published": "Jun 5, 2023"
+    },
+    {
+      "image_name": "pd-server-ppc64le",
+      "canonical_name": "pd-server",
+      "tag": "v7.1.0",
+      "full_ref": "icr.io/ppc64le-oss/pd-server-ppc64le:v7.1.0",
+      "license": "Apache License 2.0",
+      "last_published": "Jun 5, 2023"
+    },
+    {
+      "image_name": "vault-ppc64le",
+      "canonical_name": "vault",
+      "tag": "v1.13.1",
+      "full_ref": "icr.io/ppc64le-oss/vault-ppc64le:v1.13.1",
+      "license": "Mozilla Public License, version 2.0",
+      "last_published": "May 31, 2023"
+    },
+    {
+      "image_name": "eck-operator-ppc64le",
+      "canonical_name": "eck-operator",
+      "tag": "2.5.0-v1.10.0",
+      "full_ref": "icr.io/ppc64le-oss/eck-operator-ppc64le:2.5.0-v1.10.0",
+      "license": "Elastic License 2.0",
+      "last_published": "Aug 29, 2023"
+    },
+    {
+      "image_name": "zookeeper-ppc64le",
+      "canonical_name": "zookeeper",
+      "tag": "3.5.10",
+      "full_ref": "icr.io/ppc64le-oss/zookeeper-ppc64le:3.5.10",
+      "license": "Apache License 2.0",
+      "last_published": "April 17, 2023"
+    },
+    {
+      "image_name": "nomad",
+      "canonical_name": "nomad",
+      "tag": "v1.4.2",
+      "full_ref": "icr.io/ppc64le-oss/nomad:v1.4.2",
+      "license": "Mozilla Public License, version 2.0",
+      "last_published": "Feb 28, 2023"
+    },
+    {
+      "image_name": "datadog-agent",
+      "canonical_name": "datadog-agent",
+      "tag": "7.39.0",
+      "full_ref": "icr.io/ppc64le-oss/datadog-agent:7.39.0",
+      "license": "Apache License 2.0",
+      "last_published": "Feb 28, 2023"
+    },
+    {
+      "image_name": "telegraph-ppc64le",
+      "canonical_name": "telegraph",
+      "tag": "1.24.4",
+      "full_ref": "icr.io/ppc64le-oss/telegraph-ppc64le:1.24.4",
+      "license": "MIT License",
+      "last_published": "Feb 15, 2023"
+    },
+    {
+      "image_name": "proj-ppc64le",
+      "canonical_name": "proj",
+      "tag": "9.1.1",
+      "full_ref": "icr.io/ppc64le-oss/proj-ppc64le:9.1.1",
+      "license": "MIT License",
+      "last_published": "Feb 12, 2023"
+    },
+    {
+      "image_name": "orientdb-ppc64le",
+      "canonical_name": "orientdb",
+      "tag": "v3.2.12",
+      "full_ref": "icr.io/ppc64le-oss/orientdb-ppc64le:v3.2.12",
+      "license": "Apache License 2.0",
+      "last_published": "Feb 12, 2023"
+    },
+    {
+      "image_name": "rethinkdb-ppc64le",
+      "canonical_name": "rethinkdb",
+      "tag": "v2.4.3",
+      "full_ref": "icr.io/ppc64le-oss/rethinkdb-ppc64le:v2.4.3",
+      "license": "Apache License 2.0",
+      "last_published": "Jun 1, 2023"
+    },
+    {
+      "image_name": "glassfish-ppc64le",
+      "canonical_name": "glassfish",
+      "tag": "v6.2.5",
+      "full_ref": "icr.io/ppc64le-oss/glassfish-ppc64le:v6.2.5",
+      "license": "Eclipse Public License v2.0",
+      "last_published": "Jun 13, 2023"
+    },
+    {
+      "image_name": "consul-ppc64le",
+      "canonical_name": "consul",
+      "tag": "1.1.28",
+      "full_ref": "icr.io/ppc64le-oss/consul-ppc64le:1.1.28",
+      "license": "Mozilla Public License, version 2.0",
+      "last_published": "Jan 30, 2023"
+    },
+    {
+      "image_name": "tidb-ppc64le",
+      "canonical_name": "tidb",
+      "tag": "6.4.0",
+      "full_ref": "icr.io/ppc64le-oss/tidb-ppc64le:6.4.0",
+      "license": "Apache License 2.0",
+      "last_published": "Fevb 1, 2023"
+    },
+    {
+      "image_name": "rabbitmq-exporter-ppc64le",
+      "canonical_name": "rabbitmq-exporter",
+      "tag": "1.0.0-RC19",
+      "full_ref": "icr.io/ppc64le-oss/rabbitmq-exporter-ppc64le:1.0.0-RC19",
+      "license": "MIT License",
+      "last_published": "Jun 1, 2023"
+    },
+    {
+      "image_name": "mongodb-ppc64le",
+      "canonical_name": "mongodb",
+      "tag": "4.4.18",
+      "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:4.4.18",
+      "license": "Server Side Public License v1.0",
+      "last_published": "Jan 16, 2023"
+    },
+    {
+      "image_name": "postgresql",
+      "canonical_name": "postgresql",
+      "tag": "v14.6.0",
+      "full_ref": "icr.io/ppc64le-oss/postgresql:v14.6.0",
+      "license": "PostgreSQL License Apache License 2.0",
+      "last_published": "Jan 9, 2023"
+    },
+    {
+      "image_name": "redis-ppc64le",
+      "canonical_name": "redis",
+      "tag": "v7.0.4-bv",
+      "full_ref": "icr.io/ppc64le-oss/redis-ppc64le:v7.0.4-bv",
+      "license": "BSD-3-Clause",
+      "last_published": "Dec 27, 2022"
+    },
+    {
+      "image_name": "elasticsearch-ppc64le",
+      "canonical_name": "elasticsearch",
+      "tag": "7.17.3",
+      "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:7.17.3",
+      "license": "Server Side Public License V1 and Elastic License 2.0",
+      "last_published": "Nov 28, 2023"
+    },
+    {
+      "image_name": "jupyter-base-notebook-ppc64le",
+      "canonical_name": "jupyter-base-notebook",
+      "tag": "v6.4.12",
+      "full_ref": "icr.io/ppc64le-oss/jupyter-base-notebook-ppc64le:v6.4.12",
+      "license": "BSD-3-Clause",
+      "last_published": "Feb 10, 2023"
+    },
+    {
+      "image_name": "influxdb-ppc64le",
+      "canonical_name": "influxdb",
+      "tag": "v2.5.1",
+      "full_ref": "icr.io/ppc64le-oss/influxdb-ppc64le:v2.5.1",
+      "license": "MIT License",
+      "last_published": "Feb 13, 2023"
+    },
+    {
+      "image_name": "rocksdb-ppc64le",
+      "canonical_name": "rocksdb",
+      "tag": "7.7.3",
+      "full_ref": "icr.io/ppc64le-oss/rocksdb-ppc64le:7.7.3",
+      "license": "Apache License 2.0 AND GNU General Public License v2.0",
+      "last_published": "Jan 29, 2023"
+    },
+    {
+      "image_name": "kibana-ppc64le",
+      "canonical_name": "kibana",
+      "tag": "8.5.0",
+      "full_ref": "icr.io/ppc64le-oss/kibana-ppc64le:8.5.0",
+      "license": "Server Side Public License V1 and Elastic License 2.0",
+      "last_published": "Feb 14,2023"
+    },
+    {
+      "image_name": "filebeat-ppc64le",
+      "canonical_name": "filebeat",
+      "tag": "v8.5.0",
+      "full_ref": "icr.io/ppc64le-oss/filebeat-ppc64le:v8.5.0",
+      "license": "Apache License 2.0 OR Elastic License 2.0 Note: \"x-pack\" is under the Elastic License and not available for Power",
+      "last_published": "Jan 29, 2023"
+    },
+    {
+      "image_name": "elasticsearch-ppc64le",
+      "canonical_name": "elasticsearch",
+      "tag": "8.3.3",
+      "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:8.3.3",
+      "license": "Server Side Public License V1 and Elastic License 2.0",
+      "last_published": "Oct 18, 2023"
+    },
+    {
+      "image_name": "mongodb-ppc64le",
+      "canonical_name": "mongodb",
+      "tag": "4.4.17",
+      "full_ref": "icr.io/ppc64le-oss/mongodb-ppc64le:4.4.17",
+      "license": "Server Side Public License v1.0",
+      "last_published": "Oct 18, 2022"
+    },
+    {
+      "image_name": "vault-ppc64le",
+      "canonical_name": "vault",
+      "tag": "v1.5.3",
+      "full_ref": "icr.io/ppc64le-oss/vault-ppc64le:v1.5.3",
+      "license": "Mozilla Public License, version 2.0",
+      "last_published": "Oct 12, 2022"
+    },
+    {
+      "image_name": "redis-ppc64le",
+      "canonical_name": "redis",
+      "tag": "v6.2.6-bv",
+      "full_ref": "icr.io/ppc64le-oss/redis-ppc64le:v6.2.6-bv",
+      "license": "BSD-3-Clause",
+      "last_published": "Oct 11, 2022"
+    },
+    {
+      "image_name": "vault-ppc64le",
+      "canonical_name": "vault",
+      "tag": "v1.9.9",
+      "full_ref": "icr.io/ppc64le-oss/vault-ppc64le:v1.9.9",
+      "license": "Mozilla Public License, version 2.0",
+      "last_published": "Oct 18, 2022"
+    },
+    {
+      "image_name": "zookeeper-ppc64le",
+      "canonical_name": "zookeeper",
+      "tag": "v3.7.0-bv",
+      "full_ref": "icr.io/ppc64le-oss/zookeeper-ppc64le:v3.7.0-bv",
+      "license": "Apache License 2.0",
+      "last_published": "Oct 11, 2022"
+    },
+    {
+      "image_name": "zookeeper-ppc64le",
+      "canonical_name": "zookeeper",
+      "tag": "v3.8.0-bv",
+      "full_ref": "icr.io/ppc64le-oss/zookeeper-ppc64le:v3.8.0-bv",
+      "license": "Apache License 2.0",
+      "last_published": "Oct 4, 2022"
+    },
+    {
+      "image_name": "cockroach-ppc64le",
+      "canonical_name": "cockroach",
+      "tag": "v22.1.5-ubi8",
+      "full_ref": "icr.io/ppc64le-oss/cockroach-ppc64le:v22.1.5-ubi8",
+      "license": "Business Source License 1.1 (BSL) AND CockroachDB Community License (CCL) AND MIT license AND BSD-style licenses",
+      "last_published": "Mar 22, 2023"
+    },
+    {
+      "image_name": "gitea-ppc64le",
+      "canonical_name": "gitea",
+      "tag": "1.16.7",
+      "full_ref": "icr.io/ppc64le-oss/gitea-ppc64le:1.16.7",
+      "license": "MIT License",
+      "last_published": "July 7, 2022"
+    },
+    {
+      "image_name": "fluentd-elasticsearch-ppc64le",
+      "canonical_name": "fluentd-elasticsearch",
+      "tag": "1.14.5-ES7.17",
+      "full_ref": "icr.io/ppc64le-oss/fluentd-elasticsearch-ppc64le:1.14.5-ES7.17",
+      "license": "Apache License 2.0 AND ( Apache License 2.0 OR Elastic License 2.0)",
+      "last_published": "March 27, 2023"
+    },
+    {
+      "image_name": "kibana-ppc64le",
+      "canonical_name": "kibana",
+      "tag": "v7.17.2",
+      "full_ref": "icr.io/ppc64le-oss/kibana-ppc64le:v7.17.2",
+      "license": "Server Side Public License V1 and Elastic License 2.0",
+      "last_published": "March 27, 2023"
+    },
+    {
+      "image_name": "vault-ppc64le",
+      "canonical_name": "vault",
+      "tag": "v1.9.1",
+      "full_ref": "icr.io/ppc64le-oss/vault-ppc64le:v1.9.1",
+      "license": "Mozilla Public License, version 2.0",
+      "last_published": "Mar 26, 2023"
+    },
+    {
+      "image_name": "fluentd-elasticsearch-ppc64le",
+      "canonical_name": "fluentd-elasticsearch",
+      "tag": "1.14.5",
+      "full_ref": "icr.io/ppc64le-oss/fluentd-elasticsearch-ppc64le:1.14.5",
+      "license": "Apache License 2.0 AND ( Apache License 2.0 OR Elastic License 2.0)",
+      "last_published": "March 27, 2023"
+    },
+    {
+      "image_name": "kibana-ppc64le",
+      "canonical_name": "kibana",
+      "tag": "8.1.0",
+      "full_ref": "icr.io/ppc64le-oss/kibana-ppc64le:8.1.0",
+      "license": "Server Side Public License V1 and Elastic License 2.0",
+      "last_published": "Jan 4, 2023"
+    },
+    {
+      "image_name": "elasticsearch-ppc64le",
+      "canonical_name": "elasticsearch",
+      "tag": "v8.1.0",
+      "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:v8.1.0",
+      "license": "Server Side Public License V1 and Elastic License 2.0",
+      "last_published": "March 27, 2023"
+    },
+    {
+      "image_name": "elasticsearch-ppc64le",
+      "canonical_name": "elasticsearch",
+      "tag": "7.12.0",
+      "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:7.12.0",
+      "license": "Server Side Public License V1 and Elastic License 2.0",
+      "last_published": "Jan 21, 2022"
+    },
+    {
+      "image_name": "consul-ppc64le",
+      "canonical_name": "consul",
+      "tag": "1.9.4",
+      "full_ref": "icr.io/ppc64le-oss/consul-ppc64le:1.9.4",
+      "license": "Mozilla Public License, version 2.0",
+      "last_published": "March 26, 2023"
+    },
+    {
+      "image_name": "nfs-client-provisioner-ppc64le",
+      "canonical_name": "nfs-client-provisioner",
+      "tag": "latest",
+      "full_ref": "icr.io/ppc64le-oss/nfs-client-provisioner-ppc64le:latest",
+      "license": "",
+      "last_published": "Jan 9, 2021"
+    },
+    {
+      "image_name": "kibana-ppc64le",
+      "canonical_name": "kibana",
+      "tag": "v7.9.1",
+      "full_ref": "icr.io/ppc64le-oss/kibana-ppc64le:v7.9.1",
+      "license": "Server Side Public License V1 and Elastic License 2.0",
+      "last_published": "March 27, 2023"
+    },
+    {
+      "image_name": "elasticsearch-ppc64le",
+      "canonical_name": "elasticsearch",
+      "tag": "v7.8.0",
+      "full_ref": "icr.io/ppc64le-oss/elasticsearch-ppc64le:v7.8.0",
+      "license": "Server Side Public License V1 and Elastic License 2.0",
+      "last_published": "March 27, 2023"
+    },
+    {
+      "image_name": "logstash-ppc64le",
+      "canonical_name": "logstash",
+      "tag": "v7.6.0",
+      "full_ref": "icr.io/ppc64le-oss/logstash-ppc64le:v7.6.0",
+      "license": "Apache License 2.0 OR Elastic License 2.0 Note: \"x-pack\" is under the Elastic License and not available for Power",
+      "last_published": "March 27, 2023"
+    },
+    {
+      "image_name": "opensearch-ppc64le",
+      "canonical_name": "opensearch",
+      "tag": "3.3.0",
+      "full_ref": "icr.io/ppc64le-oss/opensearch-ppc64le:3.3.0",
+      "license": "Apache License 2.0",
+      "last_published": "Feb 26, 2026"
+    }
+  ]
+}

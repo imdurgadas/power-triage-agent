@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+// Carbon Design System base styles (g100 dark theme)
+import '@carbon/styles/css/styles.css';
 import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(

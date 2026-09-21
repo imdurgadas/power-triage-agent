@@ -10,7 +10,19 @@ We have built and verified the **IBM Power Porting Triage Agent**, an agentic AI
 - **Universal Manifest Normalizer ([backend/normalizer.py](file:///Users/durgadas/code/ccaf/gemini-elite-ai/backend/normalizer.py)):**
   Parses mixed enterprise inputs: CycloneDX/SPDX SBOMs, Dockerfiles, Python `requirements.txt`, Node.js `package.json`, Java `pom.xml`, and free-form client emails or stack descriptions into normalized Package URLs (`purl`).
 - **Multi-Source Availability Prober ([backend/prober.py](file:///Users/durgadas/code/ccaf/gemini-elite-ai/backend/prober.py)):**
-  Inspects multi-arch manifests across container registries (Docker Hub, Quay), OS repositories (RHEL 8/9 ppc64le BaseOS/AppStream, EPEL, Ubuntu Ports), language registries (PyPI ppc64le wheels vs `none-any.whl`, Maven, NPM), and the IBM Open-CE catalog.
+  Inspects multi-arch manifests across container registries (Docker Hub, Quay), OS repositories (RHEL 8/9 ppc64le BaseOS/AppStream, EPEL, Ubuntu Ports), language registries (PyPI ppc64le wheels vs `none-any.whl`, Maven, NPM), and IBM-specific sources (ICR `ppc64le-oss`, `ppc64le/build-scripts`, `ppc64le/pyeco` DevPi).
+
+  **Source precedence policy:** Red Hat distro repositories (RHEL/EPEL Koji) and Docker Hub / Quay are probed first and take precedence over IBM-specific sources. IBM Container Registry (`icr.io/ppc64le-oss`), `ppc64le/build-scripts` recipes, and IBM pyeco DevPi wheels are used only as fallbacks when no upstream distro or public registry result is found. This ensures the most broadly maintained and canonical upstream package is always preferred.
+
+  Probe order:
+  1. RHEL/EPEL Koji (Red Hat distro RPMs)
+  2. Docker Hub / Quay.io live multi-arch manifest check
+  3. PyPI live API (ppc64le wheels / noarch)
+  4. ppc64le/pyeco DevPi wheels index *(IBM fallback, Python only)*
+  5. IBM Container Registry ppc64le-oss *(IBM fallback, containers only)*
+  6. ppc64le/build-scripts build recipe index *(IBM fallback, any ecosystem)*
+  7. Static curated cache (blockers, math libs, unmaintained entries)
+  8. Gemini LLM research
 - **Transitive Source Build & Heuristic Engine ([backend/build_analyzer.py](file:///Users/durgadas/code/ccaf/gemini-elite-ai/backend/build_analyzer.py)):**
   - **The "Dependency Iceberg" Scope:** When a package is unported, inspects build systems (CMake, Make, Bazel, setup.py) and extracts **Build-Time Requirements (`BuildRequires`)**.
   - **Recursive Availability Probing:** Checks if the build requirements are available in the target OS. If a build dependency is *also* missing (e.g., `jemalloc-ppc64le` for RocksDB), it is flagged as an unported transitive dependency with its own porting effort.

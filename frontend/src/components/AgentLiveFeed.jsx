@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
-import { Bot, Terminal, CheckCircle2, AlertTriangle, ArrowRight, Loader } from 'lucide-react';
+import { Tile, Tag, InlineLoading } from '@carbon/react';
+import { Bot, Terminal, CheckmarkFilled, WarningAltFilled, Information } from '@carbon/icons-react';
 
 export default function AgentLiveFeed({ steps, isRunning }) {
   const feedEndRef = useRef(null);
@@ -11,43 +12,68 @@ export default function AgentLiveFeed({ steps, isRunning }) {
   if (!steps || steps.length === 0) return null;
 
   return (
-    <div className="agent-feed-card" id="agent-live-feed">
-      <div className="agent-feed-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-          <Bot size={18} color="#60a5fa" />
-          <span>Autonomous Porting Triage Agent Execution Stream</span>
+    <Tile id="agent-live-feed" style={{ borderLeft: '3px solid var(--cds-interactive)' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <Bot size={18} />
+          <span className="cds--productive-heading-02">
+            Autonomous Porting Triage Agent — Execution Stream
+          </span>
         </div>
         {isRunning && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.78rem', color: '#38bdf8' }}>
-            <Loader size={14} className="spin-slow" /> Active Reasoning
-          </div>
+          <InlineLoading description="Active Reasoning" status="active" />
         )}
       </div>
 
-      <div style={{ maxHeight: '260px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.4rem', paddingRight: '0.5rem' }}>
+      {/* Step log */}
+      <div
+        style={{
+          maxHeight: '280px',
+          overflowY: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.35rem',
+          fontFamily: "'IBM Plex Mono', monospace",
+          fontSize: '0.8rem',
+        }}
+      >
         {steps.map((s, idx) => (
-          <div key={idx} className="agent-step-item">
-            <div className="step-icon">
+          <div
+            key={idx}
+            className="agent-step-item"
+            style={{ display: 'flex', gap: '0.6rem', padding: '0.3rem 0', alignItems: 'flex-start' }}
+          >
+            {/* Step icon */}
+            <span style={{ flexShrink: 0, marginTop: '2px' }}>
               {s.action_type === 'synthesis' ? (
-                <CheckCircle2 size={16} color="#4ade80" />
+                <CheckmarkFilled size={16} style={{ color: 'var(--cds-support-success)' }} />
               ) : s.thought?.includes('⚠️') ? (
-                <AlertTriangle size={16} color="#facc15" />
+                <WarningAltFilled size={16} style={{ color: 'var(--cds-support-warning)' }} />
               ) : (
-                <Terminal size={16} color="#38bdf8" />
+                <Terminal size={16} style={{ color: 'var(--cds-interactive)' }} />
               )}
-            </div>
+            </span>
+
+            {/* Step content */}
             <div style={{ flex: 1 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexWrap: 'wrap' }}>
-                <span className="step-agent">[{s.agent_name}]</span>
-                <span className="step-target">&gt; {s.target}:</span>
-                <span style={{ color: '#f1f5f9' }}>{s.thought}</span>
-              </div>
-              {s.detail && <div className="step-detail">↳ {s.detail}</div>}
+              <span style={{ display: 'inline', lineHeight: 1.5 }}>
+                <span style={{ color: 'var(--cds-support-info)', fontWeight: 600 }}>[{s.agent_name}]</span>
+                {' '}
+                <span style={{ color: 'var(--cds-link-visited)' }}>&gt; {s.target}:</span>
+                {' '}
+                <span style={{ color: 'var(--cds-text-primary)' }}>{s.thought}</span>
+              </span>
+              {s.detail && (
+                <div style={{ color: 'var(--cds-text-secondary)', fontSize: '0.75rem', marginTop: '0.15rem' }}>
+                  ↳ {s.detail}
+                </div>
+              )}
             </div>
           </div>
         ))}
         <div ref={feedEndRef} />
       </div>
-    </div>
+    </Tile>
   );
 }

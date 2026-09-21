@@ -1,11 +1,69 @@
+import asyncio
 import re
+import json
+import xmlrpc.client
 import httpx
 import logging
-from typing import Dict, Any, Optional, Tuple
-from .models import AvailabilityStatus
+from concurrent.futures import ThreadPoolExecutor
+from functools import lru_cache, partial
+from pathlib import Path
+from typing import Dict, Any, Optional, List
+from .models import AvailabilityStatus, DeliverableType, DeliverableMatchStatus, _PARTIAL_EFFORT_MULTIPLIERS
 from .gemini_helper import generate_gemini_content
 
+# Thread-pool for running blocking XMLRPC calls off the async event loop
+_SYNC_EXECUTOR = ThreadPoolExecutor(max_workers=4, thread_name_prefix="prober_sync")
+
+
+async def _run_sync(fn, *args):
+    """Run a blocking callable in the shared thread-pool and await the result."""
+    loop = asyncio.get_event_loop()
+    return await loop.run_in_executor(_SYNC_EXECUTOR, partial(fn, *args))
+
 logger = logging.getLogger("prober")
+
+# ---------------------------------------------------------------------------
+# Local index data — loaded once at import time from pre-built JSON files.
+# Re-generated monthly by:  python3 backend/data/refresh_indexes.py
+# ---------------------------------------------------------------------------
+
+_DATA_DIR = Path(__file__).parent / "data"
+
+
+@lru_cache(maxsize=1)
+def _load_devpi_index() -> Dict[str, Any]:
+    """Return the ppc64le/pyeco DevPi wheels index (package_name → metadata)."""
+    path = _DATA_DIR / "devpi_wheels_index.json"
+    if path.exists():
+        try:
+            return json.loads(path.read_text(encoding="utf-8")).get("packages", {})
+        except Exception as exc:
+            logger.warning("Could not load devpi_wheels_index.json: %s", exc)
+    return {}
+
+
+@lru_cache(maxsize=1)
+def _load_icr_index() -> Dict[str, List[Dict]]:
+    """Return the ICR Power Image Tracker lookup (canonical_name → list of entries)."""
+    path = _DATA_DIR / "icr_power_images.json"
+    if path.exists():
+        try:
+            return json.loads(path.read_text(encoding="utf-8")).get("lookup", {})
+        except Exception as exc:
+            logger.warning("Could not load icr_power_images.json: %s", exc)
+    return {}
+
+
+@lru_cache(maxsize=1)
+def _load_build_scripts_index() -> Dict[str, Any]:
+    """Return the ppc64le/build-scripts lookup (package_name → build_info entry)."""
+    path = _DATA_DIR / "build_scripts_index.json"
+    if path.exists():
+        try:
+            return json.loads(path.read_text(encoding="utf-8")).get("lookup", {})
+        except Exception as exc:
+            logger.warning("Could not load build_scripts_index.json: %s", exc)
+    return {}
 
 
 def compare_versions(requested: str, available: str) -> int:
@@ -115,9 +173,9 @@ POWER_ECOSYSTEM_CACHE = {
     },
     "snappy": {
         "status": AvailabilityStatus.NATIVE_AVAILABLE,
-        "available_version": "1.1.9",
+        "available_version": "1.2.2",
         "tier": "Core OS Library",
-        "evidence": "RHEL 8/9 AppStream ppc64le",
+        "evidence": "RHEL 8/9 AppStream ppc64le; ppc64le/build-scripts v1.2.2",
         "url": "https://github.com/google/snappy"
     },
     "lz4": {
@@ -131,13 +189,10 @@ POWER_ECOSYSTEM_CACHE = {
     "numpy": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "tier": "PyPI native ppc64le wheel", "evidence": "PyPI release (ppc64le wheel available)", "url": "https://pypi.org/project/numpy"},
     "pandas": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "tier": "PyPI native ppc64le wheel", "evidence": "PyPI release (ppc64le wheel available)", "url": "https://pypi.org/project/pandas"},
     "scipy": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "tier": "PyPI native ppc64le wheel", "evidence": "PyPI release (ppc64le wheel available)", "url": "https://pypi.org/project/scipy"},
-    "torch": {
-        "status": AvailabilityStatus.SUBSTITUTE_AVAILABLE,
-        "tier": "IBM Open-CE optimized package",
-        "evidence": "IBM Open-CE / RocketCE repository (conda-forge ppc64le)",
-        "url": "https://github.com/open-ce/open-ce",
-        "substitute": "open-ce/pytorch-ppc64le (optimized with Power VSX / MMA)"
-    },
+    # torch and tensorflow are intentionally absent here — the ppc64le/pyeco DevPi
+    # wheels index has native ppc64le wheels for both and is more authoritative.
+    # _probe_devpi_wheels() handles them and returns NATIVE_AVAILABLE.
+    # pytorch (conda name, no devpi entry) and faiss (no devpi entry) remain below.
     "pytorch": {
         "status": AvailabilityStatus.SUBSTITUTE_AVAILABLE,
         "tier": "IBM Open-CE optimized package",
@@ -145,33 +200,13 @@ POWER_ECOSYSTEM_CACHE = {
         "url": "https://github.com/open-ce/open-ce",
         "substitute": "open-ce/pytorch-ppc64le (optimized with Power VSX / MMA)"
     },
-    "tensorflow": {
-        "status": AvailabilityStatus.SUBSTITUTE_AVAILABLE,
-        "tier": "IBM Open-CE optimized package",
-        "evidence": "IBM Open-CE channel (ppc64le builds)",
-        "url": "https://github.com/open-ce/open-ce",
-        "substitute": "open-ce/tensorflow-ppc64le"
-    },
     "fastapi": {"status": AvailabilityStatus.PLATFORM_AGNOSTIC, "tier": "Pure Python package (noarch)", "evidence": "PyPI (py2.py3-none-any.whl)", "url": "https://pypi.org/project/fastapi"},
     "flask": {"status": AvailabilityStatus.PLATFORM_AGNOSTIC, "tier": "Pure Python package (noarch)", "evidence": "PyPI (py2.py3-none-any.whl)", "url": "https://pypi.org/project/flask"},
     "requests": {"status": AvailabilityStatus.PLATFORM_AGNOSTIC, "tier": "Pure Python package (noarch)", "evidence": "PyPI (py2.py3-none-any.whl)", "url": "https://pypi.org/project/requests"},
     "pydantic": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "tier": "PyPI native ppc64le wheel", "evidence": "PyPI release (pydantic-core ppc64le wheel)", "url": "https://pypi.org/project/pydantic"},
 
-    # Unported or complex native components that require building from source
-    "rocksdb": {
-        "status": AvailabilityStatus.UNPORTED_BUILD_REQUIRED,
-        "tier": "Requires build from source",
-        "evidence": "No prebuilt RPM/binary for RHEL ppc64le in default repo",
-        "url": "https://github.com/facebook/rocksdb",
-        "build_system": "CMake / Make"
-    },
-    "simdjson": {
-        "status": AvailabilityStatus.UNPORTED_BUILD_REQUIRED,
-        "tier": "Requires build from source & AVX fallback",
-        "evidence": "Source build required; has fallback scalar/Altivec path",
-        "url": "https://github.com/simdjson/simdjson",
-        "build_system": "CMake"
-    },
+    # NOTE: rocksdb and simdjson have active build recipes in ppc64le/build-scripts
+    # and are intentionally absent here so _probe_build_scripts() handles them.
     "faiss": {
         "status": AvailabilityStatus.SUBSTITUTE_AVAILABLE,
         "tier": "IBM Open-CE optimized build",
@@ -216,8 +251,138 @@ POWER_ECOSYSTEM_CACHE = {
 }
 
 
+def classify_deliverable_match(
+    probe_result: Dict[str, Any],
+    requested_version: str,
+    deliverable_type: DeliverableType,
+) -> Dict[str, Any]:
+    """
+    Overlays a deliverable-type aware support label on an existing probe result.
+
+    Rules
+    -----
+    • container deliverable:
+        - available_type == container  AND version matches  → Supported
+        - available_type == container  AND version differs  → Partial, different version
+        - available_type != container  (e.g. RPM / wheel)   → Partial, different artifact type
+        - status is BLOCKER / UNPORTED                      → Not Supported
+    • build deliverable:
+        - available_type has an RPM / wheel / source build  → Supported
+        - only a container is available                     → Partial, different artifact type
+        - status is BLOCKER                                 → Not Supported
+    • build_script deliverable:
+        - build-scripts index or build recipe available     → Supported
+        - something else is available                       → Partial, different artifact type
+        - nothing available                                 → Not Supported
+
+    Returns a copy of probe_result with two extra keys added:
+        deliverable_match  : DeliverableMatchStatus
+        deliverable_detail : str
+        partial_multiplier : float  (effort multiplier to apply)
+    """
+    result = probe_result.copy()
+    status: AvailabilityStatus = result.get("status", AvailabilityStatus.UNPORTED_BUILD_REQUIRED)
+    tier: str = (result.get("tier") or "").lower()
+    avail_ver: str = (result.get("available_version") or "").strip().lstrip("v")
+    req_ver: str = (requested_version or "latest").strip().lstrip("v")
+
+    # Not supported — blockers and explicit unported are always NOT_SUPPORTED regardless of deliverable
+    if status in (AvailabilityStatus.BLOCKER, AvailabilityStatus.UNPORTED_BUILD_REQUIRED):
+        result["deliverable_match"] = DeliverableMatchStatus.NOT_SUPPORTED
+        result["deliverable_detail"] = (
+            "Not Supported — no pre-built ppc64le artefact available; source porting required."
+            if status == AvailabilityStatus.UNPORTED_BUILD_REQUIRED
+            else "Not Supported — proprietary x86 blocker with no Power equivalent."
+        )
+        result["partial_multiplier"] = 1.0
+        return result
+
+    # Helper: does the tier string indicate a container artefact?
+    def _is_container(t: str) -> bool:
+        return any(k in t for k in ("container", "docker", "quay", "icr", "multi-arch", "image"))
+
+    # Helper: does the tier string indicate a source build / RPM / wheel artefact?
+    def _is_build(t: str) -> bool:
+        return any(k in t for k in ("rpm", "wheel", "build-scripts", "devpi", "koji", "source", "pypi", "npm", "maven", "native"))
+
+    # Helper: does the tier indicate a build script recipe exists?
+    def _is_build_script(t: str) -> bool:
+        return "build-scripts" in t or "recipe" in t or "build script" in t
+
+    # Version match helper (only meaningful when a specific version was requested)
+    def _version_mismatch() -> bool:
+        if req_ver in ("latest", "master", "main", "") or not avail_ver:
+            return False
+        try:
+            from packaging import version as pkg_v
+            return pkg_v.parse(req_ver) != pkg_v.parse(avail_ver)
+        except Exception:
+            return req_ver != avail_ver
+
+    is_container = _is_container(tier)
+    is_build     = _is_build(tier)
+    is_script    = _is_build_script(tier)
+    ver_mismatch = _version_mismatch()
+
+    match = DeliverableMatchStatus.SUPPORTED
+    detail = ""
+    multiplier = 1.0
+
+    if deliverable_type == DeliverableType.CONTAINER:
+        if is_container:
+            if ver_mismatch:
+                match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_VERSION
+                detail = f"Partial Support — container available but at version {avail_ver} (requested {req_ver})."
+            else:
+                match  = DeliverableMatchStatus.SUPPORTED
+                detail = f"Supported — ppc64le container image available (version {avail_ver or 'latest'})."
+        elif is_build or is_script or status == AvailabilityStatus.PLATFORM_AGNOSTIC:
+            match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE
+            detail = f"Partial Support — no container image available; an RPM/wheel/build artefact exists. Containerisation effort required."
+        else:
+            match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE
+            detail = "Partial Support — indirect availability; manual containerisation for ppc64le required."
+
+    elif deliverable_type == DeliverableType.BUILD:
+        if is_build or is_script or status == AvailabilityStatus.PLATFORM_AGNOSTIC:
+            if ver_mismatch:
+                match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_VERSION
+                detail = f"Partial Support — build artefact available at version {avail_ver} (requested {req_ver})."
+            else:
+                match  = DeliverableMatchStatus.SUPPORTED
+                detail = "Supported — pre-built ppc64le RPM/wheel/source build available."
+        elif is_container:
+            match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE
+            detail = "Partial Support — only a container image is available; extraction or source build from container needed."
+        else:
+            match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE
+            detail = "Partial Support — substitute available but artefact type differs from requested build."
+
+    elif deliverable_type == DeliverableType.BUILD_SCRIPT:
+        if is_script:
+            if ver_mismatch:
+                match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_VERSION
+                detail = f"Partial Support — build script exists at version {avail_ver} (requested {req_ver}); script update required."
+            else:
+                match  = DeliverableMatchStatus.SUPPORTED
+                detail = "Supported — IBM ppc64le/build-scripts recipe exists for this package."
+        elif is_build or is_container or status == AvailabilityStatus.PLATFORM_AGNOSTIC:
+            match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE
+            detail = "Partial Support — pre-built artefact or container exists, but no dedicated build script. Script authoring required."
+        else:
+            match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE
+            detail = "Partial Support — substitute or indirect availability; build script authoring required."
+
+    multiplier = _PARTIAL_EFFORT_MULTIPLIERS[match]
+    result["deliverable_match"] = match
+    result["deliverable_detail"] = detail
+    result["partial_multiplier"] = multiplier
+    return result
+
+
 class MultiSourceProber:
-    """Probes Docker Hub, Quay.io, PyPI, and Linux Distro repositories using live APIs and Gemini LLM reasoning."""
+    """Probes Docker Hub, Quay.io, PyPI, RHEL/EPEL Koji, ICR Power catalogue,
+    ppc64le/pyeco DevPi wheels index, ppc64le/build-scripts, and Gemini LLM."""
 
     def __init__(self, gemini_client=None):
         self._cache = POWER_ECOSYSTEM_CACHE.copy()
@@ -226,9 +391,16 @@ class MultiSourceProber:
     def set_gemini_client(self, client):
         self.gemini_client = client
 
-    async def probe_component(self, name: str, version: str = "latest", ecosystem: str = "container", target_os: str = "rhel9") -> Dict[str, Any]:
+    async def probe_component(
+        self,
+        name: str,
+        version: str = "latest",
+        ecosystem: str = "container",
+        target_os: str = "rhel9",
+        deliverable_type: DeliverableType = DeliverableType.CONTAINER,
+    ) -> Dict[str, Any]:
         norm_name = name.lower().strip()
-        
+
         # Clean image prefixes if container
         clean_name = norm_name
         if clean_name.startswith("quay.io/"):
@@ -237,7 +409,70 @@ class MultiSourceProber:
         elif clean_name.startswith("docker.io/"):
             clean_name = clean_name.replace("docker.io/", "")
 
-        # 1. Check local curated cache
+        # Probe priority order:
+        #   RedHat distro repos and Docker Hub take precedence over IBM-specific
+        #   sources (build-scripts, ICR) so that the most broadly available and
+        #   maintained package is always preferred.
+        #
+        #   1. RHEL/EPEL Koji          — Red Hat distro repositories (rpm/native/container)
+        #   2. Docker Hub / Quay live  — container registries
+        #   3. PyPI live               — Python packages
+        #   4. DevPi wheels index      — IBM pyeco (Python only, fallback)
+        #   5. ICR Power catalogue     — IBM Container Registry (container fallback)
+        #   6. build-scripts index     — IBM build recipes (last resort before static cache)
+        #   7. Static cache            — hand-curated entries (e.g. mkl blocker, essl, blis)
+        #   8. Gemini LLM              — AI research for unknown packages
+        #   9. Default fallback
+
+        # 1. RHEL/EPEL Koji repository check (rpm ecosystem, native C/C++, containers, or any RHEL target)
+        if ecosystem in ["rpm", "native_c", "container"] or target_os.startswith("rhel"):
+            rhel_res = await self._probe_rhel_epel(clean_name, version)
+            if rhel_res:
+                self._cache[clean_name] = rhel_res
+                return classify_deliverable_match(rhel_res, version, deliverable_type)
+
+        # 2. Live API check for container registries (Docker Hub / Quay)
+        if ecosystem in ["container", "docker", "quay"] or "/" in clean_name:
+            if ecosystem == "quay" or "strimzi" in clean_name or "redhat" in clean_name:
+                quay_res = await self._probe_quay(clean_name, version)
+                if quay_res and quay_res.get("status") == AvailabilityStatus.NATIVE_AVAILABLE:
+                    self._cache[clean_name] = quay_res
+                    return classify_deliverable_match(quay_res, version, deliverable_type)
+
+            docker_res = await self._probe_docker_hub(clean_name, version)
+            if docker_res and docker_res.get("status") == AvailabilityStatus.NATIVE_AVAILABLE:
+                self._cache[clean_name] = docker_res
+                return classify_deliverable_match(docker_res, version, deliverable_type)
+
+        # 3. Live API check for PyPI
+        if ecosystem == "pypi":
+            pypi_res = await self._probe_pypi(clean_name, version)
+            if pypi_res and pypi_res.get("status") in [AvailabilityStatus.NATIVE_AVAILABLE, AvailabilityStatus.PLATFORM_AGNOSTIC]:
+                self._cache[clean_name] = pypi_res
+                return classify_deliverable_match(pypi_res, version, deliverable_type)
+
+        # 4. ppc64le/pyeco DevPi wheels index (Python only — IBM fallback)
+        if ecosystem == "pypi":
+            devpi_res = self._probe_devpi_wheels(clean_name, version)
+            if devpi_res:
+                self._cache[clean_name] = devpi_res
+                return classify_deliverable_match(devpi_res, version, deliverable_type)
+
+        # 5. ICR Power catalogue (containers only — IBM fallback)
+        if ecosystem in ["container", "docker", "quay"] or "/" in clean_name:
+            icr_res = self._probe_icr_power(clean_name, version)
+            if icr_res:
+                self._cache[clean_name] = icr_res
+                return classify_deliverable_match(icr_res, version, deliverable_type)
+
+        # 6. ppc64le/build-scripts index — IBM build recipes (any ecosystem, last resort before cache)
+        bs_res = self._probe_build_scripts(clean_name, version)
+        if bs_res:
+            self._cache[clean_name] = bs_res
+            return classify_deliverable_match(bs_res, version, deliverable_type)
+
+        # 7. Static curated cache (POWER_ECOSYSTEM_CACHE) — covers packages not yet
+        #    in any of the live indexes above (e.g. mkl blocker, essl, blis)
         if clean_name in self._cache:
             item = self._cache[clean_name].copy()
             avail_ver = item.get("available_version")
@@ -252,60 +487,288 @@ class MultiSourceProber:
                     item["version_warning"] = (
                         f"Requested version {version} is older than available ppc64le version {avail_ver}; recommend upgrading."
                     )
-            return item
+            return classify_deliverable_match(item, version, deliverable_type)
 
-        # 2. Live API check for container registries
-        if ecosystem in ["container", "docker", "quay"] or "/" in clean_name:
-            # Check Quay.io if it's from quay or named like strimzi/kafka
-            if ecosystem == "quay" or "strimzi" in clean_name or "redhat" in clean_name:
-                quay_res = await self._probe_quay(clean_name, version)
-                if quay_res and quay_res.get("status") == AvailabilityStatus.NATIVE_AVAILABLE:
-                    self._cache[clean_name] = quay_res
-                    return quay_res
-
-            # Check Docker Hub live API
-            docker_res = await self._probe_docker_hub(clean_name, version)
-            if docker_res and docker_res.get("status") == AvailabilityStatus.NATIVE_AVAILABLE:
-                self._cache[clean_name] = docker_res
-                return docker_res
-
-        # 3. Live API check for PyPI
-        if ecosystem == "pypi":
-            pypi_res = await self._probe_pypi(clean_name, version)
-            if pypi_res and pypi_res.get("status") in [AvailabilityStatus.NATIVE_AVAILABLE, AvailabilityStatus.PLATFORM_AGNOSTIC]:
-                self._cache[clean_name] = pypi_res
-                return pypi_res
-
-        # 4. Standard runtime packages
+        # 8. Standard arch-independent runtime packages
         if ecosystem == "npm":
-            return {
+            raw = {
                 "status": AvailabilityStatus.PLATFORM_AGNOSTIC,
                 "tier": "Node.js JavaScript package (noarch)",
                 "evidence": f"NPM Registry: {clean_name} runs on Node.js ppc64le engine",
-                "url": f"https://www.npmjs.com/package/{clean_name}"
+                "url": f"https://www.npmjs.com/package/{clean_name}",
             }
+            return classify_deliverable_match(raw, version, deliverable_type)
         elif ecosystem == "maven":
-            return {
+            raw = {
                 "status": AvailabilityStatus.PLATFORM_AGNOSTIC,
                 "tier": "Java bytecode package (noarch)",
                 "evidence": f"Maven Central: {clean_name} runs on OpenJDK ppc64le JVM",
-                "url": f"https://search.maven.org/artifact/{clean_name}"
+                "url": f"https://search.maven.org/artifact/{clean_name}",
             }
+            return classify_deliverable_match(raw, version, deliverable_type)
 
-        # 5. Agentic AI Layer: Use Gemini LLM to research availability across RHEL/EPEL/Quay/Docker/Power ecosystem
+        # 9. Gemini LLM agentic research
         if self.gemini_client:
             llm_res = await self._probe_gemini_llm(clean_name, version, ecosystem, target_os)
             if llm_res:
                 self._cache[clean_name] = llm_res
-                return llm_res
+                return classify_deliverable_match(llm_res, version, deliverable_type)
 
-        # 6. Default fallback for unlisted native packages
-        return {
+        # 10. Default fallback
+        raw = {
             "status": AvailabilityStatus.UNPORTED_BUILD_REQUIRED,
             "tier": "Unverified / Requires Source Build",
             "evidence": f"No immediate pre-built binary verified for {target_os} ppc64le",
-            "url": f"https://github.com/search?q={clean_name}+ppc64le"
+            "url": f"https://github.com/search?q={clean_name}+ppc64le",
         }
+        return classify_deliverable_match(raw, version, deliverable_type)
+
+    # ------------------------------------------------------------------
+    # New source probes (synchronous — read from local index files)
+    # ------------------------------------------------------------------
+
+    def _probe_icr_power(self, name: str, version: str) -> Optional[Dict[str, Any]]:
+        """Check ICR ppc64le-oss catalogue for a named container image.
+
+        The index canonical key strips the trailing '-ppc64le' suffix so that a
+        query for 'mongodb' matches 'mongodb-ppc64le', 'opensearch' matches
+        'opensearch-ppc64le', etc.  Version matching follows the same
+        compare_versions logic used elsewhere: if the requested version is newer
+        than any catalogued tag we return None (let live probes try) so as not
+        to falsely declare availability.
+        """
+        lookup = _load_icr_index()
+        # Try exact name, then strip -ppc64le suffix, then add it
+        candidates = [
+            name,
+            name.rstrip("-ppc64le"),
+            name + "-ppc64le" if not name.endswith("-ppc64le") else name,
+        ]
+        entries: List[Dict] = []
+        for key in candidates:
+            if key.lower() in lookup:
+                entries = lookup[key.lower()]
+                break
+        if not entries:
+            return None
+
+        # Pick the best matching entry:
+        # 1. Exact version match, 2. latest entry (first in list)
+        matched = entries[0]
+        for e in entries:
+            if e.get("tag", "").lstrip("v") == str(version).lstrip("v"):
+                matched = e
+                break
+
+        avail_tag = matched.get("tag", "latest")
+        full_ref  = matched.get("full_ref", f"icr.io/ppc64le-oss/{matched['image_name']}:{avail_tag}")
+
+        # Version guard: if requested > available tag, don't claim it's available
+        if version and version != "latest":
+            cmp = compare_versions(version, avail_tag.lstrip("v"))
+            if cmp > 0:
+                return None  # let live Docker Hub / Quay probes try
+
+        result: Dict[str, Any] = {
+            "status":            AvailabilityStatus.NATIVE_AVAILABLE,
+            "available_version": avail_tag,
+            "tier":              "ICR ppc64le-oss Container",
+            "evidence":          f"IBM Container Registry ppc64le-oss namespace: {full_ref}",
+            "url":               f"https://github.com/seth-priya/ICR-Power-Image-Tracker/blob/main/docs/index.md",
+        }
+        if version and version != "latest" and avail_tag != version:
+            result["version_warning"] = (
+                f"Requested version '{version}' not found in ICR; "
+                f"latest available ICR tag is '{avail_tag}'. Pull: docker pull {full_ref}"
+            )
+        logger.info("ICR Power match: %s → %s", name, full_ref)
+        return result
+
+    def _probe_devpi_wheels(self, name: str, version: str) -> Optional[Dict[str, Any]]:
+        """Check the ppc64le/pyeco DevPi wheels index for a Python package.
+
+        This index is built from DevpiWheelsIndex.md in the pyeco repo and
+        contains native ppc64le and noarch wheels maintained by the IBM Power
+        Python ecosystem team.  No requests are made to devpi.io — the data
+        is entirely sourced from the cloned Markdown file.
+        """
+        lookup = _load_devpi_index()
+        pkg = lookup.get(name) or lookup.get(name.replace("-", "_")) or lookup.get(name.replace("_", "-"))
+        if not pkg:
+            return None
+
+        has_ppc64le = pkg.get("has_ppc64le_wheel", False)
+        has_noarch  = pkg.get("has_noarch_wheel", False)
+        avail_ver   = pkg.get("latest_ppc64le_version") or pkg.get("latest_noarch_version") or "latest"
+        all_vers    = pkg.get("versions", [])
+
+        status = AvailabilityStatus.NATIVE_AVAILABLE if has_ppc64le else (
+                 AvailabilityStatus.PLATFORM_AGNOSTIC if has_noarch else None)
+        if not status:
+            return None
+
+        tier = ("ppc64le/pyeco DevPi — native ppc64le wheel"
+                if has_ppc64le else "ppc64le/pyeco DevPi — noarch wheel")
+
+        result: Dict[str, Any] = {
+            "status":            status,
+            "available_version": avail_ver,
+            "tier":              tier,
+            "evidence":          (
+                f"ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); "
+                f"{len(all_vers)} version(s) available: {', '.join(all_vers[:5])}"
+            ),
+            "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+        }
+
+        # Version comparison
+        if version and version != "latest" and avail_ver and avail_ver != "latest":
+            # Check if the exact requested version exists in the index
+            clean_req = version.split("+")[0]
+            if clean_req in all_vers:
+                result["available_version"] = clean_req
+            else:
+                cmp = compare_versions(clean_req, avail_ver)
+                if cmp > 0:
+                    result["version_warning"] = (
+                        f"Requested version {version} not in DevPi index; "
+                        f"latest DevPi ppc64le version is {avail_ver}. May require source build."
+                    )
+                elif cmp < 0:
+                    result["version_warning"] = (
+                        f"Requested version {version} is older than DevPi ppc64le version {avail_ver}; "
+                        f"recommend upgrading."
+                    )
+
+        logger.info("DevPi wheels match: %s → %s (%s)", name, avail_ver, status.value)
+        return result
+
+    def _probe_build_scripts(self, name: str, version: str) -> Optional[Dict[str, Any]]:
+        """Check ppc64le/build-scripts for a package with a build_info.json.
+
+        A hit here means the IBM Power porting team has an active build script
+        for this package.  Status is NATIVE_AVAILABLE (a build recipe exists),
+        not UNPORTED_BUILD_REQUIRED, and the evidence links directly to the
+        build script in the repo.
+        """
+        lookup = _load_build_scripts_index()
+        entry = (
+            lookup.get(name) or
+            lookup.get(name.replace("-", "_")) or
+            lookup.get(name.replace("_", "-"))
+        )
+        if not entry:
+            return None
+
+        avail_ver   = (entry.get("version") or "").lstrip("v") or None
+        build_url   = entry.get("raw_build_info_url", "https://github.com/ppc64le/build-scripts")
+        pkg_dir_url = (
+            f"https://github.com/ppc64le/build-scripts/tree/master/{entry.get('package_dir', '')}"
+        )
+
+        result: Dict[str, Any] = {
+            "status":            AvailabilityStatus.NATIVE_AVAILABLE,
+            "available_version": avail_ver,
+            "tier":              "ppc64le/build-scripts — active IBM Power build recipe",
+            "evidence":          (
+                f"IBM ppc64le/build-scripts repo has build_info.json for '{entry.get('package_name', name)}' "
+                f"(version {avail_ver or 'unspecified'}). "
+                f"Build script: {entry.get('build_script', 'N/A')}"
+            ),
+            "url": pkg_dir_url,
+        }
+
+        if version and version != "latest" and avail_ver:
+            cmp = compare_versions(version.lstrip("v"), avail_ver)
+            if cmp > 0:
+                result["version_warning"] = (
+                    f"Requested version {version} is newer than build-scripts version {avail_ver}; "
+                    f"build script may need updating."
+                )
+            elif cmp < 0:
+                result["version_warning"] = (
+                    f"Requested version {version} is older than build-scripts version {avail_ver}; "
+                    f"recommend upgrading to {avail_ver}."
+                )
+
+        logger.info("build-scripts match: %s → version=%s", name, avail_ver)
+        return result
+
+    async def _probe_rhel_epel(self, name: str, version: str) -> Optional[Dict[str, Any]]:
+        """Check Fedora Koji (RHEL/EPEL) for a ppc64le RPM build.
+
+        Uses the Fedora Koji XMLRPC API to:
+          1. Search for the package by name.
+          2. Retrieve the latest successful build.
+          3. Confirm a ppc64le RPM exists for that build.
+
+        Returns NATIVE_AVAILABLE if confirmed, None if not found or on error.
+        """
+        try:
+            proxy = xmlrpc.client.ServerProxy(
+                "https://koji.fedoraproject.org/kojihub",
+                allow_none=True,
+            )
+            results = await _run_sync(proxy.search, name, "package", "glob")
+            if not results:
+                return None
+
+            # Pick exact name match first, else first result
+            pkg_match = next((r for r in results if r["name"].lower() == name), results[0])
+            pkg_id    = pkg_match["id"]
+            pkg_name  = pkg_match["name"]
+
+            builds = await _run_sync(
+                proxy.listBuilds,
+                {"packageID": pkg_id, "state": 1},   # state=1 = COMPLETE
+                {"limit": 1, "order": "-build_id"},
+            )
+            if not builds:
+                return None
+
+            build    = builds[0]
+            build_id = build["build_id"]
+            nvr      = build["nvr"]
+
+            # Confirm ppc64le RPM exists for this build
+            rpms = await _run_sync(proxy.listRPMs, {"buildID": build_id, "arch": "ppc64le"})
+            if not rpms:
+                return None
+
+            # Extract version from NVR (name-version-release)
+            avail_ver = build.get("version", "")
+
+            result: Dict[str, Any] = {
+                "status":            AvailabilityStatus.NATIVE_AVAILABLE,
+                "available_version": avail_ver,
+                "tier":              "RHEL/EPEL — Fedora Koji ppc64le RPM",
+                "evidence":          f"Fedora Koji build {nvr} has ppc64le RPM(s): {rpms[0]['nvr']}.{rpms[0]['arch']}",
+                "url":               f"https://koji.fedoraproject.org/koji/packageinfo?packageID={pkg_id}",
+            }
+
+            if version and version != "latest" and avail_ver:
+                cmp = compare_versions(version, avail_ver)
+                if cmp > 0:
+                    result["version_warning"] = (
+                        f"Requested version {version} exceeds EPEL/Koji ppc64le version {avail_ver}; "
+                        f"source build or newer EPEL release required."
+                    )
+                elif cmp < 0:
+                    result["version_warning"] = (
+                        f"Requested version {version} is older than available EPEL ppc64le version {avail_ver}; "
+                        f"recommend upgrading."
+                    )
+
+            logger.info("RHEL/EPEL Koji match: %s → %s (ppc64le)", name, nvr)
+            return result
+
+        except Exception as exc:
+            logger.debug("RHEL/EPEL Koji probe error for %s: %s", name, exc)
+            return None
+
+    # ------------------------------------------------------------------
+    # Existing live-API probes
+    # ------------------------------------------------------------------
 
     async def _probe_quay(self, image_path: str, tag: str) -> Optional[Dict[str, Any]]:
         """Live probe of Quay.io API inspecting multi-arch manifest list for ppc64le."""

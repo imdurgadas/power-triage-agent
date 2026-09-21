@@ -4,7 +4,7 @@
 set -e
 
 # Ensure standard bin paths (Podman, Homebrew, Docker) are in PATH
-export PATH="/opt/podman/bin:/usr/local/bin:/opt/homebrew/bin:$PATH"
+export PATH="/opt/podman/bin:/usr/local/bin:/opt/homebrew/bin:${HOME}/Library/Python/3.9/bin:${HOME}/.local/bin:$PATH"
 
 # Load .env if present
 if [ -f .env ]; then
@@ -15,15 +15,15 @@ fi
 # Determine container compose tool
 if command -v docker >/dev/null 2>&1 && docker compose version >/dev/null 2>&1; then
   COMPOSE_CMD="docker compose"
-elif command -v podman >/dev/null 2>&1 && podman compose version >/dev/null 2>&1; then
-  COMPOSE_CMD="podman compose"
 elif command -v docker-compose >/dev/null 2>&1; then
   COMPOSE_CMD="docker-compose"
-elif command -v podman >/dev/null 2>&1; then
+elif command -v podman-compose >/dev/null 2>&1; then
+  COMPOSE_CMD="podman-compose"
+elif command -v podman >/dev/null 2>&1 && podman compose version >/dev/null 2>&1; then
   COMPOSE_CMD="podman compose"
 else
-  echo "Error: Neither docker compose, podman compose, nor docker-compose was found."
-  echo "Please verify that Docker or Podman is installed and in your PATH."
+  echo "Error: No compose provider found."
+  echo "Tried: docker compose, docker-compose, podman-compose, podman compose"
   exit 1
 fi
 

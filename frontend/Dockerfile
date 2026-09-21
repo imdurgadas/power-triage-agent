@@ -1,6 +1,8 @@
 # Stage 1: Build React/Vite assets
-FROM node:20-slim AS builder
+FROM registry.access.redhat.com/ubi9/nodejs-20-minimal:latest AS builder
 
+# Run build steps as root so npm can write to /app
+USER root
 WORKDIR /app
 
 COPY package*.json ./
@@ -9,12 +11,15 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Stage 2: Serve via high-performance Nginx with API reverse proxy
-FROM nginx:alpine
+# Stage 2: Serve via Red Hat UBI nginx
+FROM registry.access.redhat.com/ubi9/nginx-122:latest
 
-COPY --from=builder /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# UBI nginx-122 default document root is /opt/app-root/src
+COPY --from=builder /app/dist /opt/app-root/src
+# Inject locations into the default server block (nginx.default.d is included inside server{})
+COPY nginx.conf /opt/app-root/etc/nginx.default.d/app.conf
 
-EXPOSE 80
+# UBI nginx image runs as non-root (uid 1001) by default
+EXPOSE 8080
 
 CMD ["nginx", "-g", "daemon off;"]

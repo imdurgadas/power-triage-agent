@@ -1,19 +1,21 @@
 import React from 'react';
-import { Award, Clock, CheckCircle, AlertCircle, ShieldAlert, Sparkles, GitPullRequest, ArrowUpRight } from 'lucide-react';
+import { Tile, Button, Tag } from '@carbon/react';
+import { Time, CheckmarkFilled, WarningAltFilled, MisuseOutline, ArrowUpRight, Layers, Chip } from '@carbon/icons-react';
 
-export default function Scorecard({ summary, onOpenExport }) {
+export default function Scorecard({ summary, triageResult, onOpenExport }) {
   if (!summary) return null;
 
-  const rec = summary.recommendation || 'Minimal Effort';
-  
-  const getPillData = (recommendationStr) => {
-    const s = String(recommendationStr);
-    if (s.includes('Minimal') || s === 'GO') {
-      return {
-        className: 'minimal',
-        icon: <Sparkles size={17} color="#6ee7b7" />,
-        subtext: 'Turnkey fit • Zero or near-zero build adaptation'
-      };
+  const trafficClass = {
+    GO: 'traffic-pill--GO',
+    CAUTION: 'traffic-pill--CAUTION',
+    HIGH_RISK: 'traffic-pill--HIGH_RISK',
+  }[summary.recommendation] || 'traffic-pill--HIGH_RISK';
+
+  const getTrafficIcon = (rec) => {
+    switch (rec) {
+      case 'GO':       return <CheckmarkFilled size={20} />;
+      case 'CAUTION':  return <WarningAltFilled size={20} />;
+      default:         return <MisuseOutline size={20} />;
     }
     if (s.includes('Minor')) {
       return {
@@ -43,87 +45,148 @@ export default function Scorecard({ summary, onOpenExport }) {
     };
   };
 
-  const pill = getPillData(rec);
-  const fibEffort = summary.fibonacci_effort_pd !== undefined ? summary.fibonacci_effort_pd : (summary.max_total_person_days || 0);
+  const scoreColor =
+    summary.readiness_score_pct >= 85 ? 'var(--cds-support-success)' :
+    summary.readiness_score_pct >= 65 ? 'var(--cds-support-warning)' :
+    'var(--cds-support-error)';
 
   return (
-    <div className="glass-card" id="executive-scorecard">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.25rem' }}>
+    <Tile id="executive-scorecard">
+      {/* Top bar */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1.5rem' }}>
         <div>
-          <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#06b6d4', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+          <p className="cds--label" style={{ color: 'var(--cds-interactive)', marginBottom: '0.2rem' }}>
             Pre-Sales Migration Qualification
-          </span>
-          <h2 style={{ fontSize: '1.45rem', fontWeight: 800, marginTop: '0.2rem', color: '#f8fafc' }}>
-            Executive Feasibility Scorecard
-          </h2>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', marginTop: '0.35rem', maxWidth: '750px', lineHeight: 1.5 }}>
+          </p>
+          <h2 className="cds--productive-heading-04">Executive Feasibility Scorecard</h2>
+          <p className="cds--body-short-01" style={{ marginTop: '0.25rem', color: 'var(--cds-text-secondary)', maxWidth: '680px' }}>
             {summary.recommendation_reason}
           </p>
+          {/* Context row: target environment + deliverable type */}
+          {(triageResult?.target_environment || triageResult?.deliverable_type) && (
+            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: '0.6rem' }}>
+              {triageResult.target_environment && (
+                <Tag type="cool-gray" size="sm">
+                  <Chip size={12} style={{ marginRight: '3px' }} />
+                  {triageResult.target_environment}
+                </Tag>
+              )}
+              {triageResult.deliverable_type && (
+                <Tag type="cool-gray" size="sm">
+                  <Layers size={12} style={{ marginRight: '3px' }} />
+                  {triageResult.deliverable_type}
+                </Tag>
+              )}
+            </div>
+          )}
         </div>
-        <button 
-          className="btn btn-primary" 
+        <Button
+          kind="primary"
+          size="md"
+          renderIcon={ArrowUpRight}
           onClick={onOpenExport}
           id="open-export-btn"
-          style={{ fontSize: '0.86rem', padding: '0.65rem 1.25rem' }}
         >
-          <ArrowUpRight size={16} /> Export Executive 1-Pager (PDF / MD)
-        </button>
+          Export Executive 1-Pager
+        </Button>
       </div>
 
-      <div className="scorecard-grid">
-        {/* Metric 1: Readiness Score */}
-        <div className="metric-card">
-          <div className="metric-label">Porting Readiness Score</div>
-          <div className="metric-value">
-            <span style={{ color: summary.readiness_score_pct >= 85 ? '#10b981' : summary.readiness_score_pct >= 65 ? '#06b6d4' : summary.readiness_score_pct >= 40 ? '#f59e0b' : '#a855f7' }}>
-              {summary.readiness_score_pct}%
-            </span>
-          </div>
-          <div className="metric-sub">
-            {summary.native_count + summary.agnostic_count} of {summary.total_packages} components ready natively
-          </div>
-        </div>
+      {/* Metric grid — 5 tiles when partial_support_count is present */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
 
-        {/* Metric 2: Sales Qualification Tier */}
-        <div className="metric-card">
-          <div className="metric-label">Sales Recommendation Tier</div>
+        {/* Readiness Score */}
+        <Tile style={{ background: 'var(--cds-layer-02)' }}>
+          <p className="cds--label" style={{ textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+            Porting Readiness Score
+          </p>
+          <div style={{ fontSize: '2.25rem', fontWeight: 700, color: scoreColor, lineHeight: 1.1 }}>
+            {summary.readiness_score_pct}%
+          </div>
+          <p className="cds--helper-text-01" style={{ marginTop: '0.4rem' }}>
+            {summary.native_count + summary.agnostic_count} of {summary.total_packages} ready out-of-the-box
+          </p>
+        </Tile>
+
+        {/* Recommendation */}
+        <Tile style={{ background: 'var(--cds-layer-02)' }}>
+          <p className="cds--label" style={{ textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+            Sales Recommendation
+          </p>
           <div style={{ marginTop: '0.25rem' }}>
-            <span className={`traffic-pill ${pill.className}`}>
-              {pill.icon}
-              {rec}
+            <span className={`traffic-pill ${trafficClass}`}>
+              {getTrafficIcon(summary.recommendation)}
+              {summary.recommendation}
             </span>
           </div>
-          <div className="metric-sub" style={{ marginTop: '0.35rem' }}>
-            {pill.subtext}
-          </div>
-        </div>
+          <p className="cds--helper-text-01" style={{ marginTop: '0.4rem' }}>
+            {summary.recommendation === 'GO'
+              ? 'Immediate fit for Power'
+              : summary.recommendation === 'CAUTION'
+              ? 'Minor build/porting effort'
+              : 'Blocker / x86 alternative needed'}
+          </p>
+        </Tile>
 
-        {/* Metric 3: Fibonacci Effort Sizing (Single Value) */}
-        <div className="metric-card">
-          <div className="metric-label">Porting Effort Estimate</div>
-          <div className="metric-value">
-            <Clock size={24} color="#06b6d4" style={{ alignSelf: 'center' }} />
-            <span>{fibEffort}</span>
-            <span style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-dim)' }}>Person-Days</span>
+        {/* Effort Sizing — show Fibonacci single estimate when available, else range */}
+        <Tile style={{ background: 'var(--cds-layer-02)' }}>
+          <p className="cds--label" style={{ textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+            Estimated Porting Sizing
+          </p>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.4rem' }}>
+            <Time size={22} style={{ color: 'var(--cds-interactive)', flexShrink: 0 }} />
+            <span style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--cds-text-primary)' }}>
+              {summary.fibonacci_effort_pd != null
+                ? summary.fibonacci_effort_pd
+                : `${summary.min_total_person_days}–${summary.max_total_person_days}`}
+            </span>
+            <span className="cds--label">PD</span>
           </div>
-          <div className="metric-sub">
-            Single Fibonacci Max Estimate (Ceiling)
-          </div>
-        </div>
+          <p className="cds--helper-text-01" style={{ marginTop: '0.4rem' }}>
+            {summary.fibonacci_effort_pd != null ? 'Fibonacci max estimate' : 'Total Person-Days'}
+          </p>
+        </Tile>
 
-        {/* Metric 4: Transitive Iceberg */}
-        <div className="metric-card">
-          <div className="metric-label">Transitive Build Requirements</div>
-          <div className="metric-value">
-            <GitPullRequest size={24} color={summary.unported_transitive_deps_count > 0 ? '#f59e0b' : '#10b981'} style={{ alignSelf: 'center' }} />
-            <span>{summary.unported_transitive_deps_count}</span>
-            <span style={{ fontSize: '0.9rem', color: 'var(--text-dim)', fontWeight: 500 }}>Unported</span>
+        {/* Transitive deps */}
+        <Tile style={{ background: 'var(--cds-layer-02)' }}>
+          <p className="cds--label" style={{ textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+            Transitive Build Requirements
+          </p>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.4rem' }}>
+            <span
+              style={{
+                fontSize: '2rem',
+                fontWeight: 700,
+                color: summary.unported_transitive_deps_count > 0
+                  ? 'var(--cds-support-warning)'
+                  : 'var(--cds-support-success)',
+              }}
+            >
+              {summary.unported_transitive_deps_count}
+            </span>
+            <span className="cds--label">Unported</span>
           </div>
-          <div className="metric-sub">
-            Scoped build-time dependencies from source
-          </div>
-        </div>
+          <p className="cds--helper-text-01" style={{ marginTop: '0.4rem' }}>Build-time sub-dependencies scoped from source</p>
+        </Tile>
+
+        {/* Partial deliverable support count — shown only when > 0 */}
+        {summary.partial_support_count > 0 && (
+          <Tile style={{ background: 'var(--cds-layer-02)', borderLeft: '3px solid var(--cds-support-warning)' }}>
+            <p className="cds--label" style={{ textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+              Partial Deliverable Support
+            </p>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.4rem' }}>
+              <Layers size={22} style={{ color: 'var(--cds-support-warning)', flexShrink: 0 }} />
+              <span style={{ fontSize: '2rem', fontWeight: 700, color: 'var(--cds-support-warning)' }}>
+                {summary.partial_support_count}
+              </span>
+              <span className="cds--label">Packages</span>
+            </div>
+            <p className="cds--helper-text-01" style={{ marginTop: '0.4rem' }}>
+              Artifact type or version mismatch — effort increased
+            </p>
+          </Tile>
+        )}
       </div>
-    </div>
+    </Tile>
   );
 }
