@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Tile,
   Button,
@@ -8,12 +8,6 @@ import {
   Tag,
   InlineLoading,
   PasswordInput,
-  Tabs,
-  Tab,
-  TabList,
-  TabPanels,
-  TabPanel,
-  InlineNotification,
 } from '@carbon/react';
 import {
   Play,
@@ -22,13 +16,8 @@ import {
   Chip,
   Layers,
   Flash,
-  Image,
-  TrashCan,
   DocumentBlank,
 } from '@carbon/icons-react';
-
-const ACCEPTED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
-const MAX_IMAGE_BYTES = 10 * 1024 * 1024; // 10 MB
 
 export default function InputSection({ onRunTriage, isRunning, presets, activePreset, onSelectPreset }) {
   const [targetEnvironment, setTargetEnvironment] = useState('rhel9_ocp');
@@ -36,23 +25,12 @@ export default function InputSection({ onRunTriage, isRunning, presets, activePr
   const [triageDepth, setTriageDepth] = useState('deep');
   const [manifestText, setManifestText] = useState('');
   const [manifestType, setManifestType] = useState('auto');
-  const [inputUrl, setInputUrl] = useState('');
   const [geminiKey, setGeminiKey] = useState('');
   const [showKeyInput, setShowKeyInput] = useState(false);
-
-  // Image upload state
-  const [imageDataBase64, setImageDataBase64] = useState(null);
-  const [imageMediaType, setImageMediaType] = useState('image/png');
-  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
-  const [imageFileName, setImageFileName] = useState('');
-  const [imageError, setImageError] = useState('');
-  const [activeInputTab, setActiveInputTab] = useState(0); // 0 = text, 1 = image
-  const imageDropRef = useRef(null);
 
   // Sync with selected preset
   useEffect(() => {
     if (activePreset) {
-      setActiveInputTab(0); // switch to Text/File tab
       setManifestText(activePreset.content);
       setManifestType(activePreset.manifest_type);
       // Map legacy preset target_os + target_platform to the combined environment key
@@ -67,20 +45,16 @@ export default function InputSection({ onRunTriage, isRunning, presets, activePr
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const hasText = manifestText.trim().length > 0;
-    const hasImage = !!imageDataBase64;
-    if (!hasText && !hasImage) return;
+    if (!manifestText.trim()) return;
 
     onRunTriage({
       project_name: activePreset ? activePreset.name : 'Custom Workload Migration',
       target_environment: targetEnvironment,
       deliverable_type: deliverableType,
       triage_depth: triageDepth,
-      raw_manifest: hasText ? manifestText : null,
+      raw_manifest: manifestText,
       manifest_type: manifestType,
       gemini_api_key: geminiKey || null,
-      image_data_base64: imageDataBase64 || null,
-      image_media_type: imageMediaType,
     });
   };
 
@@ -90,7 +64,6 @@ export default function InputSection({ onRunTriage, isRunning, presets, activePr
     const reader = new FileReader();
     reader.onload = (event) => {
       setManifestText(event.target.result);
-      setActiveInputTab(0); // switch to Text/File tab
       if (file.name.endsWith('.json')) setManifestType('sbom');
       else if (file.name.toLowerCase().includes('docker')) setManifestType('dockerfile');
       else if (file.name.endsWith('.txt')) setManifestType('requirements');
@@ -99,65 +72,7 @@ export default function InputSection({ onRunTriage, isRunning, presets, activePr
     reader.readAsText(file);
   };
 
-  const processImageFile = (file) => {
-    setImageError('');
-    if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
-      setImageError(`Unsupported file type: ${file.type}. Please upload PNG, JPEG, WebP, or GIF.`);
-      return;
-    }
-    if (file.size > MAX_IMAGE_BYTES) {
-      setImageError(`Image is too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Maximum is 10 MB.`);
-      return;
-    }
-    setImageFileName(file.name);
-    setImageMediaType(file.type);
-    // Build preview URL
-    const previewUrl = URL.createObjectURL(file);
-    setImagePreviewUrl(previewUrl);
-    // Read as base64 (strip data URI prefix)
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const dataUri = ev.target.result;
-      const base64 = dataUri.split(',')[1];
-      setImageDataBase64(base64);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleImageFileInput = (e) => {
-    const file = e.target.files[0];
-    if (file) processImageFile(file);
-    // Reset so the same file can be re-selected
-    e.target.value = '';
-  };
-
-  const handleImageDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    imageDropRef.current?.classList.remove('drag-over');
-    const file = e.dataTransfer.files[0];
-    if (file) processImageFile(file);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    imageDropRef.current?.classList.add('drag-over');
-  };
-
-  const handleDragLeave = () => {
-    imageDropRef.current?.classList.remove('drag-over');
-  };
-
-  const clearImage = () => {
-    if (imagePreviewUrl) URL.revokeObjectURL(imagePreviewUrl);
-    setImageDataBase64(null);
-    setImagePreviewUrl(null);
-    setImageFileName('');
-    setImageMediaType('image/png');
-    setImageError('');
-  };
-
-  const canSubmit = !isRunning && (manifestText.trim().length > 0 || !!imageDataBase64);
+  const canSubmit = !isRunning && manifestText.trim().length > 0;
 
   return (
     <Tile id="input-section">
@@ -169,7 +84,7 @@ export default function InputSection({ onRunTriage, isRunning, presets, activePr
             <Chip size={20} /> Workload Assessment Parameters
           </h2>
           <p className="cds--body-short-01" style={{ marginTop: '0.25rem', color: 'var(--cds-text-secondary)' }}>
-            Upload manifests or screenshots, select target Power environment, and let the agent scope availability and build-time dependencies.
+            Upload manifests, select target Power environment, and let the agent scope availability and build-time dependencies.
           </p>
         </div>
         <Button
@@ -218,146 +133,27 @@ export default function InputSection({ onRunTriage, isRunning, presets, activePr
       <form onSubmit={handleSubmit}>
         <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1.5rem' }}>
 
-          {/* Left column: tabbed manifest / image input */}
+          {/* Left column: manifest text input */}
           <div>
-            <Tabs selectedIndex={activeInputTab} onChange={({ selectedIndex }) => setActiveInputTab(selectedIndex)}>
-              <TabList aria-label="Input method">
-                <Tab renderIcon={DocumentBlank}>Text / File</Tab>
-                <Tab renderIcon={Image}>Image Upload</Tab>
-              </TabList>
-
-              <TabPanels>
-                {/* ── Tab 0: text manifest ── */}
-                <TabPanel style={{ padding: '1rem 0 0' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
-                    <label className="cds--label" htmlFor="manifest-input">
-                      Application Dependency Manifest / Stack Specification
-                    </label>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer', color: 'var(--cds-link-primary)', fontSize: '0.875rem' }}>
-                      <CloudUpload size={16} /> Upload File
-                      <input type="file" style={{ display: 'none' }} onChange={handleTextFileUpload} />
-                    </label>
-                  </div>
-                  <TextArea
-                    id="manifest-input"
-                    labelText=""
-                    hideLabel
-                    rows={9}
-                    value={manifestText}
-                    onChange={(e) => setManifestText(e.target.value)}
-                    placeholder="Paste Dockerfile, SBOM (JSON), requirements.txt, or unstructured description (e.g. 'nginx:1.24, redis, custom C++ dsp library with AVX2')..."
-                    style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.85rem' }}
-                  />
-                </TabPanel>
-
-                {/* ── Tab 1: image upload ── */}
-                <TabPanel style={{ padding: '1rem 0 0' }}>
-                  {imageError && (
-                    <InlineNotification
-                      kind="error"
-                      title="Upload error:"
-                      subtitle={imageError}
-                      lowContrast
-                      style={{ marginBottom: '0.75rem' }}
-                      onCloseButtonClick={() => setImageError('')}
-                    />
-                  )}
-
-                  {imagePreviewUrl ? (
-                    /* Preview state */
-                    <div style={{ border: '1px solid var(--cds-border-subtle-01)', borderRadius: '2px', overflow: 'hidden' }}>
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          padding: '0.5rem 0.75rem',
-                          background: 'var(--cds-layer-02)',
-                          borderBottom: '1px solid var(--cds-border-subtle-01)',
-                        }}
-                      >
-                        <span className="cds--label" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                          <Image size={14} /> {imageFileName}
-                        </span>
-                        <Button
-                          kind="ghost"
-                          size="sm"
-                          renderIcon={TrashCan}
-                          iconDescription="Remove image"
-                          hasIconOnly
-                          tooltipPosition="left"
-                          onClick={clearImage}
-                        />
-                      </div>
-                      <img
-                        src={imagePreviewUrl}
-                        alt="Uploaded manifest"
-                        style={{ width: '100%', maxHeight: '300px', objectFit: 'contain', background: 'var(--cds-layer-01)', display: 'block' }}
-                      />
-                      <p className="cds--helper-text-01" style={{ padding: '0.4rem 0.75rem' }}>
-                        Gemini Vision will extract dependency text from this image before triage analysis.
-                      </p>
-                    </div>
-                  ) : (
-                    /* Drop zone */
-                    <div
-                      ref={imageDropRef}
-                      onDrop={handleImageDrop}
-                      onDragOver={handleDragOver}
-                      onDragLeave={handleDragLeave}
-                      style={{
-                        border: '2px dashed var(--cds-border-subtle-01)',
-                        borderRadius: '2px',
-                        minHeight: '220px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '0.75rem',
-                        cursor: 'pointer',
-                        transition: 'border-color 0.15s, background 0.15s',
-                        padding: '2rem',
-                      }}
-                    >
-                      <Image size={40} style={{ color: 'var(--cds-text-secondary)' }} />
-                      <p className="cds--body-short-01" style={{ color: 'var(--cds-text-secondary)', textAlign: 'center' }}>
-                        Drag &amp; drop a screenshot here, or click to browse
-                      </p>
-                      <p className="cds--helper-text-01" style={{ textAlign: 'center' }}>
-                        PNG · JPEG · WebP · GIF &nbsp;|&nbsp; Max 10 MB
-                        <br />
-                        e.g. screenshot of a Dockerfile, requirements.txt, or architecture diagram
-                      </p>
-                      <label>
-                        <Button kind="tertiary" size="sm" renderIcon={CloudUpload} as="span">
-                          Choose Image
-                        </Button>
-                        <input
-                          type="file"
-                          accept={ACCEPTED_IMAGE_TYPES.join(',')}
-                          style={{ display: 'none' }}
-                          onChange={handleImageFileInput}
-                        />
-                      </label>
-                    </div>
-                  )}
-
-                  {/* Optional: also allow typed context alongside the image */}
-                  <div style={{ marginTop: '0.75rem' }}>
-                    <TextArea
-                      id="image-context-input"
-                      labelText="Additional context (optional)"
-                      helperText="Add any notes about what's in the image, or extra packages not visible."
-                      rows={3}
-                      value={manifestText}
-                      onChange={(e) => setManifestText(e.target.value)}
-                      placeholder="e.g. 'This is from our CI pipeline — also include libssl-dev and libffi-dev'"
-                      style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.85rem' }}
-                    />
-                  </div>
-                </TabPanel>
-              </TabPanels>
-            </Tabs>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.35rem' }}>
+              <label className="cds--label" htmlFor="manifest-input">
+                Application Dependency Manifest / Stack Specification
+              </label>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', cursor: 'pointer', color: 'var(--cds-link-primary)', fontSize: '0.875rem' }}>
+                <CloudUpload size={16} /> Upload File
+                <input type="file" style={{ display: 'none' }} onChange={handleTextFileUpload} />
+              </label>
+            </div>
+            <TextArea
+              id="manifest-input"
+              labelText=""
+              hideLabel
+              rows={9}
+              value={manifestText}
+              onChange={(e) => setManifestText(e.target.value)}
+              placeholder="Paste Dockerfile, SBOM (JSON), requirements.txt, or unstructured description (e.g. 'nginx:1.24, redis, custom C++ dsp library with AVX2')..."
+              style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.85rem' }}
+            />
           </div>
 
           {/* Right column: target parameters + submit */}
@@ -397,10 +193,9 @@ export default function InputSection({ onRunTriage, isRunning, presets, activePr
             </Select>
 
             {/* Active input indicator */}
-            {(imageDataBase64 || manifestText.trim()) && (
+            {manifestText.trim() && (
               <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-                {imageDataBase64 && <Tag type="purple" size="sm"><Image size={12} style={{ marginRight: '3px' }} /> Image ready</Tag>}
-                {manifestText.trim() && <Tag type="teal" size="sm"><DocumentBlank size={12} style={{ marginRight: '3px' }} /> Text ready</Tag>}
+                <Tag type="teal" size="sm"><DocumentBlank size={12} style={{ marginRight: '3px' }} /> Text ready</Tag>
               </div>
             )}
 

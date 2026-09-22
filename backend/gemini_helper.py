@@ -1,5 +1,4 @@
 import os
-import base64
 import logging
 from typing import Optional, List
 from google.genai import types
@@ -21,15 +20,8 @@ def generate_gemini_content(
     client,
     contents: str,
     json_mode: bool = False,
-    image_data_base64: Optional[str] = None,
-    image_media_type: str = "image/png",
 ) -> Optional[str]:
-    """Generates content using Gemini with automatic rate-limit (429) fallback across candidate models.
-
-    When ``image_data_base64`` is supplied, the prompt is sent as a multipart
-    vision request: the image is prepended as an inline_data part so Gemini can
-    read text/diagrams visible in the screenshot before processing the manifest.
-    """
+    """Generates content using Gemini with automatic rate-limit (429) fallback across candidate models."""
     if not client:
         return None
 
@@ -38,25 +30,7 @@ def generate_gemini_content(
         response_mime_type="application/json"
     ) if json_mode else None
 
-    # Build the contents list — always include the text prompt; optionally
-    # prepend an image part for vision models.
-    if image_data_base64:
-        try:
-            raw_bytes = base64.b64decode(image_data_base64)
-            contents_payload = [
-                types.Part(
-                    inline_data=types.Blob(
-                        mime_type=image_media_type,
-                        data=raw_bytes,
-                    )
-                ),
-                types.Part(text=contents),
-            ]
-        except Exception as exc:
-            logger.warning("Failed to decode image_data_base64, falling back to text-only: %s", exc)
-            contents_payload = contents
-    else:
-        contents_payload = contents
+    contents_payload = contents
 
     last_error = None
     for model_name in candidate_models:

@@ -268,10 +268,6 @@ class TriageRequest(BaseModel):
     doc_url: Optional[str] = None
     packages_list: Optional[List[Dict[str, str]]] = None
 
-    # Image input
-    image_data_base64: Optional[str] = None
-    image_media_type: Optional[str] = "image/png"
-
     # LLM config override
     gemini_api_key: Optional[str] = None
 
