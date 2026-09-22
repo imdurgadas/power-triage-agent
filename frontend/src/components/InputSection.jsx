@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Tile,
   Tabs,
@@ -16,9 +16,6 @@ import {
 } from '@carbon/react';
 import {
   Play,
-  CloudUpload,
-  TrashCan,
-  Image,
   DocumentBlank,
   Chip,
   Layers,
@@ -27,8 +24,6 @@ import {
   Key,
 } from '@carbon/icons-react';
 
-const ACCEPTED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
-
 export default function InputSection({
   onRunTriage,
   isRunning,
@@ -36,7 +31,7 @@ export default function InputSection({
   activePreset,
   onSelectPreset,
 }) {
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0); // 0: Text, 1: URL, 2: Image
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0); // 0: Text, 1: URL
   const [manifestText, setManifestText] = useState('');
   const [inputUrl, setInputUrl] = useState('');
   const [targetEnvironment, setTargetEnvironment] = useState('rhel9_ocp');
@@ -44,14 +39,6 @@ export default function InputSection({
   const [triageDepth, setTriageDepth] = useState('deep');
   const [geminiKey, setGeminiKey] = useState('');
   const [showKeyInput, setShowKeyInput] = useState(false);
-
-  // Image upload state
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
-  const [imageDataBase64, setImageDataBase64] = useState(null);
-  const [imageMediaType, setImageMediaType] = useState('image/png');
-  const [imageFileName, setImageFileName] = useState('');
-  const imageDropRef = useRef(null);
 
   // When active preset changes, populate text, environment, and deliverable type
   useEffect(() => {
@@ -82,50 +69,6 @@ export default function InputSection({
     setInputUrl(p.url);
     if (p.env) setTargetEnvironment(p.env);
     if (p.deliverable) setDeliverableType(p.deliverable);
-  };
-
-  const processImageFile = (file) => {
-    if (!file) return;
-    if (!ACCEPTED_IMAGE_TYPES.includes(file.type) && !file.name.match(/\.(png|jpe?g|webp|gif)$/i)) {
-      alert('Please upload a PNG, JPEG, WebP, or GIF image.');
-      return;
-    }
-    setImageFile(file);
-    setImageFileName(file.name);
-    setImageMediaType(file.type || 'image/png');
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const dataUrl = e.target.result;
-      setImagePreviewUrl(dataUrl);
-      const base64 = dataUrl.split(',')[1];
-      setImageDataBase64(base64);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleImageFileInput = (e) => {
-    const file = e.target.files?.[0];
-    if (file) processImageFile(file);
-  };
-
-  const handleImageDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const file = e.dataTransfer.files?.[0];
-    if (file) processImageFile(file);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const clearImage = () => {
-    setImageFile(null);
-    setImagePreviewUrl(null);
-    setImageDataBase64(null);
-    setImageFileName('');
   };
 
   const handleSubmit = (e) => {
@@ -180,28 +123,12 @@ export default function InputSection({
         git_repo_url: isGithub ? raw : null,
         gemini_api_key: geminiKey || null,
       });
-    } else if (selectedTabIndex === 2) {
-      if (!imageDataBase64) return;
-      onRunTriage({
-        project_name: imageFileName ? `${imageFileName.replace(/\.[^/.]+$/, '')} (Vision Triage)` : "Vision Architecture Triage",
-        target_os: targetOs,
-        target_platform: targetPlatform,
-        target_environment: targetEnvironment,
-        deliverable_type: deliverableType,
-        triage_depth: triageDepth,
-        raw_manifest: manifestText || "",
-        manifest_type: "auto",
-        image_data_base64: imageDataBase64,
-        image_media_type: imageMediaType,
-        gemini_api_key: geminiKey || null,
-      });
     }
   };
 
   const canSubmit = !isRunning && (
     (selectedTabIndex === 0 && manifestText.trim().length > 0) ||
-    (selectedTabIndex === 1 && inputUrl.trim().length > 0) ||
-    (selectedTabIndex === 2 && imageDataBase64 != null)
+    (selectedTabIndex === 1 && inputUrl.trim().length > 0)
   );
 
   return (
@@ -213,7 +140,7 @@ export default function InputSection({
             Workload Specification &amp; Qualification Vector
           </h2>
           <p className="cds--body-short-01" style={{ color: 'var(--cds-text-secondary)' }}>
-            Analyze manifests, URLs, or architecture diagrams to evaluate IBM Power (ppc64le) porting feasibility.
+            Analyze manifests or URLs to evaluate IBM Power (ppc64le) porting feasibility.
           </p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -243,7 +170,7 @@ export default function InputSection({
 
       <form onSubmit={handleSubmit}>
         <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 2fr) minmax(300px, 1fr)', gap: '1.5rem' }}>
-          {/* Left: Input Tabs (Manifest Text, URL, Image) */}
+          {/* Left: Input Tabs (Manifest Text, URL) */}
           <div>
             <Tabs
               selectedIndex={selectedTabIndex}
@@ -252,7 +179,6 @@ export default function InputSection({
               <TabList aria-label="Input specification type" contained>
                 <Tab renderIcon={DocumentBlank}>Manifest / Text</Tab>
                 <Tab renderIcon={Launch}>GitHub Repo / URL</Tab>
-                <Tab renderIcon={Image}>Architecture Image</Tab>
               </TabList>
               <TabPanels>
                 {/* Panel 0: Manifest Text */}
@@ -328,98 +254,6 @@ export default function InputSection({
                     Autonomous agents will clone the repo or scrape docs to identify C/C++ SIMD intrinsics, build systems, test suites, and container dependencies.
                   </p>
                 </TabPanel>
-
-                {/* Panel 2: Image */}
-                <TabPanel style={{ padding: '1rem 0' }}>
-                  {imagePreviewUrl ? (
-                    <div style={{ border: '1px solid var(--cds-border-subtle-01)', borderRadius: '2px', overflow: 'hidden' }}>
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          padding: '0.5rem 0.75rem',
-                          background: 'var(--cds-layer-02)',
-                          borderBottom: '1px solid var(--cds-border-subtle-01)',
-                        }}
-                      >
-                        <span className="cds--label" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                          <Image size={14} /> {imageFileName}
-                        </span>
-                        <Button
-                          kind="ghost"
-                          size="sm"
-                          renderIcon={TrashCan}
-                          iconDescription="Remove image"
-                          hasIconOnly
-                          tooltipPosition="left"
-                          onClick={clearImage}
-                        />
-                      </div>
-                      <img
-                        src={imagePreviewUrl}
-                        alt="Uploaded architecture preview"
-                        style={{ width: '100%', maxHeight: '260px', objectFit: 'contain', background: 'var(--cds-layer-01)', display: 'block' }}
-                      />
-                      <p className="cds--helper-text-01" style={{ padding: '0.4rem 0.75rem' }}>
-                        Gemini Vision OCR will extract architectural components and dependencies from this diagram.
-                      </p>
-                    </div>
-                  ) : (
-                    <div
-                      ref={imageDropRef}
-                      onDrop={handleImageDrop}
-                      onDragOver={handleDragOver}
-                      style={{
-                        border: '2px dashed var(--cds-border-subtle-01)',
-                        borderRadius: '2px',
-                        minHeight: '200px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '0.75rem',
-                        padding: '2rem',
-                        textAlign: 'center',
-                        background: 'var(--cds-layer-02)',
-                      }}
-                    >
-                      <Image size={36} style={{ color: 'var(--cds-text-secondary)' }} />
-                      <div>
-                        <p className="cds--body-short-01" style={{ color: 'var(--cds-text-primary)' }}>
-                          Drag &amp; drop an architecture diagram or screenshot here, or browse
-                        </p>
-                        <p className="cds--helper-text-01">
-                          Supports PNG, JPEG, WebP, GIF (up to 10 MB)
-                        </p>
-                      </div>
-                      <label>
-                        <Button kind="tertiary" size="sm" renderIcon={CloudUpload} as="span">
-                          Select Image
-                        </Button>
-                        <input
-                          type="file"
-                          accept={ACCEPTED_IMAGE_TYPES.join(',')}
-                          style={{ display: 'none' }}
-                          onChange={handleImageFileInput}
-                        />
-                      </label>
-                    </div>
-                  )}
-
-                  <div style={{ marginTop: '0.75rem' }}>
-                    <TextArea
-                      id="image-context-input"
-                      labelText="Additional context (optional)"
-                      helperText="Specify any extra requirements or notes regarding this architecture diagram."
-                      rows={2}
-                      value={manifestText}
-                      onChange={(e) => setManifestText(e.target.value)}
-                      placeholder="e.g. Include RocksDB for cache layer and Redis for session broker"
-                      style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.85rem' }}
-                    />
-                  </div>
-                </TabPanel>
               </TabPanels>
             </Tabs>
           </div>
@@ -460,15 +294,9 @@ export default function InputSection({
               <SelectItem value="express" text="Express Triage (Registry lookup only)" />
             </Select>
 
-            {/* Status indicator tags */}
-            {((selectedTabIndex === 1 && inputUrl.trim()) || (selectedTabIndex === 2 && imageDataBase64)) && (
+            {selectedTabIndex === 1 && inputUrl.trim() && (
               <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-                {selectedTabIndex === 1 && inputUrl.trim() && (
-                  <Tag type="blue" size="sm"><Launch size={12} style={{ marginRight: '3px' }} /> URL ready</Tag>
-                )}
-                {selectedTabIndex === 2 && imageDataBase64 && (
-                  <Tag type="purple" size="sm"><Image size={12} style={{ marginRight: '3px' }} /> Image ready</Tag>
-                )}
+                <Tag type="blue" size="sm"><Launch size={12} style={{ marginRight: '3px' }} /> URL ready</Tag>
               </div>
             )}
 

@@ -163,56 +163,6 @@ class TriageAgent:
 
         raw_text = request.raw_manifest or ""
 
-        # --- Image ingestion: extract manifest text from uploaded image via Gemini vision ---
-        if request.image_data_base64 and self.gemini_client:
-            yield {
-                "type": "step",
-                "step": AgentStep(
-                    step_id=step_counter,
-                    agent_name="VisionAgent",
-                    action_type="llm_reasoning",
-                    target="Uploaded Image",
-                    thought="Analysing uploaded image with Gemini Vision to extract dependency manifest text.",
-                    detail="OCR + semantic extraction of packages, versions, and ecosystems visible in the image."
-                ).model_dump()
-            }
-            await asyncio.sleep(0.2)
-            step_counter += 1
-
-            vision_prompt = (
-                "You are an IBM Power porting assistant. The user has uploaded an image that contains a software dependency "
-                "manifest, Dockerfile, requirements file, architecture diagram, or similar artefact.\n"
-                "Extract all software packages, container images, and libraries visible in the image and return them as "
-                "a plain-text list, one entry per line, preserving version numbers where shown "
-                "(e.g. 'nginx:1.24', 'torch==2.1.0', 'libssl-dev'). "
-                "If the image contains a Dockerfile, reproduce the FROM and RUN apt-get/pip install lines verbatim. "
-                "Output ONLY the extracted manifest text — no commentary, no markdown fences."
-            )
-            extracted = generate_gemini_content(
-                self.gemini_client,
-                vision_prompt,
-                json_mode=False,
-                image_data_base64=request.image_data_base64,
-                image_media_type=request.image_media_type or "image/png",
-            )
-            if extracted and extracted.strip():
-                # Merge with any typed text — image text takes precedence if no text was supplied
-                raw_text = (raw_text + "\n" + extracted).strip() if raw_text else extracted.strip()
-                yield {
-                    "type": "step",
-                    "step": AgentStep(
-                        step_id=step_counter,
-                        agent_name="VisionAgent",
-                        action_type="llm_reasoning",
-                        target="Uploaded Image",
-                        thought=f"Vision extraction complete — {len(extracted.splitlines())} lines of manifest text recovered from image.",
-                        detail=extracted[:200] + ("..." if len(extracted) > 200 else "")
-                    ).model_dump()
-                }
-                await asyncio.sleep(0.2)
-                step_counter += 1
-        # ---------------------------------------------------------------------------------
-
         parsed_items = UniversalNormalizer.normalize(raw_text, request.manifest_type or "auto")
 
         # Provenance detection & URL extraction
