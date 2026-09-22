@@ -39,8 +39,8 @@ async def get_sample_workloads():
             "id": "microservices",
             "name": "Enterprise Cloud Microservices",
             "description": "Standard containerized enterprise application stack (Nginx, Redis, PostgreSQL, Kafka, Node.js, Spring Boot).",
-            "target_os": "rhel9",
-            "target_platform": "ocp",
+            "target_environment": "rhel9_ocp",
+            "deliverable_type": "container",
             "manifest_type": "dockerfile",
             "content": """# ACME Payments Microservices Manifest
 FROM nginx:1.24
@@ -58,8 +58,8 @@ FROM node:20-alpine
             "id": "aiml_pipeline",
             "name": "AI/ML Data Pipeline (with Vector Acceleration)",
             "description": "Python ML inference service using PyTorch, NumPy, FastAPI, and custom C++ vector kernel with AVX2.",
-            "target_os": "rhel9",
-            "target_platform": "powervm",
+            "target_environment": "rhel9_baremetal",
+            "deliverable_type": "build",
             "manifest_type": "requirements",
             "content": """# AI Inference Pipeline Dependencies
 torch==2.1.0
@@ -77,8 +77,8 @@ libcustom-dsp-engine==1.2.0
             "id": "unported_storage",
             "name": "High-Throughput Storage Engine (Dependency Iceberg)",
             "description": "Database engine relying on RocksDB and simdjson. Demonstrates 64KB page size sensitivities and transitive build-dependency scoping.",
-            "target_os": "rhel9",
-            "target_platform": "baremetal",
+            "target_environment": "rhel9_baremetal",
+            "deliverable_type": "build",
             "manifest_type": "text",
             "content": """Customer uses a high-throughput time-series cache:
 - rocksdb 8.6 (Storage engine, depends on snappy, lz4, zlib, jemalloc)
@@ -91,8 +91,8 @@ libcustom-dsp-engine==1.2.0
             "id": "legacy_proprietary",
             "name": "Legacy Financial Analytics (x86 Blocker)",
             "description": "Workload containing proprietary Intel-MKL and C++ analytics libraries. Tests risk detection and alternative recommendations.",
-            "target_os": "rhel8",
-            "target_platform": "powervm",
+            "target_environment": "rhel9_baremetal",
+            "deliverable_type": "build",
             "manifest_type": "text",
             "content": """Financial risk calculation batch job:
 - intel-mkl (Intel Math Kernel Library for x86)

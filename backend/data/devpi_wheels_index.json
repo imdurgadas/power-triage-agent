@@ -1,0 +1,4463 @@
+{
+  "metadata": {
+    "source": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+    "last_updated_upstream": "August 28, 2026",
+    "fetched_at": "2026-09-10T12:38:45.368123+00:00",
+    "total_packages": 414
+  },
+  "packages": {
+    "Last CVE Scanned On: August 28, 2026": {
+      "versions": [],
+      "latest_ppc64le_version": null,
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": false,
+      "has_noarch_wheel": false
+    },
+    "abseil-cpp": {
+      "versions": [
+        "20230125.4",
+        "20230802.3",
+        "20240116.2"
+      ],
+      "latest_ppc64le_version": "20230125.4",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "aesara": {
+      "versions": [
+        "2.9.4"
+      ],
+      "latest_ppc64le_version": "2.9.4",
+      "latest_noarch_version": "2.9.4",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "agno": {
+      "versions": [
+        "2.6.6"
+      ],
+      "latest_ppc64le_version": "2.6.6",
+      "latest_noarch_version": "2.6.6",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "aiohttp": {
+      "versions": [
+        "3.8.6",
+        "3.9.0"
+      ],
+      "latest_ppc64le_version": "3.8.6",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "aiosignal": {
+      "versions": [
+        "1.2.0",
+        "1.3.1",
+        "1.4.0"
+      ],
+      "latest_ppc64le_version": "1.2.0",
+      "latest_noarch_version": "1.2.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "alabaster": {
+      "versions": [
+        "1.0.0"
+      ],
+      "latest_ppc64le_version": "1.0.0",
+      "latest_noarch_version": "1.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "ansible-core": {
+      "versions": [
+        "2.18.6",
+        "2.19.2",
+        "2.19.3"
+      ],
+      "latest_ppc64le_version": "2.18.6",
+      "latest_noarch_version": "2.18.6",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "ansible-navigator": {
+      "versions": [
+        "25.9.1.dev0"
+      ],
+      "latest_ppc64le_version": null,
+      "latest_noarch_version": "25.9.1.dev0",
+      "has_ppc64le_wheel": false,
+      "has_noarch_wheel": true
+    },
+    "ansible-rulebook": {
+      "versions": [
+        "1.1.2",
+        "1.1.6"
+      ],
+      "latest_ppc64le_version": "1.1.2",
+      "latest_noarch_version": "1.1.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "ansible-runner": {
+      "versions": [
+        "2.3.6",
+        "2.4.1"
+      ],
+      "latest_ppc64le_version": "2.3.6",
+      "latest_noarch_version": "2.3.6",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "ansible-sign": {
+      "versions": [
+        "0.1.2"
+      ],
+      "latest_ppc64le_version": "0.1.2",
+      "latest_noarch_version": "0.1.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "antlr4-python3-runtime": {
+      "versions": [
+        "4.13.2",
+        "4.9.3"
+      ],
+      "latest_ppc64le_version": "4.13.2",
+      "latest_noarch_version": "4.13.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "apache-airflow": {
+      "versions": [
+        "3.0.2"
+      ],
+      "latest_ppc64le_version": "3.0.2",
+      "latest_noarch_version": "3.0.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "apache-tvm-ffi": {
+      "versions": [
+        "0.1.11",
+        "0.1.12",
+        "0.1.9"
+      ],
+      "latest_ppc64le_version": "0.1.11",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "appdirs": {
+      "versions": [
+        "1.4.4"
+      ],
+      "latest_ppc64le_version": "1.4.4",
+      "latest_noarch_version": "1.4.4",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "argon2-cffi-bindings": {
+      "versions": [
+        "21.2.0",
+        "25.1.0"
+      ],
+      "latest_ppc64le_version": "21.2.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "array-record": {
+      "versions": [
+        "0.5.0",
+        "0.6.0",
+        "0.8.2",
+        "0.8.3"
+      ],
+      "latest_ppc64le_version": "0.5.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "async-timeout": {
+      "versions": [
+        "5.0.1"
+      ],
+      "latest_ppc64le_version": "5.0.1",
+      "latest_noarch_version": "5.0.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "asyncpg": {
+      "versions": [
+        "0.31.0"
+      ],
+      "latest_ppc64le_version": "0.31.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "autovizwidget": {
+      "versions": [
+        "0.20.0",
+        "0.22.0"
+      ],
+      "latest_ppc64le_version": "0.20.0",
+      "latest_noarch_version": "0.20.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "av": {
+      "versions": [
+        "13.1.0",
+        "14.0.1",
+        "14.4.0",
+        "15.0.0",
+        "15.1.0",
+        "16.0.1",
+        "16.1.0"
+      ],
+      "latest_ppc64le_version": "13.1.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "awx": {
+      "versions": [
+        "24.6.1"
+      ],
+      "latest_ppc64le_version": "24.6.1",
+      "latest_noarch_version": "24.6.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-authorization": {
+      "versions": [
+        "4.0.0"
+      ],
+      "latest_ppc64le_version": "4.0.0",
+      "latest_noarch_version": "4.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-batch": {
+      "versions": [
+        "18.0.0"
+      ],
+      "latest_ppc64le_version": "18.0.0",
+      "latest_noarch_version": "18.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-cdn": {
+      "versions": [
+        "13.1.1"
+      ],
+      "latest_ppc64le_version": "13.1.1",
+      "latest_noarch_version": "13.1.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-containerregistry": {
+      "versions": [
+        "14.0.0"
+      ],
+      "latest_ppc64le_version": "14.0.0",
+      "latest_noarch_version": "14.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-containerservice": {
+      "versions": [
+        "36.0.0"
+      ],
+      "latest_ppc64le_version": "36.0.0",
+      "latest_noarch_version": "36.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-cosmosdb": {
+      "versions": [
+        "9.8.0"
+      ],
+      "latest_ppc64le_version": "9.8.0",
+      "latest_noarch_version": "9.8.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-devtestlabs": {
+      "versions": [
+        "10.0.0b2"
+      ],
+      "latest_ppc64le_version": "10.0.0b2",
+      "latest_noarch_version": "10.0.0b2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-dns": {
+      "versions": [
+        "8.2.0"
+      ],
+      "latest_ppc64le_version": "8.2.0",
+      "latest_noarch_version": "8.2.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-hdinsight": {
+      "versions": [
+        "9.1.0b1"
+      ],
+      "latest_ppc64le_version": "9.1.0b1",
+      "latest_noarch_version": "9.1.0b1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-iothub": {
+      "versions": [
+        "4.0.0"
+      ],
+      "latest_ppc64le_version": "4.0.0",
+      "latest_noarch_version": "4.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-keyvault": {
+      "versions": [
+        "11.0.0"
+      ],
+      "latest_ppc64le_version": "11.0.0",
+      "latest_noarch_version": "11.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-loganalytics": {
+      "versions": [
+        "13.0.0b7"
+      ],
+      "latest_ppc64le_version": "13.0.0b7",
+      "latest_noarch_version": "13.0.0b7",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-marketplaceordering": {
+      "versions": [
+        "1.2.0b2"
+      ],
+      "latest_ppc64le_version": "1.2.0b2",
+      "latest_noarch_version": "1.2.0b2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-monitor": {
+      "versions": [
+        "7.0.0b2"
+      ],
+      "latest_ppc64le_version": "7.0.0b2",
+      "latest_noarch_version": "7.0.0b2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-network": {
+      "versions": [
+        "29.0.0"
+      ],
+      "latest_ppc64le_version": "29.0.0",
+      "latest_noarch_version": "29.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-rdbms": {
+      "versions": [
+        "10.1.0"
+      ],
+      "latest_ppc64le_version": "10.1.0",
+      "latest_noarch_version": "10.1.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-redis": {
+      "versions": [
+        "14.5.0"
+      ],
+      "latest_ppc64le_version": "14.5.0",
+      "latest_noarch_version": "14.5.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-resource": {
+      "versions": [
+        "23.4.0"
+      ],
+      "latest_ppc64le_version": "23.4.0",
+      "latest_noarch_version": "23.4.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-servicebus": {
+      "versions": [
+        "9.0.0"
+      ],
+      "latest_ppc64le_version": "9.0.0",
+      "latest_noarch_version": "9.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-sql": {
+      "versions": [
+        "4.0.0b21"
+      ],
+      "latest_ppc64le_version": "4.0.0b21",
+      "latest_noarch_version": "4.0.0b21",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-storage": {
+      "versions": [
+        "23.0.0"
+      ],
+      "latest_ppc64le_version": "23.0.0",
+      "latest_noarch_version": "23.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-trafficmanager": {
+      "versions": [
+        "1.1.0"
+      ],
+      "latest_ppc64le_version": "1.1.0",
+      "latest_noarch_version": "1.1.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "azure-mgmt-web": {
+      "versions": [
+        "8.0.0"
+      ],
+      "latest_ppc64le_version": "8.0.0",
+      "latest_noarch_version": "8.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "backports-functools-lru-cache": {
+      "versions": [
+        "2.0.0"
+      ],
+      "latest_ppc64le_version": "2.0.0",
+      "latest_noarch_version": "2.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "bcrypt": {
+      "versions": [
+        "4.0.1",
+        "4.2.1",
+        "4.3.0",
+        "5.0.0"
+      ],
+      "latest_ppc64le_version": "4.0.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "black": {
+      "versions": [
+        "22.12.0"
+      ],
+      "latest_ppc64le_version": "22.12.0",
+      "latest_noarch_version": "22.12.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "blinker": {
+      "versions": [
+        "1.4",
+        "1.6.2"
+      ],
+      "latest_ppc64le_version": "1.4",
+      "latest_noarch_version": "1.4",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "blis": {
+      "versions": [
+        "1.3.0",
+        "1.3.3"
+      ],
+      "latest_ppc64le_version": "1.3.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "boto3": {
+      "versions": [
+        "1.37.27"
+      ],
+      "latest_ppc64le_version": "1.37.27",
+      "latest_noarch_version": "1.37.27",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "Bottleneck": {
+      "versions": [
+        "1.3.5"
+      ],
+      "latest_ppc64le_version": "1.3.5",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "bottleneck": {
+      "versions": [
+        "1.3.5",
+        "1.3.8",
+        "1.4.2",
+        "1.5.0",
+        "1.6.0"
+      ],
+      "latest_ppc64le_version": "1.3.5",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "brotli": {
+      "versions": [
+        "1.0.9",
+        "1.1.0",
+        "1.2.0"
+      ],
+      "latest_ppc64le_version": "1.0.9",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "brotlicffi": {
+      "versions": [
+        "0.8.0",
+        "1.1.0.0",
+        "1.2.0.0",
+        "1.2.0.1"
+      ],
+      "latest_ppc64le_version": "0.8.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "brotlipy": {
+      "versions": [
+        "0.7.0"
+      ],
+      "latest_ppc64le_version": "0.7.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "bsdiff4": {
+      "versions": [
+        "1.2.4",
+        "1.2.6"
+      ],
+      "latest_ppc64le_version": "1.2.4",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "BTrees": {
+      "versions": [
+        "5.1",
+        "5.2",
+        "6.1"
+      ],
+      "latest_ppc64le_version": "5.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "c-ares": {
+      "versions": [
+        "1.19.1"
+      ],
+      "latest_ppc64le_version": "1.19.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "cachetools": {
+      "versions": [
+        "4.2.2",
+        "5.5.2",
+        "6.1.0",
+        "6.2.0",
+        "6.2.1",
+        "7.0.5"
+      ],
+      "latest_ppc64le_version": "4.2.2",
+      "latest_noarch_version": "4.2.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "cassandra-driver": {
+      "versions": [
+        "3.29.0",
+        "3.29.2",
+        "3.29.3",
+        "3.30.0",
+        "3.30.1"
+      ],
+      "latest_ppc64le_version": "3.29.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "catboost": {
+      "versions": [
+        "1.2.7"
+      ],
+      "latest_ppc64le_version": "1.2.7",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "cchardet": {
+      "versions": [
+        "2.2.0a3"
+      ],
+      "latest_ppc64le_version": "2.2.0a3",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "certifi": {
+      "versions": [
+        "2024.8.30",
+        "2025.1.31",
+        "2025.11.12",
+        "2025.7.14",
+        "2026.1.4",
+        "2026.2.25",
+        "2026.4.22",
+        "2026.5.20"
+      ],
+      "latest_ppc64le_version": "2024.8.30",
+      "latest_noarch_version": "2024.8.30",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "certipy": {
+      "versions": [
+        "0.2.1",
+        "0.2.2"
+      ],
+      "latest_ppc64le_version": "0.2.1",
+      "latest_noarch_version": "0.2.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "cffi": {
+      "versions": [
+        "1.15.1",
+        "1.17.1",
+        "2.0.0"
+      ],
+      "latest_ppc64le_version": "1.15.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "cforge": {
+      "versions": [
+        "1.0.0b4"
+      ],
+      "latest_ppc64le_version": "1.0.0b4",
+      "latest_noarch_version": "1.0.0b4",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "chalice": {
+      "versions": [
+        "1.32.0"
+      ],
+      "latest_ppc64le_version": "1.32.0",
+      "latest_noarch_version": "1.32.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "chroma-hnswlib": {
+      "versions": [
+        "0.7.3",
+        "0.7.6"
+      ],
+      "latest_ppc64le_version": "0.7.3",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "chromadb": {
+      "versions": [
+        "1.5.10"
+      ],
+      "latest_ppc64le_version": "1.5.10",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "clawpack": {
+      "versions": [
+        "5.12.0"
+      ],
+      "latest_ppc64le_version": "5.12.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "clevercsv": {
+      "versions": [
+        "0.8.5"
+      ],
+      "latest_ppc64le_version": "0.8.5",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "clickhouse-connect": {
+      "versions": [
+        "0.7.19"
+      ],
+      "latest_ppc64le_version": "0.7.19",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "cloudpickle": {
+      "versions": [
+        "3.0.0",
+        "3.1.1",
+        "3.1.2"
+      ],
+      "latest_ppc64le_version": "3.0.0",
+      "latest_noarch_version": "3.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "Composio": {
+      "versions": [
+        "0.16.0"
+      ],
+      "latest_ppc64le_version": null,
+      "latest_noarch_version": "0.16.0",
+      "has_ppc64le_wheel": false,
+      "has_noarch_wheel": true
+    },
+    "confluent-kafka": {
+      "versions": [
+        "2.10.0"
+      ],
+      "latest_ppc64le_version": "2.10.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "contourpy": {
+      "versions": [
+        "1.0.5",
+        "1.3.1",
+        "1.3.2",
+        "1.3.3"
+      ],
+      "latest_ppc64le_version": "1.0.5",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "couchbase": {
+      "versions": [
+        "4.6.1",
+        "4.6.2"
+      ],
+      "latest_ppc64le_version": "4.6.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "crc32c": {
+      "versions": [
+        "2.8"
+      ],
+      "latest_ppc64le_version": "2.8",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "crmsh": {
+      "versions": [
+        "0.0.1",
+        "4.6.0"
+      ],
+      "latest_ppc64le_version": "0.0.1",
+      "latest_noarch_version": "0.0.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "crontab": {
+      "versions": [
+        "1.0.4"
+      ],
+      "latest_ppc64le_version": "1.0.4",
+      "latest_noarch_version": "1.0.4",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "cryptography": {
+      "versions": [
+        "39.0.1",
+        "42.0.5",
+        "43.0.1",
+        "43.0.3",
+        "44.0.0",
+        "44.0.1",
+        "44.0.2",
+        "44.0.3",
+        "45.0.2",
+        "45.0.3",
+        "45.0.4",
+        "45.0.5",
+        "45.0.6",
+        "45.0.7",
+        "46.0.1",
+        "46.0.2",
+        "46.0.3",
+        "46.0.5",
+        "46.0.6",
+        "46.0.7",
+        "48.0.0",
+        "49.0.0"
+      ],
+      "latest_ppc64le_version": "39.0.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "cutadapt": {
+      "versions": [
+        "5.1"
+      ],
+      "latest_ppc64le_version": "5.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "cx-oracle": {
+      "versions": [
+        "8.3.0"
+      ],
+      "latest_ppc64le_version": "8.3.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "cykhash": {
+      "versions": [
+        "2.0.0"
+      ],
+      "latest_ppc64le_version": "2.0.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "cymem": {
+      "versions": [
+        "2.0.7"
+      ],
+      "latest_ppc64le_version": "2.0.7",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "cysignals": {
+      "versions": [
+        "1.11.4",
+        "1.12.6"
+      ],
+      "latest_ppc64le_version": "1.11.4",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "cython": {
+      "versions": [
+        "0.29.36",
+        "3.2.4",
+        "3.2.5",
+        "3.2.8"
+      ],
+      "latest_ppc64le_version": "0.29.36",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "cytoolz": {
+      "versions": [
+        "0.12.0",
+        "0.12.3",
+        "1.0.1"
+      ],
+      "latest_ppc64le_version": "0.12.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "dask": {
+      "versions": [
+        "2.20.0",
+        "2023.3.2",
+        "2023.6.0",
+        "2024.5.0",
+        "2025.10.0",
+        "2025.11.0",
+        "2025.12.0",
+        "2025.3.0",
+        "2026.1.1"
+      ],
+      "latest_ppc64le_version": "2.20.0",
+      "latest_noarch_version": "2.20.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "debugpy": {
+      "versions": [
+        "1.8.21"
+      ],
+      "latest_ppc64le_version": "1.8.21",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "dill": {
+      "versions": [
+        "0.3.8",
+        "0.4.0",
+        "0.4.1"
+      ],
+      "latest_ppc64le_version": "0.3.8",
+      "latest_noarch_version": "0.3.8",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "distributed": {
+      "versions": [
+        "2025.5.1",
+        "2026.1.0"
+      ],
+      "latest_ppc64le_version": "2025.5.1",
+      "latest_noarch_version": "2025.5.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "distro": {
+      "versions": [
+        "1.9.0"
+      ],
+      "latest_ppc64le_version": "1.9.0",
+      "latest_noarch_version": "1.9.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "django": {
+      "versions": [
+        "5.0.7",
+        "5.2.1",
+        "5.2.11",
+        "5.2.13",
+        "5.2.3"
+      ],
+      "latest_ppc64le_version": "5.0.7",
+      "latest_noarch_version": "5.0.7",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "dm-tree": {
+      "versions": [
+        "0.1.10",
+        "0.1.7",
+        "0.1.8",
+        "0.1.9"
+      ],
+      "latest_ppc64le_version": "0.1.10",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "docling-parse": {
+      "versions": [
+        "4.7.1",
+        "4.7.3",
+        "5.11.0",
+        "5.3.2",
+        "5.6.2",
+        "5.7.0",
+        "5.8.0",
+        "6.2.0",
+        "7.0.0",
+        "7.6.0",
+        "7.9.0"
+      ],
+      "latest_ppc64le_version": "4.7.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "duckdb": {
+      "versions": [
+        "1.4.3",
+        "1.4.4",
+        "1.5.2",
+        "1.5.3",
+        "1.5.4",
+        "1.5.5"
+      ],
+      "latest_ppc64le_version": "1.4.3",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "editdistance": {
+      "versions": [
+        "0.8.1"
+      ],
+      "latest_ppc64le_version": "0.8.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "einops": {
+      "versions": [
+        "0.8.1",
+        "0.8.2"
+      ],
+      "latest_ppc64le_version": "0.8.1",
+      "latest_noarch_version": "0.8.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "ephem": {
+      "versions": [
+        "4.1.5",
+        "4.2"
+      ],
+      "latest_ppc64le_version": "4.1.5",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "executing": {
+      "versions": [
+        "2.2.0"
+      ],
+      "latest_ppc64le_version": "2.2.0",
+      "latest_noarch_version": "2.2.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "faiss-cpu": {
+      "versions": [
+        "1.9.0.post1"
+      ],
+      "latest_ppc64le_version": "1.9.0.post1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "fastapi": {
+      "versions": [
+        "0.135.1",
+        "0.136.1"
+      ],
+      "latest_ppc64le_version": "0.135.1",
+      "latest_noarch_version": "0.135.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "fastavro": {
+      "versions": [
+        "1.12.1",
+        "1.12.2",
+        "1.9.7"
+      ],
+      "latest_ppc64le_version": "1.12.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "fastjsonschema": {
+      "versions": [
+        "2.16.2",
+        "2.21.1"
+      ],
+      "latest_ppc64le_version": "2.16.2",
+      "latest_noarch_version": "2.16.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "fastparquet": {
+      "versions": [
+        "2024.11.0"
+      ],
+      "latest_ppc64le_version": "2024.11.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "fastuuid": {
+      "versions": [
+        "0.14.0"
+      ],
+      "latest_ppc64le_version": "0.14.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "ffmpeg": {
+      "versions": [
+        "4.2.2",
+        "4.4.2",
+        "5.1.6",
+        "7.1"
+      ],
+      "latest_ppc64le_version": "4.2.2",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "filelock": {
+      "versions": [
+        "3.18.0",
+        "3.20.3",
+        "3.25.2"
+      ],
+      "latest_ppc64le_version": "3.18.0",
+      "latest_noarch_version": "3.18.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "fiona": {
+      "versions": [
+        "1.10.1",
+        "1.9.6"
+      ],
+      "latest_ppc64le_version": "1.10.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "fire": {
+      "versions": [
+        "0.4.0",
+        "0.6.0",
+        "0.7.0"
+      ],
+      "latest_ppc64le_version": "0.4.0",
+      "latest_noarch_version": "0.4.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "flask-security": {
+      "versions": [
+        "5.6.2"
+      ],
+      "latest_ppc64le_version": "5.6.2",
+      "latest_noarch_version": "5.6.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "flatbuffers": {
+      "versions": [
+        "2.0.0",
+        "23.1.21",
+        "24.12.23",
+        "24.3.25",
+        "25.2.10"
+      ],
+      "latest_ppc64le_version": "2.0.0",
+      "latest_noarch_version": "2.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "frozenlist": {
+      "versions": [
+        "1.3.3",
+        "1.8.0"
+      ],
+      "latest_ppc64le_version": "1.3.3",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "fsspec": {
+      "versions": [
+        "2025.3.0",
+        "2025.3.2",
+        "2026.2.0",
+        "2026.4.0"
+      ],
+      "latest_ppc64le_version": "2025.3.0",
+      "latest_noarch_version": "2025.3.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "furo": {
+      "versions": [
+        "2024.4.27",
+        "2024.8.6"
+      ],
+      "latest_ppc64le_version": "2024.4.27",
+      "latest_noarch_version": "2024.4.27",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "future": {
+      "versions": [
+        "0.18.3"
+      ],
+      "latest_ppc64le_version": "0.18.3",
+      "latest_noarch_version": "0.18.3",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "gensim": {
+      "versions": [
+        "4.3.2",
+        "4.3.3",
+        "4.4.0"
+      ],
+      "latest_ppc64le_version": "4.3.2",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "geomet": {
+      "versions": [
+        "1.1.0"
+      ],
+      "latest_ppc64le_version": "1.1.0",
+      "latest_noarch_version": "1.1.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "gmpy2": {
+      "versions": [
+        "2.1.2",
+        "2.2.0",
+        "2.2.1",
+        "2.2.2",
+        "2.3.0",
+        "2.3.1"
+      ],
+      "latest_ppc64le_version": "2.1.2",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "google-crc32c": {
+      "versions": [
+        "1.7.1",
+        "1.8.0"
+      ],
+      "latest_ppc64le_version": "1.7.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "gradio": {
+      "versions": [
+        "6.9.0"
+      ],
+      "latest_ppc64le_version": "6.9.0",
+      "latest_noarch_version": "6.9.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "graphite2": {
+      "versions": [
+        "1.3.14"
+      ],
+      "latest_ppc64le_version": "1.3.14",
+      "latest_noarch_version": "1.3.14",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "graphviz": {
+      "versions": [
+        "0.20.2"
+      ],
+      "latest_ppc64le_version": "0.20.2",
+      "latest_noarch_version": "0.20.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "greenlet": {
+      "versions": [
+        "2.0.1",
+        "3.0.3",
+        "3.1.1",
+        "3.2.4",
+        "3.3.0",
+        "3.5.0"
+      ],
+      "latest_ppc64le_version": "2.0.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "grpc-cpp": {
+      "versions": [
+        "1.54.3",
+        "1.68.0"
+      ],
+      "latest_ppc64le_version": "1.54.3",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "grpcio": {
+      "versions": [
+        "1.53.0",
+        "1.54.3",
+        "1.59.3",
+        "1.62.3",
+        "1.64.1",
+        "1.67.1",
+        "1.68.1",
+        "1.69.0",
+        "1.70.0",
+        "1.70.1",
+        "1.71.0",
+        "1.71.1",
+        "1.72.0",
+        "1.72.1",
+        "1.73.0",
+        "1.73.1",
+        "1.74.0",
+        "1.75.0",
+        "1.75.1",
+        "1.76.0",
+        "1.78.0",
+        "1.78.1",
+        "1.80.0",
+        "1.81.0",
+        "1.81.1",
+        "1.82.1"
+      ],
+      "latest_ppc64le_version": "1.53.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "grpcio-tools": {
+      "versions": [
+        "1.74.0",
+        "1.78.1",
+        "1.80.0"
+      ],
+      "latest_ppc64le_version": "1.74.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "gunicorn": {
+      "versions": [
+        "21.2.0",
+        "23.0.0"
+      ],
+      "latest_ppc64le_version": "21.2.0",
+      "latest_noarch_version": "21.2.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "h5py": {
+      "versions": [
+        "3.10.0",
+        "3.11.0",
+        "3.12.1",
+        "3.13.0",
+        "3.14.0",
+        "3.15.0",
+        "3.15.1",
+        "3.16.0",
+        "3.7.0"
+      ],
+      "latest_ppc64le_version": "3.10.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "hdbscan": {
+      "versions": [
+        "0.8.40"
+      ],
+      "latest_ppc64le_version": "0.8.40",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "hdf5": {
+      "versions": [
+        "1.12.1",
+        "1.12.3",
+        "1.14.4.3",
+        "1.14.6"
+      ],
+      "latest_ppc64le_version": "1.12.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "hdijupyterutils": {
+      "versions": [
+        "0.20.0"
+      ],
+      "latest_ppc64le_version": "0.20.0",
+      "latest_noarch_version": "0.20.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "hf-xet": {
+      "versions": [
+        "1.1.0",
+        "1.1.1",
+        "1.1.2",
+        "1.1.5",
+        "1.1.8",
+        "1.1.9",
+        "1.2.0",
+        "1.4.2",
+        "1.5.0",
+        "1.5.1"
+      ],
+      "latest_ppc64le_version": "1.1.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "hjson": {
+      "versions": [
+        "3.0.2"
+      ],
+      "latest_ppc64le_version": "3.0.2",
+      "latest_noarch_version": "3.0.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "hmmlearn": {
+      "versions": [
+        "0.3.3"
+      ],
+      "latest_ppc64le_version": "0.3.3",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "hnswlib": {
+      "versions": [
+        "0.8.0"
+      ],
+      "latest_ppc64le_version": "0.8.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "httptools": {
+      "versions": [
+        "0.6.4",
+        "0.7.1",
+        "0.8.0"
+      ],
+      "latest_ppc64le_version": "0.6.4",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "httpx-sse": {
+      "versions": [
+        "0.4.0",
+        "0.4.3"
+      ],
+      "latest_ppc64le_version": "0.4.0",
+      "latest_noarch_version": "0.4.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "iaesdk": {
+      "versions": [
+        "3.3.0"
+      ],
+      "latest_ppc64le_version": "3.3.0",
+      "latest_noarch_version": "3.3.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "ibm-cloud-sdk-core": {
+      "versions": [
+        "3.16.7",
+        "3.22.1",
+        "3.24.2",
+        "3.24.4"
+      ],
+      "latest_ppc64le_version": "3.16.7",
+      "latest_noarch_version": "3.16.7",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "ibm-cos-sdk": {
+      "versions": [
+        "2.13.4",
+        "2.13.6",
+        "2.14.0",
+        "2.14.1",
+        "2.14.2",
+        "2.14.3",
+        "2.15.0",
+        "2.16.0",
+        "2.16.2"
+      ],
+      "latest_ppc64le_version": "2.13.4",
+      "latest_noarch_version": "2.13.4",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "ibm-cos-sdk-core": {
+      "versions": [
+        "2.13.4",
+        "2.13.5",
+        "2.13.6",
+        "2.14.0",
+        "2.14.1",
+        "2.14.2",
+        "2.14.3",
+        "2.16.2"
+      ],
+      "latest_ppc64le_version": "2.13.4",
+      "latest_noarch_version": "2.13.4",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "ibm-cos-sdk-s3transfer": {
+      "versions": [
+        "2.13.4",
+        "2.13.6",
+        "2.14.0",
+        "2.14.1",
+        "2.14.2",
+        "2.14.3",
+        "2.16.2"
+      ],
+      "latest_ppc64le_version": "2.13.4",
+      "latest_noarch_version": "2.13.4",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "ibm-db": {
+      "versions": [
+        "3.2.3",
+        "3.2.5",
+        "3.2.6",
+        "3.2.7",
+        "3.2.9"
+      ],
+      "latest_ppc64le_version": "3.2.3",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "ijson": {
+      "versions": [
+        "3.1.4",
+        "3.3.0",
+        "3.4.0",
+        "3.4.0.post0",
+        "3.5.0"
+      ],
+      "latest_ppc64le_version": "3.1.4",
+      "latest_noarch_version": "3.1.4",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "imagecodecs": {
+      "versions": [
+        "2023.1.23",
+        "2024.1.1",
+        "2024.12.30",
+        "2025.11.11",
+        "2025.3.30",
+        "2025.8.2",
+        "2026.1.14",
+        "2026.3.6",
+        "2026.6.6"
+      ],
+      "latest_ppc64le_version": "2023.1.23",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "imageio": {
+      "versions": [
+        "2.34.1",
+        "2.37.0",
+        "2.37.2",
+        "2.37.3"
+      ],
+      "latest_ppc64le_version": "2.34.1",
+      "latest_noarch_version": "2.34.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "iminuit": {
+      "versions": [
+        "2.28.0",
+        "2.31.0",
+        "2.31.1"
+      ],
+      "latest_ppc64le_version": "2.28.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "impit": {
+      "versions": [
+        "0.13.1"
+      ],
+      "latest_ppc64le_version": "0.13.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "import-tracker": {
+      "versions": [
+        "3.2.1"
+      ],
+      "latest_ppc64le_version": "3.2.1",
+      "latest_noarch_version": "3.2.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "impyla": {
+      "versions": [
+        "0.21.0"
+      ],
+      "latest_ppc64le_version": "0.21.0",
+      "latest_noarch_version": "0.21.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "incremental": {
+      "versions": [
+        "24.7.2"
+      ],
+      "latest_ppc64le_version": "24.7.2",
+      "latest_noarch_version": "24.7.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "ipykernel": {
+      "versions": [
+        "6.29.4",
+        "6.29.5"
+      ],
+      "latest_ppc64le_version": "6.29.4",
+      "latest_noarch_version": "6.29.4",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "ipywidgets": {
+      "versions": [
+        "8.1.2",
+        "8.1.7",
+        "8.1.8"
+      ],
+      "latest_ppc64le_version": "8.1.2",
+      "latest_noarch_version": "8.1.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "itsdangerous": {
+      "versions": [
+        "2.1.2",
+        "2.2.0"
+      ],
+      "latest_ppc64le_version": "2.1.2",
+      "latest_noarch_version": "2.1.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "jaraco-packaging": {
+      "versions": [
+        "10.2.2"
+      ],
+      "latest_ppc64le_version": "10.2.2",
+      "latest_noarch_version": "10.2.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "jaraco-test": {
+      "versions": [
+        "5.5.1"
+      ],
+      "latest_ppc64le_version": "5.5.1",
+      "latest_noarch_version": "5.5.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "javabridge": {
+      "versions": [
+        "1.0.19"
+      ],
+      "latest_ppc64le_version": "1.0.19",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "jaxlib": {
+      "versions": [
+        "0.4.7"
+      ],
+      "latest_ppc64le_version": "0.4.7",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "jedi": {
+      "versions": [
+        "0.16.0",
+        "0.17.0",
+        "0.19.2",
+        "0.20.0"
+      ],
+      "latest_ppc64le_version": "0.16.0",
+      "latest_noarch_version": "0.16.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "jenkspy": {
+      "versions": [
+        "0.4.1"
+      ],
+      "latest_ppc64le_version": "0.4.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "jpype1": {
+      "versions": [
+        "1.5.0",
+        "1.5.2",
+        "1.6.0"
+      ],
+      "latest_ppc64le_version": "1.5.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "jq": {
+      "versions": [
+        "1.11.0"
+      ],
+      "latest_ppc64le_version": "1.11.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "jsonschema-specifications": {
+      "versions": [
+        "2024.10.1",
+        "2025.9.1"
+      ],
+      "latest_ppc64le_version": "2024.10.1",
+      "latest_noarch_version": "2024.10.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "jupyter": {
+      "versions": [
+        "1.1.1"
+      ],
+      "latest_ppc64le_version": "1.1.1",
+      "latest_noarch_version": "1.1.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "jupyter-core": {
+      "versions": [
+        "5.7.2",
+        "5.8.1",
+        "5.9.1"
+      ],
+      "latest_ppc64le_version": "5.7.2",
+      "latest_noarch_version": "5.7.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "kafka-python": {
+      "versions": [
+        "2.2.10"
+      ],
+      "latest_ppc64le_version": "2.2.10",
+      "latest_noarch_version": "2.2.10",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "keras": {
+      "versions": [
+        "3.10.0"
+      ],
+      "latest_ppc64le_version": "3.10.0",
+      "latest_noarch_version": "3.10.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "kiwisolver": {
+      "versions": [
+        "1.2.0",
+        "1.4.4",
+        "1.5.0"
+      ],
+      "latest_ppc64le_version": "1.2.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "krb5": {
+      "versions": [
+        "0.6.0",
+        "0.7.0",
+        "0.9.0"
+      ],
+      "latest_ppc64le_version": "0.6.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "lame": {
+      "versions": [
+        "3.100"
+      ],
+      "latest_ppc64le_version": "3.100",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "langchain": {
+      "versions": [
+        "0.3.26",
+        "0.3.27",
+        "1.2.10"
+      ],
+      "latest_ppc64le_version": "0.3.26",
+      "latest_noarch_version": "0.3.26",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "langchain-classic": {
+      "versions": [
+        "1.0.1"
+      ],
+      "latest_ppc64le_version": "1.0.1",
+      "latest_noarch_version": "1.0.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "langdetect": {
+      "versions": [
+        "1.0.8"
+      ],
+      "latest_ppc64le_version": "1.0.8",
+      "latest_noarch_version": "1.0.8",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "langgraph": {
+      "versions": [
+        "1.0.9",
+        "1.1.7a2"
+      ],
+      "latest_ppc64le_version": "1.0.9",
+      "latest_noarch_version": "1.0.9",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "lapack": {
+      "versions": [
+        "3.12.1"
+      ],
+      "latest_ppc64le_version": "3.12.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "libclang": {
+      "versions": [
+        "14.0.6",
+        "18.1.1"
+      ],
+      "latest_ppc64le_version": "14.0.6",
+      "latest_noarch_version": "14.0.6",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "libprotobuf": {
+      "versions": [
+        "21.12",
+        "25.0",
+        "25.4",
+        "25.8",
+        "28.0",
+        "4.25.3",
+        "4.25.8"
+      ],
+      "latest_ppc64le_version": "21.12",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "librt": {
+      "versions": [
+        "0.11.0",
+        "0.8.1",
+        "0.9.0"
+      ],
+      "latest_ppc64le_version": "0.11.0",
+      "latest_noarch_version": "0.8.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "libvpx": {
+      "versions": [
+        "1.13.1",
+        "1.9.0"
+      ],
+      "latest_ppc64le_version": "1.13.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "lightgbm": {
+      "versions": [
+        "3.3.2",
+        "4.2.0",
+        "4.5.0",
+        "4.6.0"
+      ],
+      "latest_ppc64le_version": "3.3.2",
+      "latest_noarch_version": "3.3.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "lingua-language-detector": {
+      "versions": [
+        "2.2.0"
+      ],
+      "latest_ppc64le_version": "2.2.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "litellm": {
+      "versions": [
+        "1.93.0"
+      ],
+      "latest_ppc64le_version": "1.93.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "llama-cpp-python-package": {
+      "versions": [
+        "1.0"
+      ],
+      "latest_ppc64le_version": "1.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "llguidance": {
+      "versions": [
+        "0.7.19",
+        "1.2.0",
+        "1.3.0",
+        "1.4.0",
+        "1.7.5"
+      ],
+      "latest_ppc64le_version": "0.7.19",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "llvmlite": {
+      "versions": [
+        "0.40.0",
+        "0.42.0",
+        "0.44.0",
+        "0.44.0rc1",
+        "0.45.1",
+        "0.46.0",
+        "0.47.0"
+      ],
+      "latest_ppc64le_version": "0.40.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "luigi": {
+      "versions": [
+        "3.6.0"
+      ],
+      "latest_ppc64le_version": "3.6.0",
+      "latest_noarch_version": "3.6.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "lxml": {
+      "versions": [
+        "4.9.2",
+        "4.9.3",
+        "6.0.2",
+        "6.1.0"
+      ],
+      "latest_ppc64le_version": "4.9.2",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "lz4": {
+      "versions": [
+        "4.4.5"
+      ],
+      "latest_ppc64le_version": "4.4.5",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "macs3": {
+      "versions": [
+        "3.0.1",
+        "3.0.3"
+      ],
+      "latest_ppc64le_version": "3.0.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "markdown": {
+      "versions": [
+        "3.10.2",
+        "3.6",
+        "3.8",
+        "3.8.2"
+      ],
+      "latest_ppc64le_version": "3.10.2",
+      "latest_noarch_version": "3.10.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "markupsafe": {
+      "versions": [
+        "2.1.1",
+        "2.1.5",
+        "3.0.2",
+        "3.0.3"
+      ],
+      "latest_ppc64le_version": "2.1.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "matplotlib": {
+      "versions": [
+        "3.10.0",
+        "3.10.1",
+        "3.10.3",
+        "3.10.5",
+        "3.10.6",
+        "3.10.7",
+        "3.10.8",
+        "3.10.9",
+        "3.11.0",
+        "3.7.1",
+        "3.8.0",
+        "3.9.4"
+      ],
+      "latest_ppc64le_version": "3.10.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "milvus-lite": {
+      "versions": [
+        "2.4.11",
+        "2.4.12",
+        "2.5.0",
+        "2.5.1"
+      ],
+      "latest_ppc64le_version": "2.4.11",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "mistral-common": {
+      "versions": [
+        "1.11.5"
+      ],
+      "latest_ppc64le_version": "1.11.5",
+      "latest_noarch_version": "1.11.5",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "ml-dtypes": {
+      "versions": [
+        "0.1.0",
+        "0.2.0",
+        "0.4.1",
+        "0.5.0",
+        "0.5.1",
+        "0.5.3",
+        "0.5.4"
+      ],
+      "latest_ppc64le_version": "0.1.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "ml-metadata": {
+      "versions": [
+        "1.17.0"
+      ],
+      "latest_ppc64le_version": "1.17.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "mock": {
+      "versions": [
+        "5.2.0"
+      ],
+      "latest_ppc64le_version": "5.2.0",
+      "latest_noarch_version": "5.2.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "mongoengine": {
+      "versions": [
+        "0.29.1"
+      ],
+      "latest_ppc64le_version": "0.29.1",
+      "latest_noarch_version": "0.29.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "mpmath": {
+      "versions": [
+        "1.3.0"
+      ],
+      "latest_ppc64le_version": "1.3.0",
+      "latest_noarch_version": "1.3.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "msgpack": {
+      "versions": [
+        "1.1.0",
+        "1.1.1",
+        "1.1.2",
+        "1.2.1"
+      ],
+      "latest_ppc64le_version": "1.1.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "msgspec": {
+      "versions": [
+        "0.18.6",
+        "0.19.0"
+      ],
+      "latest_ppc64le_version": "0.18.6",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "multidict": {
+      "versions": [
+        "6.0.2",
+        "6.7.1"
+      ],
+      "latest_ppc64le_version": "6.0.2",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "multipart": {
+      "versions": [
+        "1.2.0",
+        "1.2.1",
+        "1.3.0",
+        "1.3.1"
+      ],
+      "latest_ppc64le_version": "1.2.0",
+      "latest_noarch_version": "1.2.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "murmurhash": {
+      "versions": [
+        "1.0.15"
+      ],
+      "latest_ppc64le_version": "1.0.15",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "natsort": {
+      "versions": [
+        "8.4.0"
+      ],
+      "latest_ppc64le_version": "8.4.0",
+      "latest_noarch_version": "8.4.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "nbconvert": {
+      "versions": [
+        "7.16.4",
+        "7.16.5",
+        "7.16.6",
+        "7.17.0",
+        "7.17.1"
+      ],
+      "latest_ppc64le_version": "7.16.4",
+      "latest_noarch_version": "7.16.4",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "nbformat": {
+      "versions": [
+        "5.10.3",
+        "5.10.4"
+      ],
+      "latest_ppc64le_version": "5.10.3",
+      "latest_noarch_version": "5.10.3",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "networkx": {
+      "versions": [
+        "3.6.1"
+      ],
+      "latest_ppc64le_version": "3.6.1",
+      "latest_noarch_version": "3.6.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "nodejs-wheel-binaries": {
+      "versions": [
+        "22.20.0"
+      ],
+      "latest_ppc64le_version": "22.20.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "notebook": {
+      "versions": [
+        "6.5.4",
+        "6.5.7"
+      ],
+      "latest_ppc64le_version": "6.5.4",
+      "latest_noarch_version": "6.5.4",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "numactl": {
+      "versions": [
+        "2.0.19"
+      ],
+      "latest_ppc64le_version": "2.0.19",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "numba": {
+      "versions": [
+        "0.57.0",
+        "0.59.0",
+        "0.61.2",
+        "0.62.0",
+        "0.62.0.dev0",
+        "0.62.1",
+        "0.63.1",
+        "0.65.0",
+        "0.65.1"
+      ],
+      "latest_ppc64le_version": "0.57.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "numexpr": {
+      "versions": [
+        "2.10.2",
+        "2.11.0",
+        "2.12.1",
+        "2.13.0",
+        "2.13.1",
+        "2.14.1",
+        "2.8.4",
+        "2.8.7"
+      ],
+      "latest_ppc64le_version": "2.10.2",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "numpy": {
+      "versions": [
+        "1.23.5",
+        "1.24.2",
+        "1.26.0",
+        "1.26.4",
+        "2.0.2",
+        "2.2.2",
+        "2.2.3",
+        "2.2.4",
+        "2.2.5",
+        "2.2.6",
+        "2.3.0",
+        "2.3.1",
+        "2.3.2",
+        "2.3.3",
+        "2.3.4",
+        "2.3.5",
+        "2.4.0",
+        "2.4.1",
+        "2.4.2",
+        "2.4.3",
+        "2.4.4",
+        "2.4.6",
+        "2.5.1"
+      ],
+      "latest_ppc64le_version": "1.23.5",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "ollama-python-package": {
+      "versions": [
+        "0.12.10",
+        "0.13.1",
+        "0.13.5",
+        "0.20.3",
+        "0.23.1",
+        "0.30.10"
+      ],
+      "latest_ppc64le_version": "0.12.10",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "onigurumacffi": {
+      "versions": [
+        "1.5.0"
+      ],
+      "latest_ppc64le_version": "1.5.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "onnx": {
+      "versions": [
+        "1.13.1",
+        "1.16.0",
+        "1.17.0",
+        "1.18.0",
+        "1.19.0",
+        "1.19.1",
+        "1.20.0",
+        "1.20.1",
+        "1.21.0"
+      ],
+      "latest_ppc64le_version": "1.13.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "onnxconverter-common": {
+      "versions": [
+        "1.14.0"
+      ],
+      "latest_ppc64le_version": "1.14.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "onnxmltools": {
+      "versions": [
+        "1.13.0"
+      ],
+      "latest_ppc64le_version": "1.13.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "onnxruntime": {
+      "versions": [
+        "1.20.1",
+        "1.21.0",
+        "1.21.1",
+        "1.22.0",
+        "1.22.1",
+        "1.23.0",
+        "1.23.1",
+        "1.23.2",
+        "1.25.1",
+        "1.26.0",
+        "1.27.0"
+      ],
+      "latest_ppc64le_version": "1.20.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "openai-harmony": {
+      "versions": [
+        "0.0.4",
+        "0.0.8"
+      ],
+      "latest_ppc64le_version": "0.0.4",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "openapi-schema-validator": {
+      "versions": [
+        "0.6.3"
+      ],
+      "latest_ppc64le_version": "0.6.3",
+      "latest_noarch_version": "0.6.3",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "openblas": {
+      "versions": [
+        "0.3.29",
+        "0.3.30",
+        "0.3.32",
+        "0.3.33",
+        "0.3.34"
+      ],
+      "latest_ppc64le_version": "0.3.29",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "opencv-python": {
+      "versions": [
+        "4.10.0.84",
+        "4.13.0.92",
+        "5.0.0.93"
+      ],
+      "latest_ppc64le_version": "4.10.0.84",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "opencv-python-headless": {
+      "versions": [
+        "4.10.0.84",
+        "4.11.0.86",
+        "4.12.0.88",
+        "4.13.0.92",
+        "5.0.0.93"
+      ],
+      "latest_ppc64le_version": "4.10.0.84",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "openmpi": {
+      "versions": [
+        "5.0.6",
+        "5.0.8"
+      ],
+      "latest_ppc64le_version": "5.0.6",
+      "latest_noarch_version": "5.0.6",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "opentelemetry-python": {
+      "versions": [
+        "1.37.0"
+      ],
+      "latest_ppc64le_version": "1.37.0",
+      "latest_noarch_version": "1.37.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "opus": {
+      "versions": [
+        "1.3.1"
+      ],
+      "latest_ppc64le_version": "1.3.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "oracledb": {
+      "versions": [
+        "2.5.1"
+      ],
+      "latest_ppc64le_version": "2.5.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "orange3": {
+      "versions": [
+        "3.38.1"
+      ],
+      "latest_ppc64le_version": "3.38.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "orc": {
+      "versions": [
+        "2.0.3"
+      ],
+      "latest_ppc64le_version": "2.0.3",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "ormsgpack": {
+      "versions": [
+        "1.10.0",
+        "1.11.0",
+        "1.12.0",
+        "1.12.2",
+        "1.9.1"
+      ],
+      "latest_ppc64le_version": "1.10.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "outlines-core": {
+      "versions": [
+        "0.1.26",
+        "0.2.11",
+        "0.2.14"
+      ],
+      "latest_ppc64le_version": "0.1.26",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "paddlepaddle": {
+      "versions": [
+        "3.0.0"
+      ],
+      "latest_ppc64le_version": "3.0.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pallets-sphinx-themes": {
+      "versions": [
+        "2.3.0"
+      ],
+      "latest_ppc64le_version": "2.3.0",
+      "latest_noarch_version": "2.3.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "pandas": {
+      "versions": [
+        "1.5.3",
+        "2.1.1",
+        "2.1.4",
+        "2.2.3",
+        "2.3.0",
+        "2.3.1",
+        "2.3.2",
+        "2.3.3",
+        "3.0.0",
+        "3.0.1",
+        "3.0.2",
+        "3.0.3",
+        "3.0.5"
+      ],
+      "latest_ppc64le_version": "1.5.3",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "param": {
+      "versions": [
+        "1.13.0",
+        "2.0.0",
+        "2.0.1",
+        "2.0.2",
+        "2.1.0",
+        "2.1.1",
+        "2.2.0",
+        "2.2.1",
+        "2.3.0",
+        "2.3.1",
+        "2.3.2",
+        "2.3.3",
+        "2.4.0",
+        "2.4.1"
+      ],
+      "latest_ppc64le_version": "1.13.0",
+      "latest_noarch_version": "1.13.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "partd": {
+      "versions": [
+        "1.4.1",
+        "1.4.2"
+      ],
+      "latest_ppc64le_version": "1.4.1",
+      "latest_noarch_version": "1.4.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "patroni": {
+      "versions": [
+        "4.0.5"
+      ],
+      "latest_ppc64le_version": "4.0.5",
+      "latest_noarch_version": "4.0.5",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "persistent": {
+      "versions": [
+        "5.2",
+        "6.1.1",
+        "6.5"
+      ],
+      "latest_ppc64le_version": "5.2",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pillow": {
+      "versions": [
+        "10.0.1",
+        "10.3.0",
+        "10.4.0",
+        "11.0.0",
+        "11.1.0",
+        "11.2.1",
+        "11.3.0",
+        "12.0.0",
+        "12.1.0",
+        "12.1.1",
+        "12.2.0",
+        "12.3.0"
+      ],
+      "latest_ppc64le_version": "10.0.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pint": {
+      "versions": [
+        "0.24.4"
+      ],
+      "latest_ppc64le_version": "0.24.4",
+      "latest_noarch_version": "0.24.4",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "playwright": {
+      "versions": [
+        "1.61.0"
+      ],
+      "latest_ppc64le_version": "1.61.0",
+      "latest_noarch_version": "1.61.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "poetry": {
+      "versions": [
+        "1.8.3",
+        "1.8.5",
+        "2.3.3",
+        "2.3.4"
+      ],
+      "latest_ppc64le_version": "1.8.3",
+      "latest_noarch_version": "1.8.3",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "poetry-plugin-export": {
+      "versions": [
+        "1.8.0"
+      ],
+      "latest_ppc64le_version": "1.8.0",
+      "latest_noarch_version": "1.8.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "polars": {
+      "versions": [
+        "1.38.1"
+      ],
+      "latest_ppc64le_version": "1.38.1",
+      "latest_noarch_version": "1.38.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "polars-runtime-32": {
+      "versions": [
+        "1.38.1"
+      ],
+      "latest_ppc64le_version": "1.38.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "polars-runtime-64": {
+      "versions": [
+        "1.38.1"
+      ],
+      "latest_ppc64le_version": "1.38.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "polars-runtime-compat": {
+      "versions": [
+        "1.38.1"
+      ],
+      "latest_ppc64le_version": "1.38.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "preshed": {
+      "versions": [
+        "3.0.13"
+      ],
+      "latest_ppc64le_version": "3.0.13",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "promise": {
+      "versions": [
+        "2.3"
+      ],
+      "latest_ppc64le_version": "2.3",
+      "latest_noarch_version": "2.3",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "propcache": {
+      "versions": [
+        "0.5.2"
+      ],
+      "latest_ppc64le_version": "0.5.2",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "protobuf": {
+      "versions": [
+        "4.21.12",
+        "4.25.3",
+        "4.25.8"
+      ],
+      "latest_ppc64le_version": "4.21.12",
+      "latest_noarch_version": "4.21.12",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "psutil": {
+      "versions": [
+        "5.9.0",
+        "5.9.8",
+        "6.1.1",
+        "7.0.0",
+        "7.1.0",
+        "7.1.1",
+        "7.1.2",
+        "7.1.3",
+        "7.2.2"
+      ],
+      "latest_ppc64le_version": "5.9.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "psycopg2": {
+      "versions": [
+        "2.9.10",
+        "2.9.11",
+        "2.9.12",
+        "2.9.3",
+        "2.9.6"
+      ],
+      "latest_ppc64le_version": "2.9.10",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pulsar-client": {
+      "versions": [
+        "3.5.0",
+        "3.6.0",
+        "3.6.1",
+        "3.7.0",
+        "3.8.0"
+      ],
+      "latest_ppc64le_version": "3.5.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pure-eval": {
+      "versions": [
+        "0.2.3"
+      ],
+      "latest_ppc64le_version": "0.2.3",
+      "latest_noarch_version": "0.2.3",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "py-make": {
+      "versions": [
+        "0.1.2"
+      ],
+      "latest_ppc64le_version": "0.1.2",
+      "latest_noarch_version": "0.1.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "py-rust-stemmers": {
+      "versions": [
+        "0.1.8"
+      ],
+      "latest_ppc64le_version": "0.1.8",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pyarrow": {
+      "versions": [
+        "11.0.0",
+        "15.0.1",
+        "18.0.0",
+        "18.1.0",
+        "19.0.0",
+        "19.0.1",
+        "20.0.0",
+        "21.0.0",
+        "22.0.0",
+        "23.0.0",
+        "23.0.1"
+      ],
+      "latest_ppc64le_version": "11.0.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pyclaw": {
+      "versions": [
+        "5.12.0"
+      ],
+      "latest_ppc64le_version": "5.12.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pyclipper": {
+      "versions": [
+        "1.3.0.post5",
+        "1.3.0.post6",
+        "1.4.0"
+      ],
+      "latest_ppc64le_version": "1.3.0.post5",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pycryptodome": {
+      "versions": [
+        "3.21.0",
+        "3.23.0"
+      ],
+      "latest_ppc64le_version": "3.21.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pycurl": {
+      "versions": [
+        "7.45.6"
+      ],
+      "latest_ppc64le_version": "7.45.6",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pydantic": {
+      "versions": [
+        "2.10.3",
+        "2.12.5",
+        "2.13.4"
+      ],
+      "latest_ppc64le_version": "2.10.3",
+      "latest_noarch_version": "2.10.3",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "pydantic-core": {
+      "versions": [
+        "2.27.1",
+        "2.41.5"
+      ],
+      "latest_ppc64le_version": "2.27.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pygments": {
+      "versions": [
+        "2.19.1",
+        "2.19.2",
+        "2.20.0"
+      ],
+      "latest_ppc64le_version": "2.19.1",
+      "latest_noarch_version": "2.19.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "pyhdf": {
+      "versions": [
+        "0.11.6"
+      ],
+      "latest_ppc64le_version": "0.11.6",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pyiceberg": {
+      "versions": [
+        "0.8.1"
+      ],
+      "latest_ppc64le_version": "0.8.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pyjarowinkler": {
+      "versions": [
+        "2.0.0"
+      ],
+      "latest_ppc64le_version": "2.0.0",
+      "latest_noarch_version": "2.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "pyjnius": {
+      "versions": [
+        "1.6.1"
+      ],
+      "latest_ppc64le_version": "1.6.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pylatexenc": {
+      "versions": [
+        "2.1",
+        "2.10"
+      ],
+      "latest_ppc64le_version": "2.1",
+      "latest_noarch_version": "2.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "pymongo": {
+      "versions": [
+        "4.13.0",
+        "4.17.0",
+        "4.6.2"
+      ],
+      "latest_ppc64le_version": "4.13.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pymssql": {
+      "versions": [
+        "2.2.5",
+        "2.3.10",
+        "2.3.11",
+        "2.3.13",
+        "2.3.2",
+        "2.3.4",
+        "2.3.7",
+        "2.3.8",
+        "2.3.9"
+      ],
+      "latest_ppc64le_version": "2.2.5",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pynacl": {
+      "versions": [
+        "1.6.2"
+      ],
+      "latest_ppc64le_version": "1.6.2",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pyodbc": {
+      "versions": [
+        "4.0.34",
+        "4.0.39",
+        "5.0.0",
+        "5.2.0",
+        "5.3.0"
+      ],
+      "latest_ppc64le_version": "4.0.34",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pyopengl": {
+      "versions": [
+        "3.1.7"
+      ],
+      "latest_ppc64le_version": "3.1.7",
+      "latest_noarch_version": "3.1.7",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "pyopengl-accelerate": {
+      "versions": [
+        "3.1.10",
+        "3.1.7"
+      ],
+      "latest_ppc64le_version": "3.1.10",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pyparsing": {
+      "versions": [
+        "3.2.1",
+        "3.2.3",
+        "3.2.5",
+        "3.3.1",
+        "3.3.2"
+      ],
+      "latest_ppc64le_version": "3.2.1",
+      "latest_noarch_version": "3.2.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "pyphen": {
+      "versions": [
+        "0.14.0",
+        "0.17.2"
+      ],
+      "latest_ppc64le_version": "0.14.0",
+      "latest_noarch_version": "0.14.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "pypika": {
+      "versions": [
+        "0.48.9",
+        "0.49.0"
+      ],
+      "latest_ppc64le_version": "0.48.9",
+      "latest_noarch_version": "0.48.9",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "pyproj": {
+      "versions": [
+        "3.6.1",
+        "3.7.0",
+        "3.7.1"
+      ],
+      "latest_ppc64le_version": "3.6.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pyramid-debugtoolbar": {
+      "versions": [
+        "4.12.1"
+      ],
+      "latest_ppc64le_version": "4.12.1",
+      "latest_noarch_version": "4.12.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "pyramid-jinja2": {
+      "versions": [
+        "2.10",
+        "2.10.1",
+        "2.9"
+      ],
+      "latest_ppc64le_version": "2.10",
+      "latest_noarch_version": "2.10",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "pyro4": {
+      "versions": [
+        "4.82"
+      ],
+      "latest_ppc64le_version": "4.82",
+      "latest_noarch_version": "4.82",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "pyrsistent": {
+      "versions": [
+        "0.18.0"
+      ],
+      "latest_ppc64le_version": "0.18.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pyspnego": {
+      "versions": [
+        "0.10.2"
+      ],
+      "latest_ppc64le_version": "0.10.2",
+      "latest_noarch_version": "0.10.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "pysyncobj": {
+      "versions": [
+        "0.3.14"
+      ],
+      "latest_ppc64le_version": "0.3.14",
+      "latest_noarch_version": "0.3.14",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "pytest-aiohttp": {
+      "versions": [
+        "1.0.5"
+      ],
+      "latest_ppc64le_version": "1.0.5",
+      "latest_noarch_version": "1.0.5",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "pytest-mock": {
+      "versions": [
+        "3.14.1",
+        "3.15.1"
+      ],
+      "latest_ppc64le_version": "3.14.1",
+      "latest_noarch_version": "3.14.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "pytest-mypy": {
+      "versions": [
+        "1.0.0",
+        "1.0.1"
+      ],
+      "latest_ppc64le_version": "1.0.0",
+      "latest_noarch_version": "1.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "python-memcached": {
+      "versions": [
+        "1.62"
+      ],
+      "latest_ppc64le_version": "1.62",
+      "latest_noarch_version": "1.62",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "PyWavelets": {
+      "versions": [
+        "1.4.1"
+      ],
+      "latest_ppc64le_version": "1.4.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pywavelets": {
+      "versions": [
+        "1.8.0",
+        "1.9.0"
+      ],
+      "latest_ppc64le_version": "1.8.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pyyaml": {
+      "versions": [
+        "6.0",
+        "6.0.1",
+        "6.0.2",
+        "6.0.3"
+      ],
+      "latest_ppc64le_version": "6.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "pyzmq": {
+      "versions": [
+        "23.2.0",
+        "25.1.0",
+        "26.2.1",
+        "26.3.0",
+        "26.4.0",
+        "27.0.0",
+        "27.0.1",
+        "27.0.2",
+        "27.1.0"
+      ],
+      "latest_ppc64le_version": "23.2.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "rake-nltk": {
+      "versions": [
+        "1.0.6"
+      ],
+      "latest_ppc64le_version": "1.0.6",
+      "latest_noarch_version": "1.0.6",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "ray": {
+      "versions": [
+        "2.47.1",
+        "2.52.1",
+        "2.53.0"
+      ],
+      "latest_ppc64le_version": "2.47.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "rdflib": {
+      "versions": [
+        "7.1.4"
+      ],
+      "latest_ppc64le_version": "7.1.4",
+      "latest_noarch_version": "7.1.4",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "re2": {
+      "versions": [
+        "20220401"
+      ],
+      "latest_ppc64le_version": "20220401",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "regex": {
+      "versions": [
+        "2024.11.6"
+      ],
+      "latest_ppc64le_version": "2024.11.6",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "requests-kerberos": {
+      "versions": [
+        "0.14.0"
+      ],
+      "latest_ppc64le_version": "0.14.0",
+      "latest_noarch_version": "0.14.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "requests-oauthlib": {
+      "versions": [
+        "2.0.0"
+      ],
+      "latest_ppc64le_version": "2.0.0",
+      "latest_noarch_version": "2.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "rfc3161-client": {
+      "versions": [
+        "1.0.6"
+      ],
+      "latest_ppc64le_version": "1.0.6",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "rope": {
+      "versions": [
+        "1.13.0"
+      ],
+      "latest_ppc64le_version": "1.13.0",
+      "latest_noarch_version": "1.13.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "rpds-py": {
+      "versions": [
+        "0.22.3",
+        "0.30.0"
+      ],
+      "latest_ppc64le_version": "0.22.3",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "rq": {
+      "versions": [
+        "2.3.2",
+        "2.3.3"
+      ],
+      "latest_ppc64le_version": "2.3.2",
+      "latest_noarch_version": "2.3.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "rtree": {
+      "versions": [
+        "1.4.1",
+        "1.4.1b1"
+      ],
+      "latest_ppc64le_version": "1.4.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "ruamel-yaml-clib": {
+      "versions": [
+        "0.2.11",
+        "0.2.14",
+        "0.2.15",
+        "0.2.6"
+      ],
+      "latest_ppc64le_version": "0.2.11",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "runai-model-streamer": {
+      "versions": [
+        "0.15.7",
+        "0.16.1"
+      ],
+      "latest_ppc64le_version": "0.15.7",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "runai-model-streamer-s3": {
+      "versions": [
+        "0.15.7",
+        "0.16.1"
+      ],
+      "latest_ppc64le_version": "0.15.7",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "s3transfer": {
+      "versions": [
+        "0.10.4",
+        "0.17.0"
+      ],
+      "latest_ppc64le_version": "0.10.4",
+      "latest_noarch_version": "0.10.4",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "scikit-image": {
+      "versions": [
+        "0.19.3",
+        "0.20.0",
+        "0.22.0",
+        "0.24.0",
+        "0.25.0",
+        "0.25.1",
+        "0.25.2",
+        "0.26.0"
+      ],
+      "latest_ppc64le_version": "0.19.3",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "scikit-learn": {
+      "versions": [
+        "1.1.1",
+        "1.3.0",
+        "1.5.2",
+        "1.6.0",
+        "1.6.1",
+        "1.7.0",
+        "1.7.1",
+        "1.7.2",
+        "1.8.0",
+        "1.9.0"
+      ],
+      "latest_ppc64le_version": "1.1.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "SciPy": {
+      "versions": [
+        "1.10.1",
+        "1.11.3",
+        "1.11.4"
+      ],
+      "latest_ppc64le_version": "1.10.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "scipy": {
+      "versions": [
+        "1.13.1",
+        "1.14.0",
+        "1.14.1",
+        "1.15.0",
+        "1.15.1",
+        "1.15.2",
+        "1.15.3",
+        "1.16.0",
+        "1.16.1",
+        "1.16.2",
+        "1.16.3",
+        "1.17.0",
+        "1.17.1",
+        "1.18.0"
+      ],
+      "latest_ppc64le_version": "1.13.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "seaborn": {
+      "versions": [
+        "0.13.2"
+      ],
+      "latest_ppc64le_version": "0.13.2",
+      "latest_noarch_version": "0.13.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "SecretStorage": {
+      "versions": [
+        "3.3.3"
+      ],
+      "latest_ppc64le_version": "3.3.3",
+      "latest_noarch_version": "3.3.3",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "selinux": {
+      "versions": [
+        "0.3.0"
+      ],
+      "latest_ppc64le_version": "0.3.0",
+      "latest_noarch_version": "0.3.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "semgrep-pre-commit-package": {
+      "versions": [
+        "1.123.0"
+      ],
+      "latest_ppc64le_version": "1.123.0",
+      "latest_noarch_version": "1.123.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "semver": {
+      "versions": [
+        "3.0.2",
+        "3.0.4"
+      ],
+      "latest_ppc64le_version": "3.0.2",
+      "latest_noarch_version": "3.0.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "sentencepiece": {
+      "versions": [
+        "0.1.97",
+        "0.1.99",
+        "0.2.0",
+        "0.2.1"
+      ],
+      "latest_ppc64le_version": "0.1.97",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "sentry-sdk": {
+      "versions": [
+        "2.29.1",
+        "2.33.0"
+      ],
+      "latest_ppc64le_version": "2.29.1",
+      "latest_noarch_version": "2.29.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "setools": {
+      "versions": [
+        "4.4.4"
+      ],
+      "latest_ppc64le_version": "4.4.4",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "Shapely": {
+      "versions": [
+        "1.8.5"
+      ],
+      "latest_ppc64le_version": "1.8.5",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "shapely": {
+      "versions": [
+        "2.0.6",
+        "2.0.7",
+        "2.1.0",
+        "2.1.1",
+        "2.1.2"
+      ],
+      "latest_ppc64le_version": "2.0.6",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "simplejson": {
+      "versions": [
+        "3.17.6"
+      ],
+      "latest_ppc64le_version": "3.17.6",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "simsimd": {
+      "versions": [
+        "6.5.16"
+      ],
+      "latest_ppc64le_version": "6.5.16",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "six": {
+      "versions": [
+        "1.16.0",
+        "1.17.0"
+      ],
+      "latest_ppc64le_version": "1.16.0",
+      "latest_noarch_version": "1.16.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "skl2onnx": {
+      "versions": [
+        "1.18.0"
+      ],
+      "latest_ppc64le_version": "1.18.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "sklearn-pandas": {
+      "versions": [
+        "2.2.0"
+      ],
+      "latest_ppc64le_version": "2.2.0",
+      "latest_noarch_version": "2.2.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "snappy": {
+      "versions": [
+        "1.2.2"
+      ],
+      "latest_ppc64le_version": "1.2.2",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "sniffio": {
+      "versions": [
+        "1.3.1"
+      ],
+      "latest_ppc64le_version": "1.3.1",
+      "latest_noarch_version": "1.3.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "snowflake-connector-python": {
+      "versions": [
+        "4.3.0",
+        "4.4.0"
+      ],
+      "latest_ppc64le_version": "4.3.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "softlayer": {
+      "versions": [
+        "6.2.3",
+        "6.2.6"
+      ],
+      "latest_ppc64le_version": "6.2.3",
+      "latest_noarch_version": "6.2.3",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "spacy": {
+      "versions": [
+        "3.8.7"
+      ],
+      "latest_ppc64le_version": "3.8.7",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "sparkmagic": {
+      "versions": [
+        "0.20.0"
+      ],
+      "latest_ppc64le_version": "0.20.0",
+      "latest_noarch_version": "0.20.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "sphinx": {
+      "versions": [
+        "8.2.3"
+      ],
+      "latest_ppc64le_version": "8.2.3",
+      "latest_noarch_version": "8.2.3",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "sphinx-autodoc-typehints": {
+      "versions": [
+        "3.2.0"
+      ],
+      "latest_ppc64le_version": "3.2.0",
+      "latest_noarch_version": "3.2.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "sphinx-gallery": {
+      "versions": [
+        "0.19.0"
+      ],
+      "latest_ppc64le_version": "0.19.0",
+      "latest_noarch_version": "0.19.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "sphinx-issues": {
+      "versions": [
+        "5.0.1"
+      ],
+      "latest_ppc64le_version": "5.0.1",
+      "latest_noarch_version": "5.0.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "sphinx-prompt": {
+      "versions": [
+        "1.9.0"
+      ],
+      "latest_ppc64le_version": "1.9.0",
+      "latest_noarch_version": "1.9.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "sphinx-rtd-theme": {
+      "versions": [
+        "3.0.0",
+        "3.0.0rc1",
+        "3.0.0rc2",
+        "3.0.2",
+        "3.1.0rc1"
+      ],
+      "latest_ppc64le_version": "3.0.0",
+      "latest_noarch_version": "3.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "sphinxcontrib-programoutput": {
+      "versions": [
+        "0.18"
+      ],
+      "latest_ppc64le_version": "0.18",
+      "latest_noarch_version": "0.18",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "sqlalchemy": {
+      "versions": [
+        "1.4.39",
+        "2.0.50"
+      ],
+      "latest_ppc64le_version": "1.4.39",
+      "latest_noarch_version": "2.0.50",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "sqlite-vec": {
+      "versions": [
+        "0.1.9"
+      ],
+      "latest_ppc64le_version": "0.1.9",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "srsly": {
+      "versions": [
+        "2.4.8",
+        "2.5.3"
+      ],
+      "latest_ppc64le_version": "2.4.8",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "statsmodels": {
+      "versions": [
+        "0.13.5",
+        "0.14.1.dev0",
+        "0.14.4",
+        "0.14.5",
+        "0.14.6"
+      ],
+      "latest_ppc64le_version": "0.13.5",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "stepflow-orchestrator": {
+      "versions": [
+        "0.13.0"
+      ],
+      "latest_ppc64le_version": null,
+      "latest_noarch_version": "0.13.0",
+      "has_ppc64le_wheel": false,
+      "has_noarch_wheel": true
+    },
+    "stripe": {
+      "versions": [
+        "10.5.0",
+        "12.2.0"
+      ],
+      "latest_ppc64le_version": "10.5.0",
+      "latest_noarch_version": "10.5.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "sympy": {
+      "versions": [
+        "1.11.1",
+        "1.12",
+        "1.15.0.dev0"
+      ],
+      "latest_ppc64le_version": "1.11.1",
+      "latest_noarch_version": "1.11.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "tbb": {
+      "versions": [
+        "2021.8.0"
+      ],
+      "latest_ppc64le_version": "2021.8.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "tensorboard-plugin-wit": {
+      "versions": [
+        "1.6.0"
+      ],
+      "latest_ppc64le_version": "1.6.0",
+      "latest_noarch_version": "1.6.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "tensorflow": {
+      "versions": [
+        "2.13.0",
+        "2.14.1",
+        "2.18.1"
+      ],
+      "latest_ppc64le_version": "2.13.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "tensorflow-datasets": {
+      "versions": [
+        "4.9.7"
+      ],
+      "latest_ppc64le_version": "4.9.7",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "tensorflow-io": {
+      "versions": [
+        "0.35.0"
+      ],
+      "latest_ppc64le_version": "0.35.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "tensorflow-io-gcs-filesystem": {
+      "versions": [
+        "0.35.0"
+      ],
+      "latest_ppc64le_version": "0.35.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "tensorflow-text": {
+      "versions": [
+        "2.14.0",
+        "2.18.1"
+      ],
+      "latest_ppc64le_version": "2.14.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "termcolor": {
+      "versions": [
+        "1.0.1",
+        "1.1.0",
+        "2.1.0",
+        "2.5.0",
+        "3.1.0",
+        "3.3.0"
+      ],
+      "latest_ppc64le_version": "1.0.1",
+      "latest_noarch_version": "1.0.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "terminado": {
+      "versions": [
+        "0.18.1"
+      ],
+      "latest_ppc64le_version": "0.18.1",
+      "latest_noarch_version": "0.18.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "tesserocr": {
+      "versions": [
+        "2.10.0",
+        "2.9.0",
+        "2.9.1"
+      ],
+      "latest_ppc64le_version": "2.10.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "textstat": {
+      "versions": [
+        "0.7.7"
+      ],
+      "latest_ppc64le_version": "0.7.7",
+      "latest_noarch_version": "0.7.7",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "tf2onnx": {
+      "versions": [
+        "1.15.1",
+        "1.16.1"
+      ],
+      "latest_ppc64le_version": "1.15.1",
+      "latest_noarch_version": "1.15.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "thinc": {
+      "versions": [
+        "8.3.6"
+      ],
+      "latest_ppc64le_version": "8.3.6",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "thrift-cpp": {
+      "versions": [
+        "0.18.0",
+        "0.21.0"
+      ],
+      "latest_ppc64le_version": "0.18.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "tiktoken": {
+      "versions": [
+        "0.12.0",
+        "0.13.0",
+        "0.7.0",
+        "0.9.0"
+      ],
+      "latest_ppc64le_version": "0.12.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "tilelang": {
+      "versions": [
+        "0.1.10"
+      ],
+      "latest_ppc64le_version": "0.1.10",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "tokenizers": {
+      "versions": [
+        "0.21.0",
+        "0.21.1"
+      ],
+      "latest_ppc64le_version": "0.21.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "torch": {
+      "versions": [
+        "2.0.0",
+        "2.0.1",
+        "2.1.0",
+        "2.1.2",
+        "2.10.0",
+        "2.11.0",
+        "2.12.0",
+        "2.12.1",
+        "2.13.0",
+        "2.5.1",
+        "2.6.0",
+        "2.7.1",
+        "2.8.0",
+        "2.9.0",
+        "2.9.1"
+      ],
+      "latest_ppc64le_version": "2.0.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "torch-c-dlpack-ext": {
+      "versions": [
+        "0.1.5"
+      ],
+      "latest_ppc64le_version": null,
+      "latest_noarch_version": "0.1.5",
+      "has_ppc64le_wheel": false,
+      "has_noarch_wheel": true
+    },
+    "torchaudio": {
+      "versions": [
+        "2.10.0",
+        "2.11.0",
+        "2.6.0",
+        "2.7.1",
+        "2.8.0",
+        "2.9.0",
+        "2.9.1"
+      ],
+      "latest_ppc64le_version": "2.10.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "torchdata": {
+      "versions": [
+        "0.7.1"
+      ],
+      "latest_ppc64le_version": "0.7.1",
+      "latest_noarch_version": "0.7.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "torchtext": {
+      "versions": [
+        "0.15.2",
+        "0.16.2",
+        "0.18.0"
+      ],
+      "latest_ppc64le_version": "0.15.2",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "torchvision": {
+      "versions": [
+        "0.16.1",
+        "0.16.2",
+        "0.21.0",
+        "0.22.0",
+        "0.22.1",
+        "0.24.0",
+        "0.24.1",
+        "0.25.0",
+        "0.26.0",
+        "0.27.0",
+        "0.27.1"
+      ],
+      "latest_ppc64le_version": "0.16.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "tornado": {
+      "versions": [
+        "6.3.3",
+        "6.4.1",
+        "6.4.2",
+        "6.5.1",
+        "6.5.2",
+        "6.5.3",
+        "6.5.4",
+        "6.5.5"
+      ],
+      "latest_ppc64le_version": "6.3.3",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "traceloop-sdk": {
+      "versions": [
+        "0.60.0"
+      ],
+      "latest_ppc64le_version": null,
+      "latest_noarch_version": "0.60.0",
+      "has_ppc64le_wheel": false,
+      "has_noarch_wheel": true
+    },
+    "traitlets": {
+      "versions": [
+        "5.7.1"
+      ],
+      "latest_ppc64le_version": "5.7.1",
+      "latest_noarch_version": "5.7.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "transformers": {
+      "versions": [
+        "4.57.1",
+        "4.57.6",
+        "5.1.0"
+      ],
+      "latest_ppc64le_version": "4.57.1",
+      "latest_noarch_version": "4.57.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "tree-sitter": {
+      "versions": [
+        "0.25.2",
+        "0.26.0"
+      ],
+      "latest_ppc64le_version": "0.25.2",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "tree-sitter-c": {
+      "versions": [
+        "0.23.2",
+        "0.23.4",
+        "0.24.1",
+        "0.24.2"
+      ],
+      "latest_ppc64le_version": "0.23.2",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "tree-sitter-javascript": {
+      "versions": [
+        "0.23.1",
+        "0.25.0"
+      ],
+      "latest_ppc64le_version": "0.23.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "tree-sitter-python": {
+      "versions": [
+        "0.23.6",
+        "0.25.0"
+      ],
+      "latest_ppc64le_version": "0.23.6",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "tree-sitter-typescript": {
+      "versions": [
+        "0.23.2"
+      ],
+      "latest_ppc64le_version": "0.23.2",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "treepoem": {
+      "versions": [
+        "3.24.0",
+        "3.27.1"
+      ],
+      "latest_ppc64le_version": "3.24.0",
+      "latest_noarch_version": "3.24.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "triton": {
+      "versions": [
+        "3.6.0"
+      ],
+      "latest_ppc64le_version": "3.6.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "truststore": {
+      "versions": [
+        "0.10.0"
+      ],
+      "latest_ppc64le_version": "0.10.0",
+      "latest_noarch_version": "0.10.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "tzdata": {
+      "versions": [
+        "2025.1",
+        "2025.2",
+        "2026.2"
+      ],
+      "latest_ppc64le_version": "2025.1",
+      "latest_noarch_version": "2025.1",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "ujson": {
+      "versions": [
+        "5.10.0",
+        "5.11.0",
+        "5.12.0",
+        "5.12.1",
+        "5.13.0"
+      ],
+      "latest_ppc64le_version": "5.10.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "unicodedata2": {
+      "versions": [
+        "15.1.0",
+        "16.0.0",
+        "17.0.0",
+        "17.0.1"
+      ],
+      "latest_ppc64le_version": "15.1.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "uritools": {
+      "versions": [
+        "4.0.2",
+        "5.0.0"
+      ],
+      "latest_ppc64le_version": "4.0.2",
+      "latest_noarch_version": "4.0.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "utf8proc": {
+      "versions": [
+        "2.6.1"
+      ],
+      "latest_ppc64le_version": "2.6.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "uvloop": {
+      "versions": [
+        "0.21.0",
+        "0.22.1"
+      ],
+      "latest_ppc64le_version": "0.21.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "uvtools": {
+      "versions": [
+        "0.2.0"
+      ],
+      "latest_ppc64le_version": "0.2.0",
+      "latest_noarch_version": "0.2.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "vllm": {
+      "versions": [
+        "0.11.1",
+        "0.15.1",
+        "0.16.0",
+        "0.18.1",
+        "0.21.0",
+        "0.22.0",
+        "0.23.0",
+        "0.24.0",
+        "0.25.0",
+        "0.26.0",
+        "0.8.4"
+      ],
+      "latest_ppc64le_version": "0.11.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "watchdog": {
+      "versions": [
+        "6.0.0"
+      ],
+      "latest_ppc64le_version": "6.0.0",
+      "latest_noarch_version": "6.0.0",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "watchfiles": {
+      "versions": [
+        "0.21.0"
+      ],
+      "latest_ppc64le_version": "0.21.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "wrapt": {
+      "versions": [
+        "1.14.1",
+        "1.17.2",
+        "1.17.3"
+      ],
+      "latest_ppc64le_version": "1.14.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "xattr": {
+      "versions": [
+        "1.1.4",
+        "1.2.0",
+        "1.3.0"
+      ],
+      "latest_ppc64le_version": "1.1.4",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "xformers": {
+      "versions": [
+        "0.0.29",
+        "0.0.30"
+      ],
+      "latest_ppc64le_version": "0.0.29",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "xgboost": {
+      "versions": [
+        "1.6.2",
+        "2.0.3",
+        "2.1.3",
+        "3.0.1",
+        "3.0.2"
+      ],
+      "latest_ppc64le_version": "1.6.2",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "xgboost-cpu": {
+      "versions": [
+        "2.1.4",
+        "3.0.1",
+        "3.0.2",
+        "3.0.3",
+        "3.0.4",
+        "3.0.5",
+        "3.1.0",
+        "3.1.1",
+        "3.1.2",
+        "3.1.3",
+        "3.2.0"
+      ],
+      "latest_ppc64le_version": "2.1.4",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "xgrammar": {
+      "versions": [
+        "0.1.18",
+        "0.1.25",
+        "0.1.29",
+        "0.1.33",
+        "0.2.0",
+        "0.2.1",
+        "0.2.3"
+      ],
+      "latest_ppc64le_version": "0.1.18",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "yarl": {
+      "versions": [
+        "1.18.3",
+        "1.21.0",
+        "1.23.0"
+      ],
+      "latest_ppc64le_version": "1.18.3",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "z3-solver": {
+      "versions": [
+        "4.15.4.0",
+        "5.0.0.0"
+      ],
+      "latest_ppc64le_version": "4.15.4.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "ZConfig": {
+      "versions": [
+        "4.2"
+      ],
+      "latest_ppc64le_version": "4.2",
+      "latest_noarch_version": "4.2",
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": true
+    },
+    "zeroconf": {
+      "versions": [
+        "0.147.4",
+        "0.149.0",
+        "0.150.0"
+      ],
+      "latest_ppc64le_version": "0.147.4",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "zfpy": {
+      "versions": [
+        "1.0.0",
+        "1.0.1"
+      ],
+      "latest_ppc64le_version": "1.0.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "zope-interface": {
+      "versions": [
+        "8.0"
+      ],
+      "latest_ppc64le_version": "8.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "zstandard": {
+      "versions": [
+        "0.19.0",
+        "0.25.0"
+      ],
+      "latest_ppc64le_version": "0.19.0",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    },
+    "zstd": {
+      "versions": [
+        "1.5.5.1",
+        "1.5.6.1",
+        "1.5.7.2",
+        "1.5.7.3"
+      ],
+      "latest_ppc64le_version": "1.5.5.1",
+      "latest_noarch_version": null,
+      "has_ppc64le_wheel": true,
+      "has_noarch_wheel": false
+    }
+  }
+}

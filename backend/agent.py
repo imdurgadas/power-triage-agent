@@ -15,6 +15,8 @@ from .models import (
     AgentStep,
     AvailabilityStatus,
     SalesRecommendationTier,
+    DeliverableType,
+    DeliverableMatchStatus,
     RecommendationTrafficLight,
     SIMDPortingComplexity,
     TestDependency,
@@ -136,6 +138,10 @@ class TriageAgent:
         steps: List[AgentStep] = []
         step_counter = 1
 
+        # Resolve effective OS and platform from combined environment field
+        effective_os = request.effective_os()
+        deliverable_type: DeliverableType = request.deliverable_type
+
         # Step 1: Ingestion & Normalization
         yield {
             "type": "step",
@@ -145,13 +151,68 @@ class TriageAgent:
                 action_type="plan",
                 target="Input Manifests",
                 thought="Ingesting provided input and standardizing packages into canonical Package URLs (PURL).",
-                detail=f"Target OS: {request.target_os.value.upper()} on {request.target_platform.value.upper()} (ppc64le). Depth: {request.triage_depth.value}."
+                detail=(
+                    f"Target: {request.target_environment.display} (ppc64le). "
+                    f"Deliverable: {deliverable_type.value.replace('_', ' ').title()}. "
+                    f"Depth: {request.triage_depth.value}."
+                )
             ).model_dump()
         }
         await asyncio.sleep(0.3)
         step_counter += 1
 
         raw_text = request.raw_manifest or ""
+
+        # --- Image ingestion: extract manifest text from uploaded image via Gemini vision ---
+        if request.image_data_base64 and self.gemini_client:
+            yield {
+                "type": "step",
+                "step": AgentStep(
+                    step_id=step_counter,
+                    agent_name="VisionAgent",
+                    action_type="llm_reasoning",
+                    target="Uploaded Image",
+                    thought="Analysing uploaded image with Gemini Vision to extract dependency manifest text.",
+                    detail="OCR + semantic extraction of packages, versions, and ecosystems visible in the image."
+                ).model_dump()
+            }
+            await asyncio.sleep(0.2)
+            step_counter += 1
+
+            vision_prompt = (
+                "You are an IBM Power porting assistant. The user has uploaded an image that contains a software dependency "
+                "manifest, Dockerfile, requirements file, architecture diagram, or similar artefact.\n"
+                "Extract all software packages, container images, and libraries visible in the image and return them as "
+                "a plain-text list, one entry per line, preserving version numbers where shown "
+                "(e.g. 'nginx:1.24', 'torch==2.1.0', 'libssl-dev'). "
+                "If the image contains a Dockerfile, reproduce the FROM and RUN apt-get/pip install lines verbatim. "
+                "Output ONLY the extracted manifest text — no commentary, no markdown fences."
+            )
+            extracted = generate_gemini_content(
+                self.gemini_client,
+                vision_prompt,
+                json_mode=False,
+                image_data_base64=request.image_data_base64,
+                image_media_type=request.image_media_type or "image/png",
+            )
+            if extracted and extracted.strip():
+                # Merge with any typed text — image text takes precedence if no text was supplied
+                raw_text = (raw_text + "\n" + extracted).strip() if raw_text else extracted.strip()
+                yield {
+                    "type": "step",
+                    "step": AgentStep(
+                        step_id=step_counter,
+                        agent_name="VisionAgent",
+                        action_type="llm_reasoning",
+                        target="Uploaded Image",
+                        thought=f"Vision extraction complete — {len(extracted.splitlines())} lines of manifest text recovered from image.",
+                        detail=extracted[:200] + ("..." if len(extracted) > 200 else "")
+                    ).model_dump()
+                }
+                await asyncio.sleep(0.2)
+                step_counter += 1
+        # ---------------------------------------------------------------------------------
+
         parsed_items = UniversalNormalizer.normalize(raw_text, request.manifest_type or "auto")
 
         # Provenance detection & URL extraction
@@ -323,14 +384,16 @@ class TriageAgent:
                     agent_name="AvailabilityProber",
                     action_type="lookup",
                     target=f"{name} ({eco})",
-                    thought=f"Consulting live registries (Quay.io/Docker Hub), {request.target_os.value} repos, and Gemini LLM for {name} ({version}) on ppc64le...",
+                    thought=f"Consulting live registries (Quay.io/Docker Hub), {effective_os} repos, and Gemini LLM for {name} ({version}) on ppc64le...",
                 ).model_dump()
             }
             await asyncio.sleep(0.15)
             step_counter += 1
 
-            probe_res = await self.prober.probe_component(name, version, eco, request.target_os.value)
-            
+            probe_res = await self.prober.probe_component(
+                name, version, eco, effective_os, deliverable_type
+            )
+
             pkg_result = PackageTriageResult(
                 package_name=name,
                 requested_version=version,
@@ -340,10 +403,12 @@ class TriageAgent:
                 evidence_source=probe_res.get("evidence"),
                 evidence_url=probe_res.get("url"),
                 substitute_package=probe_res.get("substitute"),
-                version_warning=probe_res.get("version_warning")
+                version_warning=probe_res.get("version_warning"),
+                deliverable_match=probe_res.get("deliverable_match", DeliverableMatchStatus.SUPPORTED),
+                deliverable_detail=probe_res.get("deliverable_detail"),
             )
 
-            # Log version warning or verification discovery
+            # Log version warning or deliverable match detail
             if pkg_result.version_warning:
                 yield {
                     "type": "step",
@@ -354,6 +419,21 @@ class TriageAgent:
                         target=f"{name} Version Notice",
                         thought=f"⚠️ {pkg_result.version_warning}",
                         detail=f"Requested: {version} | Verified Available on Power: {probe_res.get('available_version', 'N/A')}"
+                    ).model_dump()
+                }
+                await asyncio.sleep(0.1)
+                step_counter += 1
+
+            if pkg_result.deliverable_detail and pkg_result.deliverable_match != DeliverableMatchStatus.SUPPORTED:
+                yield {
+                    "type": "step",
+                    "step": AgentStep(
+                        step_id=step_counter,
+                        agent_name="DeliverableClassifier",
+                        action_type="lookup",
+                        target=f"{name} Deliverable Match",
+                        thought=f"Deliverable match [{deliverable_type.value}]: {pkg_result.deliverable_match.value.replace('_', ' ').title()}",
+                        detail=pkg_result.deliverable_detail
                     ).model_dump()
                 }
                 await asyncio.sleep(0.1)
@@ -375,13 +455,15 @@ class TriageAgent:
 
             if pkg_result.status == AvailabilityStatus.UNPORTED_BUILD_REQUIRED:
                 unported_candidates.append(pkg_result)
-            
+
             triaged_packages.append(pkg_result)
 
         # Probe discovered Dockerfile base images & config images
         if docker_findings:
             for df in docker_findings:
-                img_probe = await self.prober.probe_component(df.base_image, df.tag, "container", request.target_os.value)
+                img_probe = await self.prober.probe_component(
+                    df.base_image, df.tag, "container", effective_os, deliverable_type
+                )
                 df.status = img_probe["status"]
                 if df.status in [AvailabilityStatus.UNPORTED_BUILD_REQUIRED, AvailabilityStatus.BLOCKER]:
                     df.effort_pd = 0.5
@@ -397,7 +479,7 @@ class TriageAgent:
                     img_name, img_tag = ref.rsplit(":", 1)
                 else:
                     img_name = ref
-                cfg_probe = await self.prober.probe_component(img_name, img_tag, "container", request.target_os.value)
+                cfg_probe = await self.prober.probe_component(img_name, img_tag, "container", effective_os, deliverable_type)
                 cf.status = cfg_probe["status"]
                 if cf.status in [AvailabilityStatus.UNPORTED_BUILD_REQUIRED, AvailabilityStatus.BLOCKER]:
                     cf.effort_pd = 0.5
@@ -563,7 +645,19 @@ class TriageAgent:
         else:
             # Express triage: apply standard build sizing
             for pkg in triaged_packages:
-                BuildAnalyzer.analyze_package_build(pkg, request.target_os.value)
+                BuildAnalyzer.analyze_package_build(pkg, effective_os)
+
+        # Apply partial deliverable match multiplier to every package with effort > 0
+        for pkg in triaged_packages:
+            dm = pkg.deliverable_match
+            if dm in (DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE, DeliverableMatchStatus.PARTIAL_DIFFERENT_VERSION):
+                from .models import _PARTIAL_EFFORT_MULTIPLIERS
+                mult = _PARTIAL_EFFORT_MULTIPLIERS[dm]
+                if pkg.total_effort_pd > 0:
+                    pkg.total_effort_pd = max(1, int(round(pkg.total_effort_pd * mult)))
+                elif pkg.status in (AvailabilityStatus.NATIVE_AVAILABLE, AvailabilityStatus.PLATFORM_AGNOSTIC):
+                    # Partial match on a previously "zero effort" package — add integration overhead
+                    pkg.total_effort_pd = 1 if dm == DeliverableMatchStatus.PARTIAL_DIFFERENT_VERSION else 2
 
         # Apply Sub-Task 6 architecture support scan factor to unported components
         if arch_scan and arch_scan.effort_adjustment_factor != 1.0:
@@ -591,7 +685,14 @@ class TriageAgent:
         substitute_count = sum(1 for p in triaged_packages if p.status == AvailabilityStatus.SUBSTITUTE_AVAILABLE)
         unported_count = sum(1 for p in triaged_packages if p.status == AvailabilityStatus.UNPORTED_BUILD_REQUIRED)
         blocker_count = sum(1 for p in triaged_packages if p.status == AvailabilityStatus.BLOCKER)
-        
+        partial_count = sum(
+            1 for p in triaged_packages
+            if p.deliverable_match in (
+                DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE,
+                DeliverableMatchStatus.PARTIAL_DIFFERENT_VERSION,
+            )
+        )
+
         # Count unported build-time transitive dependencies
         unported_transitive_count = 0
         for p in triaged_packages:
@@ -602,9 +703,14 @@ class TriageAgent:
         for p in triaged_packages:
             unported_test_count += sum(1 for td in p.test_dependencies if td.status != AvailabilityStatus.NATIVE_AVAILABLE)
 
-        # Readiness Score %
-        ready_units = native_count + agnostic_count + (substitute_count * 0.9) + (unported_count * 0.3)
-        readiness_pct = round((ready_units / max(total_count, 1)) * 100.0, 1)
+        # Readiness Score % — partial matches reduce score proportionally
+        ready_units = (
+            native_count + agnostic_count
+            + (substitute_count * 0.9)
+            + (unported_count * 0.3)
+            - (partial_count * 0.25)   # partial matches reduce readiness
+        )
+        readiness_pct = round((max(ready_units, 0) / max(total_count, 1)) * 100.0, 1)
 
         # Effort Summation with Fibonacci single-value sizing (based on max effort)
         BUFFER_PERSON_DAYS = 5  # 1 Person-Week buffer
@@ -628,6 +734,12 @@ class TriageAgent:
         elif readiness_pct >= 90 and raw_total_pd == 0 and blocker_count == 0:
             rec = SalesRecommendationTier.MINIMAL_EFFORT
             rec_reason = f"Turnkey readiness ({readiness_pct}%). All components run out-of-the-box on IBM Power (0 Person-Days)."
+        elif partial_count > 0 and readiness_pct >= 70:
+            rec = SalesRecommendationTier.MODERATE_EFFORT
+            rec_reason = (
+                f"Moderate readiness ({readiness_pct}%) with {partial_count} partial deliverable match(es) "
+                f"for '{deliverable_type.value}' deliverable type. Effort: {fib_pd} Person-Days (Fibonacci)."
+            )
         elif fib_pd <= 8:
             rec = SalesRecommendationTier.MINOR_EFFORT
             rec_reason = f"High readiness ({readiness_pct}%). Light build verification estimated at {fib_pd} Person-Days (Fibonacci max estimate)."
@@ -652,7 +764,8 @@ class TriageAgent:
             min_total_person_days=fib_pd,
             max_total_person_days=fib_pd,
             unported_transitive_deps_count=unported_transitive_count,
-            test_deps_unresolved_count=unported_test_count
+            test_deps_unresolved_count=unported_test_count,
+            partial_support_count=partial_count,
         )
 
         # Step 5: Final Executive Synthesis
@@ -698,8 +811,10 @@ class TriageAgent:
 
         response = TriageResponse(
             project_name=request.project_name or (f"{primary_pkg_name} Migration" if primary_pkg_name else "Customer Migration Triage"),
-            target_os=request.target_os.value.upper(),
-            target_platform=request.target_platform.value.upper(),
+            target_os=effective_os.upper(),
+            target_platform=request.effective_platform().upper(),
+            target_environment=request.target_environment.display,
+            deliverable_type=deliverable_type.value,
             summary=summary,
             packages=triaged_packages,
             agent_steps=[],

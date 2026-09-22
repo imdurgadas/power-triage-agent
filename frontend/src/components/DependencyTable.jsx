@@ -1,18 +1,64 @@
 import React, { useState } from 'react';
-import { 
-  Check, 
-  ExternalLink, 
-  ChevronDown, 
-  ChevronRight, 
-  Code, 
-  Cpu, 
-  Wrench, 
-  AlertTriangle, 
-  CheckCircle2, 
-  XCircle,
-  HelpCircle,
-  Sparkles
-} from 'lucide-react';
+import {
+  Tile,
+  Button,
+  Tag,
+  TextInput,
+  Link,
+  StructuredListWrapper,
+  StructuredListHead,
+  StructuredListRow,
+  StructuredListCell,
+  StructuredListBody,
+} from '@carbon/react';
+import {
+  Checkmark,
+  Launch,
+  ChevronDown,
+  ChevronRight,
+  Code,
+  Tools,
+  Warning,
+  CheckmarkFilled,
+  WarningAltFilled,
+  SubtractAlt,
+  Information,
+  Layers,
+} from '@carbon/icons-react';
+
+function getStatusBadge(status) {
+  switch (status) {
+    case 'native_available':
+      return <span className="porting-badge porting-badge--native"><Checkmark size={12} /> Native ppc64le</span>;
+    case 'platform_agnostic':
+      return <span className="porting-badge porting-badge--agnostic"><Checkmark size={12} /> Platform Agnostic</span>;
+    case 'substitute_available':
+      return <span className="porting-badge porting-badge--substitute"><Layers size={12} /> Substitute Exists</span>;
+    case 'unported_build_required':
+      return <span className="porting-badge porting-badge--unported"><Tools size={12} /> Source Build Required</span>;
+    case 'blocker':
+      return <span className="porting-badge porting-badge--blocker"><SubtractAlt size={12} /> x86 Blocker</span>;
+    default:
+      return <span className="porting-badge porting-badge--unported">{status}</span>;
+  }
+}
+
+
+function getDeliverableBadge(match) {
+  switch (match) {
+    case 'supported':
+      return <span className="porting-badge porting-badge--deliverable-ok"><Checkmark size={12} /> Supported</span>;
+    case 'partial_different_type':
+      return <span className="porting-badge porting-badge--deliverable-partial"><Warning size={12} /> Partial — different type</span>;
+    case 'partial_different_version':
+      return <span className="porting-badge porting-badge--deliverable-partial"><Warning size={12} /> Partial — different version</span>;
+    case 'not_supported':
+      return <span className="porting-badge porting-badge--deliverable-no"><SubtractAlt size={12} /> Not Supported</span>;
+    default:
+      return null;
+  }
+}
+
 
 export default function DependencyTable({ packages, onOpenCodeAudit }) {
   const [filter, setFilter] = useState('ALL');
@@ -25,121 +71,105 @@ export default function DependencyTable({ packages, onOpenCodeAudit }) {
     setExpandedRows(prev => ({ ...prev, [name]: !prev[name] }));
   };
 
-  const getStatusBadge = (status) => {
-    switch (status) {
-      case 'native_available':
-        return <span className="badge badge-native"><Check size={12} /> Native ppc64le</span>;
-      case 'platform_agnostic':
-        return <span className="badge badge-agnostic"><Check size={12} /> Platform Agnostic</span>;
-      case 'substitute_available':
-        return <span className="badge badge-substitute"><Sparkles size={12} /> Substitute Exists</span>;
-      case 'unported_build_required':
-        return <span className="badge badge-unported"><Wrench size={12} /> Source Build Required</span>;
-      case 'blocker':
-        return <span className="badge badge-blocker"><XCircle size={12} /> x86 Blocker</span>;
-      default:
-        return <span className="badge badge-unported">{status}</span>;
-    }
-  };
-
   const filteredPackages = packages.filter(p => {
     if (filter !== 'ALL' && p.status !== filter) return false;
     if (searchTerm.trim()) {
       const q = searchTerm.toLowerCase();
-      return p.package_name.toLowerCase().includes(q) || 
-             p.ecosystem.toLowerCase().includes(q) ||
-             (p.substitute_package && p.substitute_package.toLowerCase().includes(q));
+      return (
+        p.package_name.toLowerCase().includes(q) ||
+        p.ecosystem.toLowerCase().includes(q) ||
+        (p.substitute_package && p.substitute_package.toLowerCase().includes(q))
+      );
     }
     return true;
   });
 
+  const filterOptions = [
+    { value: 'ALL', label: 'All' },
+    { value: 'native_available', label: 'Native' },
+    { value: 'substitute_available', label: 'Substitutes' },
+    { value: 'unported_build_required', label: 'Unported' },
+    { value: 'blocker', label: 'Blockers' },
+  ];
+
   return (
-    <div className="glass-card" id="dependency-matrix">
+    <Tile id="dependency-matrix" style={{ padding: '1.75rem', background: '#262626', border: '1px solid #393939' }}>
+      {/* Header row */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
         <div>
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 700 }}>
-            Dependency Readiness & Build-Tree Matrix
-          </h3>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+          <h3 style={{ fontSize: '1.35rem', fontWeight: 700, color: '#f4f4f4', margin: '0 0 0.25rem 0' }}>Dependency Readiness &amp; Build-Tree Matrix</h3>
+          <p style={{ color: '#c6c6c6', fontSize: '0.88rem', margin: 0 }}>
             Inspect ready packages, alternative Power packages, and scoped build-time transitive dependencies for unported libraries.
           </p>
         </div>
-
-        {/* Filter Chips */}
         <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-          {['ALL', 'native_available', 'substitute_available', 'unported_build_required', 'blocker'].map((f) => (
-            <button
-              key={f}
-              className={`preset-chip ${filter === f ? 'active' : ''}`}
-              style={{ fontSize: '0.78rem', padding: '0.35rem 0.65rem' }}
-              onClick={() => setFilter(f)}
+          {filterOptions.map(({ value, label }) => (
+            <Tag
+              key={value}
+              type={filter === value ? 'blue' : 'gray'}
+              size="md"
+              style={{ cursor: 'pointer' }}
+              onClick={() => setFilter(value)}
             >
-              {f === 'ALL' ? 'All Packages' : f === 'native_available' ? 'Native' : f === 'substitute_available' ? 'Substitutes' : f === 'unported_build_required' ? 'Unported' : 'Blockers'}
-            </button>
+              {label}
+            </Tag>
           ))}
         </div>
       </div>
 
-      {/* Effort Sizing Guide Banner */}
-      <div style={{ 
-        background: 'rgba(30, 41, 59, 0.45)', 
-        border: '1px solid rgba(255, 255, 255, 0.08)', 
-        borderRadius: 'var(--radius-md)', 
-        padding: '0.55rem 0.85rem', 
-        marginBottom: '1rem', 
-        fontSize: '0.78rem', 
-        display: 'flex', 
-        gap: '1.25rem', 
-        flexWrap: 'wrap', 
-        alignItems: 'center',
-        color: 'var(--text-muted)'
-      }}>
-        <span style={{ fontWeight: 600, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-          <HelpCircle size={14} color="#38bdf8" /> Effort Breakdown Guide:
+      {/* Effort guide */}
+      <div
+        style={{
+          background: '#1c1c1c',
+          border: '1px solid #393939',
+          borderRadius: '2px',
+          padding: '0.65rem 1rem',
+          marginBottom: '1rem',
+          fontSize: '0.8rem',
+          display: 'flex',
+          gap: '1.25rem',
+          flexWrap: 'wrap',
+          alignItems: 'center',
+          color: '#c6c6c6',
+        }}
+      >
+        <span style={{ fontWeight: 600, color: '#f4f4f4', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+          <Information size={14} style={{ color: '#78a9ff' }} /> Effort Breakdown Guide:
         </span>
-        <span>
-          <strong style={{ color: '#93c5fd' }}>Build</strong>: Source compilation, toolchain setup & packaging.
-        </span>
-        <span>
-          <strong style={{ color: '#facc15' }}>Engineering</strong>: Architecture adaptation (SIMD/VSX vector porting, replacing proprietary x86 blockers, 64KB page alignment).
-        </span>
-        <span>
-          <strong style={{ color: '#4ade80' }}>Test</strong>: Verification suites, accuracy harnesses & benchmarks.
-        </span>
+        <span><strong style={{ color: '#78a9ff' }}>Build</strong>: Source compilation, toolchain setup &amp; packaging.</span>
+        <span><strong style={{ color: '#f1c21b' }}>Engineering</strong>: Architecture adaptation (SIMD/VSX vector porting, replacing proprietary x86 blockers, 64KB page alignment).</span>
+        <span><strong style={{ color: '#42be65' }}>Test</strong>: Verification suites, accuracy harnesses &amp; benchmarks.</span>
       </div>
 
-      <div style={{ marginBottom: '1rem' }}>
-        <input 
-          type="text" 
-          className="form-control" 
-          placeholder="Filter components by name or ecosystem..." 
-          value={searchTerm} 
+      {/* Search */}
+      <div style={{ marginBottom: '1rem', maxWidth: '400px' }}>
+        <TextInput
+          id="dep-search"
+          labelText=""
+          hideLabel
+          size="md"
+          placeholder="Filter components by name or ecosystem..."
+          value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          style={{ width: '100%', maxWidth: '400px', fontSize: '0.85rem' }}
         />
       </div>
 
-      <div className="table-responsive">
-        <table className="data-table">
+      {/* Table */}
+      <div style={{ width: '100%', overflowX: 'auto' }}>
+        <table
+          className="cds--data-table cds--data-table--normal cds--data-table--sort"
+          style={{ width: '100%' }}
+        >
           <thead>
             <tr>
-              <th style={{ width: '30px' }}></th>
-              <th>Component & Ecosystem</th>
-              <th>Readiness Status</th>
-              <th>Build System & Toolchain</th>
-              <th>Transitive Build Scope</th>
-              <th>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                  <span>Estimated Effort</span>
-                  <span 
-                    title="Effort breakdown:&#10;• Build: Clean source compilation & packaging&#10;• Engineering: Architecture adaptation (SIMD/VSX, replacing proprietary x86 blockers, 64KB page tuning)&#10;• Test: Verification suites & harnesses"
-                    style={{ cursor: 'help', color: 'var(--text-muted)' }}
-                  >
-                    <HelpCircle size={13} />
-                  </span>
-                </div>
-              </th>
-              <th>Evidence & Links</th>
+              <th style={{ width: '32px' }}><span className="cds--table-header-label"></span></th>
+              <th><span className="cds--table-header-label">Component &amp; Ecosystem</span></th>
+              <th><span className="cds--table-header-label">Readiness Status</span></th>
+              <th><span className="cds--table-header-label">Deliverable Support</span></th>
+              <th><span className="cds--table-header-label">Build System &amp; Toolchain</span></th>
+              <th><span className="cds--table-header-label">Transitive Build Scope</span></th>
+              <th><span className="cds--table-header-label">Estimated Effort</span></th>
+              <th><span className="cds--table-header-label">Evidence &amp; Links</span></th>
             </tr>
           </thead>
           <tbody>
@@ -155,201 +185,208 @@ export default function DependencyTable({ packages, onOpenCodeAudit }) {
 
               return (
                 <React.Fragment key={p.package_name}>
-                  <tr className={hasDetails ? 'row-expandable' : ''} onClick={() => hasDetails && toggleRow(p.package_name)}>
+                  <tr
+                    style={{ cursor: hasDetails ? 'pointer' : 'default' }}
+                    onClick={() => hasDetails && toggleRow(p.package_name)}
+                  >
                     <td>
-                      {hasDetails ? (
-                        isExpanded ? <ChevronDown size={16} color="#94a3b8" /> : <ChevronRight size={16} color="#94a3b8" />
-                      ) : null}
+                      {hasDetails
+                        ? (isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />)
+                        : null}
                     </td>
                     <td>
-                      <div style={{ fontWeight: 700, color: '#f8fafc', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <div style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                         {p.package_name}
-                        <span className="code-pill" style={{ color: 'var(--text-muted)' }}>{p.requested_version || 'latest'}</span>
+                        <span className="code-pill">{p.requested_version || 'latest'}</span>
                       </div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>
-                        {p.ecosystem} • {p.tier_description}
+                      <div style={{ fontSize: '0.75rem', color: 'var(--cds-text-secondary)', textTransform: 'uppercase', marginTop: '0.15rem' }}>
+                        {p.ecosystem} · {p.tier_description}
                       </div>
                       {p.substitute_package && (
-                        <div style={{ fontSize: '0.78rem', color: '#c084fc', marginTop: '0.2rem' }}>
+                        <div style={{ fontSize: '0.78rem', color: 'var(--cds-support-info)', marginTop: '0.15rem' }}>
                           ↳ Recommend: <strong>{p.substitute_package}</strong>
                         </div>
                       )}
                       {p.version_warning && (
-                        <div style={{ fontSize: '0.74rem', color: '#facc15', marginTop: '0.25rem', display: 'flex', alignItems: 'flex-start', gap: '0.3rem', background: 'rgba(234, 179, 8, 0.1)', padding: '0.2rem 0.4rem', borderRadius: '4px' }}>
-                          <AlertTriangle size={12} style={{ marginTop: '2px', flexShrink: 0 }} />
+                        <div style={{ fontSize: '0.74rem', color: 'var(--cds-support-warning)', marginTop: '0.2rem', display: 'flex', alignItems: 'flex-start', gap: '0.3rem' }}>
+                          <Warning size={12} style={{ marginTop: '2px', flexShrink: 0 }} />
                           <span>{p.version_warning}</span>
                         </div>
                       )}
                     </td>
                     <td>{getStatusBadge(p.status)}</td>
                     <td>
+                      {getDeliverableBadge(p.deliverable_match)}
+                      {p.deliverable_detail && (
+                        <div style={{ fontSize: '0.73rem', color: 'var(--cds-text-secondary)', marginTop: '0.2rem', maxWidth: '220px', lineHeight: 1.35 }}>
+                          {p.deliverable_detail}
+                        </div>
+                      )}
+                    </td>
+                    <td>
                       {p.build_system ? (
                         <div>
                           <span className="code-pill">{p.build_system}</span>
                           {p.toolchain_prerequisites?.length > 0 && (
-                            <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', marginTop: '0.15rem' }}>
+                            <div style={{ fontSize: '0.72rem', color: 'var(--cds-text-secondary)', marginTop: '0.15rem' }}>
                               {p.toolchain_prerequisites.map(t => t.tool).join(', ')}
                             </div>
                           )}
                         </div>
                       ) : (
-                        <span style={{ color: 'var(--text-dim)', fontSize: '0.8rem' }}>Prebuilt Binary</span>
+                        <span style={{ color: 'var(--cds-text-secondary)', fontSize: '0.8rem' }}>Prebuilt Binary</span>
                       )}
                     </td>
                     <td>
                       {hasTransitiveDeps ? (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                          <span style={{ fontWeight: 700, color: p.transitive_deps_effort_pd > 0 ? '#facc15' : '#4ade80' }}>
+                          <span style={{ fontWeight: 600, color: p.transitive_deps_effort_pd > 0 ? 'var(--cds-support-warning)' : 'var(--cds-support-success)' }}>
                             {p.build_dependencies.length} Build-Requires
                           </span>
                           {p.transitive_deps_effort_pd > 0 && (
-                            <span className="badge badge-unported" style={{ fontSize: '0.7rem', padding: '0.1rem 0.4rem' }}>
+                            <span className="porting-badge porting-badge--unported" style={{ fontSize: '0.7rem' }}>
                               +{p.transitive_deps_effort_pd} PD unported
                             </span>
                           )}
                         </div>
                       ) : (
-                        <span style={{ color: 'var(--text-dim)', fontSize: '0.8rem' }}>No extra build deps</span>
+                        <span style={{ color: 'var(--cds-text-secondary)', fontSize: '0.8rem' }}>No extra build deps</span>
                       )}
                     </td>
                     <td>
-                      <div style={{ fontWeight: 700, color: p.total_effort_pd > 0 ? '#60a5fa' : '#4ade80' }}>
+                      <div style={{ fontWeight: 600, color: p.total_effort_pd > 0 ? 'var(--cds-interactive)' : 'var(--cds-support-success)' }}>
                         {p.total_effort_pd > 0 ? `${p.total_effort_pd} PD` : '0 PD (Ready)'}
                       </div>
                       {p.total_effort_pd > 0 && (
-                        <div style={{ fontSize: '0.72rem', color: 'var(--text-dim)', marginTop: '0.15rem' }}>
-                          <span title="Build: Standard compilation & packaging">Build: {p.base_build_effort_pd}d</span>
+                        <div style={{ fontSize: '0.72rem', color: 'var(--cds-text-secondary)', marginTop: '0.1rem' }}>
+                          <span>Build: {p.base_build_effort_pd}d</span>
                           {' | '}
-                          <span title="Engineering: Architecture adaptation (SIMD/VSX translation, replacing proprietary x86 blockers, 64KB page tuning)">Engineering: {p.arch_complexity_effort_pd}d</span>
-                          {p.test_effort_pd > 0 && (
-                            <>
-                              {' | '}
-                              <span title="Test: Verification suites & test harness porting">Test: {p.test_effort_pd}d</span>
-                            </>
-                          )}
+                          <span>Eng: {p.arch_complexity_effort_pd}d</span>
+                          {p.test_effort_pd > 0 && <>{' | '}<span>Test: {p.test_effort_pd}d</span></>}
                         </div>
                       )}
                     </td>
                     <td>
                       {p.evidence_url ? (
-                        <a 
-                          href={p.evidence_url} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', color: '#38bdf8', fontSize: '0.8rem', textDecoration: 'none' }}
+                        <Link
+                          href={p.evidence_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
+                          style={{ fontSize: '0.8rem', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}
                         >
-                          Verify Source <ExternalLink size={12} />
-                        </a>
+                          Verify Source <Launch size={12} />
+                        </Link>
                       ) : (
-                        <span style={{ color: 'var(--text-dim)', fontSize: '0.8rem' }}>Catalog Checked</span>
+                        <span style={{ color: 'var(--cds-text-secondary)', fontSize: '0.8rem' }}>Catalog Checked</span>
                       )}
                     </td>
                   </tr>
 
-                  {/* Expandable Transitive Iceberg Drawer */}
+                  {/* Expandable drawer */}
                   {isExpanded && (
                     <tr>
-                      <td colSpan={7} style={{ padding: '0.5rem 1rem 1rem 1rem', background: 'rgba(10, 14, 24, 0.6)' }}>
-                        <div className="sub-table-container">
-                          <div className="sub-table-header">
-                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                              <Wrench size={16} /> Scoped Build-Time Transitive Dependencies for <code>{p.package_name}</code>
+                      <td colSpan={8} style={{ padding: '0.5rem 1rem 1rem', background: 'var(--cds-layer-02)' }}>
+                        <div style={{ border: '1px solid var(--cds-border-subtle-01)', borderRadius: '2px', padding: '1.25rem' }}>
+                          {/* Drawer header */}
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                            <span style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--cds-support-warning)' }}>
+                              <Tools size={16} /> Scoped Build-Time Transitive Dependencies for{' '}
+                              <code style={{ fontFamily: "'IBM Plex Mono', monospace" }}>{p.package_name}</code>
                             </span>
                             {hasArchFlags && (
-                              <button 
-                                className="btn btn-secondary" 
-                                style={{ fontSize: '0.75rem', padding: '0.25rem 0.6rem' }}
+                              <Button
+                                kind="ghost"
+                                size="sm"
+                                renderIcon={Code}
                                 onClick={(e) => { e.stopPropagation(); onOpenCodeAudit(p); }}
                               >
-                                <Code size={13} /> View Architecture Code Audit & SIMDe Fix
-                              </button>
+                                View Architecture Code Audit &amp; SIMDe Fix
+                              </Button>
                             )}
                           </div>
 
                           {p.porting_notes && (
-                            <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginBottom: '0.75rem' }}>
+                            <p className="cds--body-short-01" style={{ marginBottom: '0.75rem', color: 'var(--cds-text-secondary)' }}>
                               <strong>Triage Analysis:</strong> {p.porting_notes}
                             </p>
                           )}
 
-                          {/* Sizing Derivation & Math Breakdown */}
+                          {/* Effort derivation */}
                           {p.total_effort_pd > 0 && (
-                            <div style={{ marginBottom: '1rem', padding: '0.75rem 1rem', background: 'rgba(15, 23, 42, 0.65)', borderRadius: '6px', border: '1px solid rgba(56, 189, 248, 0.25)' }}>
-                              <div style={{ fontSize: '0.84rem', fontWeight: 700, color: '#38bdf8', marginBottom: '0.35rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                📐 Effort Sizing Derivation & Calculation Breakdown ({p.total_effort_pd} Person-Days Total)
+                            <div className="effort-derivation">
+                              <div style={{ fontSize: '0.84rem', fontWeight: 700, color: 'var(--cds-interactive)', marginBottom: '0.35rem' }}>
+                                📐 Effort Sizing Derivation ({p.total_effort_pd} Person-Days Total)
                               </div>
-                              <div style={{ fontSize: '0.76rem', color: '#cbd5e1', marginBottom: '0.6rem', fontFamily: 'var(--font-mono)' }}>
-                                Total {p.total_effort_pd} PD = Build ({p.base_build_effort_pd}d) + Engineering ({p.arch_complexity_effort_pd}d) + Test ({p.test_effort_pd}d) {p.transitive_deps_effort_pd > 0 ? `+ Transitive (${p.transitive_deps_effort_pd}d)` : ''}
+                              <div style={{ fontSize: '0.76rem', color: 'var(--cds-text-secondary)', fontFamily: "'IBM Plex Mono', monospace", marginBottom: '0.6rem' }}>
+                                Total {p.total_effort_pd} PD = Build ({p.base_build_effort_pd}d) + Engineering ({p.arch_complexity_effort_pd}d) + Test ({p.test_effort_pd}d)
+                                {p.transitive_deps_effort_pd > 0 ? ` + Transitive (${p.transitive_deps_effort_pd}d)` : ''}
                               </div>
-                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.6rem', fontSize: '0.78rem' }}>
-                                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '0.5rem', borderRadius: '4px' }}>
-                                  <div style={{ color: '#93c5fd', fontWeight: 600 }}>1. Base Compilation</div>
-                                  <div style={{ color: '#f8fafc', fontSize: '0.88rem', fontWeight: 700 }}>{p.base_build_effort_pd} PD</div>
-                                  <div style={{ color: 'var(--text-dim)', fontSize: '0.72rem' }}>Toolchain & clean source build</div>
+                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.5rem', fontSize: '0.78rem' }}>
+                                <div style={{ background: 'var(--cds-layer-01)', padding: '0.5rem', borderRadius: '2px' }}>
+                                  <div style={{ color: 'var(--cds-link-primary)', fontWeight: 600 }}>1. Base Compilation</div>
+                                  <div style={{ fontSize: '0.9rem', fontWeight: 700 }}>{p.base_build_effort_pd} PD</div>
+                                  <div style={{ color: 'var(--cds-text-secondary)', fontSize: '0.72rem' }}>Toolchain &amp; clean source build</div>
                                 </div>
-                                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '0.5rem', borderRadius: '4px' }}>
-                                  <div style={{ color: '#facc15', fontWeight: 600 }}>2. Engineering Adaptation</div>
-                                  <div style={{ color: '#f8fafc', fontSize: '0.88rem', fontWeight: 700 }}>{p.arch_complexity_effort_pd} PD</div>
+                                <div style={{ background: 'var(--cds-layer-01)', padding: '0.5rem', borderRadius: '2px' }}>
+                                  <div style={{ color: 'var(--cds-support-warning)', fontWeight: 600 }}>2. Engineering Adaptation</div>
+                                  <div style={{ fontSize: '0.9rem', fontWeight: 700 }}>{p.arch_complexity_effort_pd} PD</div>
                                   {p.arch_sensitivity?.simd_instruction_count > 0 ? (
-                                    <div style={{ color: 'var(--text-dim)', fontSize: '0.72rem', lineHeight: 1.3 }}>
-                                      Base {p.arch_sensitivity.base_engineering_effort_pd || 2.0}d × {p.arch_sensitivity.simd_instruction_multiplier || 1.0}x ({p.arch_sensitivity.simd_instruction_count} SIMD instrs) × {p.arch_sensitivity.simd_complexity_multiplier || 1.0}x ({p.arch_sensitivity.simd_porting_complexity?.replace('_', ' ') || 'direct'})
+                                    <div style={{ color: 'var(--cds-text-secondary)', fontSize: '0.72rem', lineHeight: 1.3 }}>
+                                      Base {p.arch_sensitivity.base_engineering_effort_pd || 2.0}d × {p.arch_sensitivity.simd_instruction_multiplier || 1.0}x ({p.arch_sensitivity.simd_instruction_count} SIMD)
                                     </div>
                                   ) : (
-                                    <div style={{ color: 'var(--text-dim)', fontSize: '0.72rem' }}>Architecture / blocker adaptation</div>
+                                    <div style={{ color: 'var(--cds-text-secondary)', fontSize: '0.72rem' }}>Architecture adaptation</div>
                                   )}
                                 </div>
                                 {p.test_effort_pd > 0 && (
-                                  <div style={{ background: 'rgba(255,255,255,0.03)', padding: '0.5rem', borderRadius: '4px' }}>
-                                    <div style={{ color: '#4ade80', fontWeight: 600 }}>3. Testing & Validation</div>
-                                    <div style={{ color: '#f8fafc', fontSize: '0.88rem', fontWeight: 700 }}>{p.test_effort_pd} PD</div>
-                                    <div style={{ color: 'var(--text-dim)', fontSize: '0.72rem' }}>{p.test_dependencies?.length || 0} test harness(es)</div>
+                                  <div style={{ background: 'var(--cds-layer-01)', padding: '0.5rem', borderRadius: '2px' }}>
+                                    <div style={{ color: 'var(--cds-support-success)', fontWeight: 600 }}>3. Testing &amp; Validation</div>
+                                    <div style={{ fontSize: '0.9rem', fontWeight: 700 }}>{p.test_effort_pd} PD</div>
+                                    <div style={{ color: 'var(--cds-text-secondary)', fontSize: '0.72rem' }}>{p.test_dependencies?.length || 0} test harness(es)</div>
                                   </div>
                                 )}
                                 {p.transitive_deps_effort_pd > 0 && (
-                                  <div style={{ background: 'rgba(255,255,255,0.03)', padding: '0.5rem', borderRadius: '4px' }}>
-                                    <div style={{ color: '#f87171', fontWeight: 600 }}>4. Unported Transitive Deps</div>
-                                    <div style={{ color: '#f8fafc', fontSize: '0.88rem', fontWeight: 700 }}>+{p.transitive_deps_effort_pd} PD</div>
-                                    <div style={{ color: 'var(--text-dim)', fontSize: '0.72rem' }}>Transitive build requirements</div>
+                                  <div style={{ background: 'var(--cds-layer-01)', padding: '0.5rem', borderRadius: '2px' }}>
+                                    <div style={{ color: 'var(--cds-support-error)', fontWeight: 600 }}>4. Unported Transitive Deps</div>
+                                    <div style={{ fontSize: '0.9rem', fontWeight: 700 }}>+{p.transitive_deps_effort_pd} PD</div>
+                                    <div style={{ color: 'var(--cds-text-secondary)', fontSize: '0.72rem' }}>Transitive build requirements</div>
                                   </div>
                                 )}
                               </div>
                             </div>
                           )}
 
-                          {/* Nested Transitive Dependency List */}
+                          {/* Transitive deps table */}
                           {hasTransitiveDeps && (
                             <div style={{ marginBottom: '1rem' }}>
                               <table style={{ width: '100%', fontSize: '0.82rem', borderCollapse: 'collapse' }}>
                                 <thead>
-                                  <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-                                    <th style={{ textAlign: 'left', padding: '0.4rem 0.6rem', color: 'var(--text-muted)' }}>Requirement Name</th>
-                                    <th style={{ textAlign: 'left', padding: '0.4rem 0.6rem', color: 'var(--text-muted)' }}>Status on ppc64le</th>
-                                    <th style={{ textAlign: 'left', padding: '0.4rem 0.6rem', color: 'var(--text-muted)' }}>Porting Sizing</th>
-                                    <th style={{ textAlign: 'left', padding: '0.4rem 0.6rem', color: 'var(--text-muted)' }}>Upstream Proof / Notes</th>
+                                  <tr style={{ borderBottom: '1px solid var(--cds-border-subtle-01)' }}>
+                                    {['Requirement Name', 'Status on ppc64le', 'Porting Sizing', 'Upstream Proof / Notes'].map(h => (
+                                      <th key={h} style={{ textAlign: 'left', padding: '0.4rem 0.6rem', color: 'var(--cds-text-secondary)', fontWeight: 600 }}>{h}</th>
+                                    ))}
                                   </tr>
                                 </thead>
                                 <tbody>
                                   {p.build_dependencies.map((dep, dIdx) => (
-                                    <tr key={dIdx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                                      <td style={{ padding: '0.45rem 0.6rem', fontFamily: 'var(--font-mono)' }}>
-                                        {dep.name}
-                                      </td>
+                                    <tr key={dIdx} style={{ borderBottom: '1px solid var(--cds-border-subtle-00)' }}>
+                                      <td style={{ padding: '0.45rem 0.6rem', fontFamily: "'IBM Plex Mono', monospace" }}>{dep.name}</td>
                                       <td style={{ padding: '0.45rem 0.6rem' }}>
                                         {dep.status === 'native_available' ? (
-                                          <span style={{ color: '#4ade80', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                                            <CheckCircle2 size={13} /> Native in OS
+                                          <span style={{ color: 'var(--cds-support-success)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                                            <CheckmarkFilled size={13} /> Native in OS
                                           </span>
                                         ) : (
-                                          <span style={{ color: '#fef08a', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                                            <AlertTriangle size={13} /> Unported Sub-Dependency
+                                          <span style={{ color: 'var(--cds-support-warning)', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                                            <WarningAltFilled size={13} /> Unported Sub-Dependency
                                           </span>
                                         )}
                                       </td>
                                       <td style={{ padding: '0.45rem 0.6rem', fontWeight: 600 }}>
                                         {dep.porting_effort_pd > 0 ? `+${dep.porting_effort_pd} PD` : '0 PD'}
                                       </td>
-                                      <td style={{ padding: '0.45rem 0.6rem', color: 'var(--text-muted)', fontSize: '0.78rem' }}>
+                                      <td style={{ padding: '0.45rem 0.6rem', color: 'var(--cds-text-secondary)', fontSize: '0.78rem' }}>
                                         {dep.evidence_source} {dep.notes ? `(${dep.notes})` : ''}
                                       </td>
                                     </tr>
@@ -359,32 +396,29 @@ export default function DependencyTable({ packages, onOpenCodeAudit }) {
                             </div>
                           )}
 
-                          {/* Test Dependencies & Harnesses (Sub-Task 4) */}
+                          {/* Test dependencies */}
                           {hasTestDeps && (
                             <div style={{ marginTop: '0.75rem', marginBottom: '0.75rem' }}>
-                              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#93c5fd', marginBottom: '0.4rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                                🧪 Test Verification & Test Dependencies (+{p.test_effort_pd} PD)
+                              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--cds-link-primary)', marginBottom: '0.4rem' }}>
+                                🧪 Test Verification &amp; Dependencies (+{p.test_effort_pd} PD)
                               </div>
-                              <table style={{ width: '100%', fontSize: '0.8rem', borderCollapse: 'collapse', background: 'rgba(15, 23, 42, 0.4)', borderRadius: '4px' }}>
+                              <table style={{ width: '100%', fontSize: '0.8rem', borderCollapse: 'collapse' }}>
                                 <thead>
-                                  <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
-                                    <th style={{ textAlign: 'left', padding: '0.35rem 0.5rem', color: 'var(--text-muted)' }}>Test Framework / Harness</th>
-                                    <th style={{ textAlign: 'left', padding: '0.35rem 0.5rem', color: 'var(--text-muted)' }}>Type</th>
-                                    <th style={{ textAlign: 'left', padding: '0.35rem 0.5rem', color: 'var(--text-muted)' }}>ppc64le Status</th>
-                                    <th style={{ textAlign: 'left', padding: '0.35rem 0.5rem', color: 'var(--text-muted)' }}>Effort</th>
+                                  <tr style={{ borderBottom: '1px solid var(--cds-border-subtle-01)' }}>
+                                    {['Test Framework / Harness', 'Type', 'ppc64le Status', 'Effort'].map(h => (
+                                      <th key={h} style={{ textAlign: 'left', padding: '0.35rem 0.5rem', color: 'var(--cds-text-secondary)', fontWeight: 600 }}>{h}</th>
+                                    ))}
                                   </tr>
                                 </thead>
                                 <tbody>
                                   {p.test_dependencies.map((td, tIdx) => (
-                                    <tr key={tIdx} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
-                                      <td style={{ padding: '0.35rem 0.5rem', fontFamily: 'var(--font-mono)' }}>{td.name}</td>
-                                      <td style={{ padding: '0.35rem 0.5rem', color: 'var(--text-dim)' }}>{td.test_dep_type}</td>
+                                    <tr key={tIdx} style={{ borderBottom: '1px solid var(--cds-border-subtle-00)' }}>
+                                      <td style={{ padding: '0.35rem 0.5rem', fontFamily: "'IBM Plex Mono', monospace" }}>{td.name}</td>
+                                      <td style={{ padding: '0.35rem 0.5rem', color: 'var(--cds-text-secondary)' }}>{td.test_dep_type}</td>
                                       <td style={{ padding: '0.35rem 0.5rem' }}>
-                                        {td.status === 'native_available' ? (
-                                          <span style={{ color: '#4ade80' }}>Verified Ready</span>
-                                        ) : (
-                                          <span style={{ color: '#facc15' }}>Requires Porting ({td.notes || td.evidence_source})</span>
-                                        )}
+                                        {td.status === 'native_available'
+                                          ? <span style={{ color: 'var(--cds-support-success)' }}>Verified Ready</span>
+                                          : <span style={{ color: 'var(--cds-support-warning)' }}>Requires Porting ({td.notes || td.evidence_source})</span>}
                                       </td>
                                       <td style={{ padding: '0.35rem 0.5rem', fontWeight: 600 }}>{td.porting_effort_pd > 0 ? `+${td.porting_effort_pd} PD` : '0 PD'}</td>
                                     </tr>
@@ -394,29 +428,29 @@ export default function DependencyTable({ packages, onOpenCodeAudit }) {
                             </div>
                           )}
 
-                          {/* Architecture Support Scan (Sub-Task 6) */}
+                          {/* Architecture scan */}
                           {hasArchScan && (
-                            <div style={{ marginTop: '0.75rem', padding: '0.6rem', background: 'rgba(30, 41, 59, 0.4)', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.08)' }}>
-                              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#f8fafc', marginBottom: '0.3rem' }}>
-                                🏛️ Upstream Architecture Posture & CI Scan
+                            <div style={{ marginTop: '0.75rem', padding: '0.6rem', background: 'var(--cds-layer-01)', borderRadius: '2px', border: '1px solid var(--cds-border-subtle-01)' }}>
+                              <div style={{ fontSize: '0.82rem', fontWeight: 700, marginBottom: '0.3rem' }}>
+                                🏛️ Upstream Architecture Posture &amp; CI Scan
                               </div>
-                              <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                                <span>Source: <code>{p.arch_support_scan.scan_source}</code></span>
-                                <span>CI Matrix Power: <strong>{p.arch_support_scan.ci_matrix_has_power ? 'Yes (Discount applied) ✅' : 'None ❌'}</strong></span>
+                              <div style={{ fontSize: '0.78rem', color: 'var(--cds-text-secondary)', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                                <span>Source: <code style={{ fontFamily: "'IBM Plex Mono', monospace" }}>{p.arch_support_scan.scan_source}</code></span>
+                                <span>CI Matrix Power: <strong>{p.arch_support_scan.ci_matrix_has_power ? 'Yes ✅' : 'None ❌'}</strong></span>
                                 <span>Adjustment Factor: <strong>{p.arch_support_scan.effort_adjustment_factor}x</strong></span>
                               </div>
                             </div>
                           )}
 
-                          {/* Dockerfile Base Images (Sub-Task 5) */}
+                          {/* Dockerfile images */}
                           {hasDocker && (
                             <div style={{ marginTop: '0.75rem' }}>
-                              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#38bdf8', marginBottom: '0.3rem' }}>
+                              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--cds-interactive)', marginBottom: '0.3rem' }}>
                                 🐳 Discovered Dockerfile Base Images
                               </div>
-                              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                              <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
                                 {p.dockerfile_image_findings.map((df, idx) => (
-                                  <span key={idx} className="code-pill" style={{ fontSize: '0.75rem' }}>
+                                  <span key={idx} className="code-pill">
                                     {df.dockerfile_path}: <strong>{df.base_image}:{df.tag}</strong> ({df.status})
                                   </span>
                                 ))}
@@ -424,15 +458,15 @@ export default function DependencyTable({ packages, onOpenCodeAudit }) {
                             </div>
                           )}
 
-                          {/* Compose / CI Images (Sub-Task 7) */}
+                          {/* Compose / CI images */}
                           {hasConfig && (
                             <div style={{ marginTop: '0.75rem' }}>
-                              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#a78bfa', marginBottom: '0.3rem' }}>
+                              <div style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--cds-support-info)', marginBottom: '0.3rem' }}>
                                 ⚙️ Discovered Compose / CI Images
                               </div>
-                              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                              <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
                                 {p.config_image_findings.map((cf, idx) => (
-                                  <span key={idx} className="code-pill" style={{ fontSize: '0.75rem' }}>
+                                  <span key={idx} className="code-pill">
                                     {cf.config_file_path}: <strong>{cf.image_ref}</strong> ({cf.status})
                                   </span>
                                 ))}
@@ -449,6 +483,6 @@ export default function DependencyTable({ packages, onOpenCodeAudit }) {
           </tbody>
         </table>
       </div>
-    </div>
+    </Tile>
   );
 }
