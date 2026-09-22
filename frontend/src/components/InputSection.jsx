@@ -269,7 +269,11 @@ export default function InputSection({
                             type={activePreset?.name === p.name ? 'cyan' : 'cool-gray'}
                             size="md"
                             style={{ cursor: 'pointer' }}
-                            onClick={() => onSelectPreset && onSelectPreset(p)}
+                            onClick={() => {
+                              if (onSelectPreset) onSelectPreset(p);
+                              const isMicro = (p.name || '').toLowerCase().includes('microservices') || p.id === 'microservices';
+                              setDeliverableType(p.deliverable_type || (isMicro ? 'container' : 'build'));
+                            }}
                           >
                             {p.name}
                           </Tag>
