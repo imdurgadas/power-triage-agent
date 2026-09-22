@@ -301,13 +301,43 @@ def classify_deliverable_match(
     def _is_container(t: str) -> bool:
         return any(k in t for k in ("container", "docker", "quay", "icr", "multi-arch", "image"))
 
-    # Helper: does the tier string indicate a source build / RPM / wheel artefact?
-    def _is_build(t: str) -> bool:
-        return any(k in t for k in ("rpm", "wheel", "build-scripts", "devpi", "koji", "source", "pypi", "npm", "maven", "native"))
+    # Helper: does the tier string indicate a wheel artefact specifically?
+    def _is_wheel(t: str) -> bool:
+        return any(k in t for k in ("wheel", "devpi", "pypi"))
+
+    # Helper: does the tier string indicate a distro package (RPM / deb)?
+    def _is_distro_pkg(t: str) -> bool:
+        return any(k in t for k in ("rpm", "koji", "rhel", "epel", "fedora", "dnf", "yum"))
 
     # Helper: does the tier indicate a build script recipe exists?
     def _is_build_script(t: str) -> bool:
         return "build-scripts" in t or "recipe" in t or "build script" in t
+
+    # Helper: does the tier indicate a source / generic build artefact?
+    def _is_source_build(t: str) -> bool:
+        return any(k in t for k in ("source", "maven", "npm", "native", "pypi"))
+
+    # Produce a specific human-readable label for what IS actually available.
+    def _available_artefact_label(t: str) -> str:
+        if _is_build_script(t):
+            return "an IBM ppc64le build script (build recipe)"
+        if _is_wheel(t):
+            return "a native ppc64le wheel"
+        if _is_distro_pkg(t):
+            return "a distro package (RHEL/Fedora RPM)"
+        if _is_container(t):
+            return "a ppc64le container image"
+        if _is_source_build(t):
+            return "a source build artefact"
+        return "an indirect ppc64le artefact"
+
+    # Produce a label for the requested deliverable type.
+    def _requested_label(dt: DeliverableType) -> str:
+        return {
+            DeliverableType.CONTAINER:    "a container image",
+            DeliverableType.BUILD:        "a compiled wheel",
+            DeliverableType.BUILD_SCRIPT: "a build script",
+        }[dt]
 
     # Version match helper (only meaningful when a specific version was requested)
     def _version_mismatch() -> bool:
@@ -319,10 +349,15 @@ def classify_deliverable_match(
         except Exception:
             return req_ver != avail_ver
 
-    is_container = _is_container(tier)
-    is_build     = _is_build(tier)
-    is_script    = _is_build_script(tier)
-    ver_mismatch = _version_mismatch()
+    is_container  = _is_container(tier)
+    is_wheel      = _is_wheel(tier)
+    is_distro_pkg = _is_distro_pkg(tier)
+    is_script     = _is_build_script(tier)
+    is_build      = is_wheel or is_distro_pkg or _is_source_build(tier) or is_script
+    ver_mismatch  = _version_mismatch()
+
+    avail_label = _available_artefact_label(tier)
+    req_label   = _requested_label(deliverable_type)
 
     match = DeliverableMatchStatus.SUPPORTED
     detail = ""
@@ -336,27 +371,53 @@ def classify_deliverable_match(
             else:
                 match  = DeliverableMatchStatus.SUPPORTED
                 detail = f"Supported — ppc64le container image available (version {avail_ver or 'latest'})."
-        elif is_build or is_script or status == AvailabilityStatus.PLATFORM_AGNOSTIC:
+        elif is_build or status == AvailabilityStatus.PLATFORM_AGNOSTIC:
             match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE
-            detail = f"Partial Support — no container image available; an RPM/wheel/build artefact exists. Containerisation effort required."
+            detail = (
+                f"Partial Support — no container image available; {avail_label} exists. "
+                f"Containerisation effort required."
+            )
         else:
             match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE
             detail = "Partial Support — indirect availability; manual containerisation for ppc64le required."
 
     elif deliverable_type == DeliverableType.BUILD:
-        if is_build or is_script or status == AvailabilityStatus.PLATFORM_AGNOSTIC:
+        if is_wheel:
             if ver_mismatch:
                 match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_VERSION
-                detail = f"Partial Support — build artefact available at version {avail_ver} (requested {req_ver})."
+                detail = f"Partial Support — native ppc64le wheel available at version {avail_ver} (requested {req_ver})."
             else:
                 match  = DeliverableMatchStatus.SUPPORTED
-                detail = "Supported — pre-built ppc64le RPM/wheel/source build available."
+                detail = "Supported — native ppc64le wheel available."
+        elif is_distro_pkg:
+            if ver_mismatch:
+                match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_VERSION
+                detail = f"Partial Support — distro package (RHEL/Fedora RPM) available at version {avail_ver} (requested {req_ver})."
+            else:
+                match  = DeliverableMatchStatus.SUPPORTED
+                detail = "Supported — distro package (RHEL/Fedora RPM) available for ppc64le."
+        elif is_script:
+            match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE
+            detail = (
+                f"Partial Support — an IBM ppc64le build script exists, but no pre-built wheel. "
+                f"Run the build script to produce {req_label}."
+            )
+        elif is_build or status == AvailabilityStatus.PLATFORM_AGNOSTIC:
+            if ver_mismatch:
+                match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_VERSION
+                detail = f"Partial Support — {avail_label} available at version {avail_ver} (requested {req_ver})."
+            else:
+                match  = DeliverableMatchStatus.SUPPORTED
+                detail = f"Supported — {avail_label} available for ppc64le."
         elif is_container:
             match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE
-            detail = "Partial Support — only a container image is available; extraction or source build from container needed."
+            detail = (
+                "Partial Support — only a container image is available; "
+                "extracting a wheel from the container or building from source is required."
+            )
         else:
             match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE
-            detail = "Partial Support — substitute available but artefact type differs from requested build."
+            detail = f"Partial Support — {avail_label} exists but does not match requested {req_label}."
 
     elif deliverable_type == DeliverableType.BUILD_SCRIPT:
         if is_script:
@@ -366,12 +427,30 @@ def classify_deliverable_match(
             else:
                 match  = DeliverableMatchStatus.SUPPORTED
                 detail = "Supported — IBM ppc64le/build-scripts recipe exists for this package."
-        elif is_build or is_container or status == AvailabilityStatus.PLATFORM_AGNOSTIC:
+        elif is_wheel:
             match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE
-            detail = "Partial Support — pre-built artefact or container exists, but no dedicated build script. Script authoring required."
+            detail = (
+                "Partial Support — a native ppc64le wheel is available but no dedicated build script. "
+                "Script authoring required to automate the wheel build."
+            )
+        elif is_distro_pkg:
+            match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE
+            detail = (
+                "Partial Support — a distro package (RHEL/Fedora RPM) is available but no IBM build script. "
+                "Script authoring required."
+            )
+        elif is_container:
+            match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE
+            detail = (
+                "Partial Support — a container image is available but no build script. "
+                "Script authoring required to produce a reproducible ppc64le build."
+            )
+        elif is_build or status == AvailabilityStatus.PLATFORM_AGNOSTIC:
+            match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE
+            detail = f"Partial Support — {avail_label} exists but no dedicated build script. Script authoring required."
         else:
             match  = DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE
-            detail = "Partial Support — substitute or indirect availability; build script authoring required."
+            detail = "Partial Support — indirect availability; build script authoring required."
 
     multiplier = _PARTIAL_EFFORT_MULTIPLIERS[match]
     result["deliverable_match"] = match
