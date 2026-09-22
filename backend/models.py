@@ -21,10 +21,10 @@ class TargetEnvironment(str, Enum):
     @property
     def display(self) -> str:
         names = {
-            "rhel9_ocp":       "RHEL 9 on OpenShift (ppc64le)",
-            "rhel10_ocp":      "RHEL 10 on OpenShift (ppc64le)",
-            "rhel9_baremetal": "RHEL 9 Bare Metal / PowerVM (ppc64le)",
-            "rhel10_baremetal":"RHEL 10 Bare Metal / PowerVM (ppc64le)",
+            "rhel9_ocp":       "OpenShift Platform (ppc64le)",
+            "rhel10_ocp":      "OpenShift Platform — RHEL 10 (ppc64le)",
+            "rhel9_baremetal": "Bare Metal / PowerVM — RHEL 9 (ppc64le)",
+            "rhel10_baremetal":"Bare Metal / PowerVM — RHEL 10 (ppc64le)",
         }
         return names.get(self.value, self.value)
 

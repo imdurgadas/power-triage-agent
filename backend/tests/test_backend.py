@@ -265,7 +265,7 @@ def test_api_triage_flow_with_gaps():
     assert "summary" in data
     assert data["summary"]["total_packages"] >= 2
     assert "executive_brief_markdown" in data
-    assert data.get("target_environment") == "RHEL 9 on OpenShift (ppc64le)"
+    assert data.get("target_environment") == "OpenShift Platform (ppc64le)"
     assert data.get("deliverable_type") == "container"
     assert "Person-Days" in data["executive_brief_markdown"]
     assert "fibonacci_effort_pd" in data["summary"]
@@ -375,7 +375,7 @@ def test_target_environment_enum():
     assert TargetEnvironment.RHEL9_OCP.platform == "ocp"
     assert TargetEnvironment.RHEL10_OCP.os == "rhel10"
     assert TargetEnvironment.RHEL10_BARE.platform == "baremetal"
-    assert "OpenShift" in TargetEnvironment.RHEL9_OCP.display
+    assert "OpenShift Platform" in TargetEnvironment.RHEL9_OCP.display
     assert "RHEL 10" in TargetEnvironment.RHEL10_OCP.display
 
 

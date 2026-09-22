@@ -368,10 +368,10 @@ export default function InputSection({ onRunTriage, isRunning, presets, activePr
               value={targetEnvironment}
               onChange={(e) => setTargetEnvironment(e.target.value)}
             >
-              <SelectItem value="rhel9_ocp"        text="RHEL 9 on OpenShift (ppc64le)" />
-              <SelectItem value="rhel10_ocp"       text="RHEL 10 on OpenShift (ppc64le)" />
-              <SelectItem value="rhel9_baremetal"  text="RHEL 9 Bare Metal / PowerVM (ppc64le)" />
-              <SelectItem value="rhel10_baremetal" text="RHEL 10 Bare Metal / PowerVM (ppc64le)" />
+              <SelectItem value="rhel9_ocp"        text="OpenShift Platform (ppc64le)" />
+              <SelectItem value="rhel10_ocp"       text="OpenShift Platform — RHEL 10 (ppc64le)" />
+              <SelectItem value="rhel9_baremetal"  text="Bare Metal / PowerVM — RHEL 9 (ppc64le)" />
+              <SelectItem value="rhel10_baremetal" text="Bare Metal / PowerVM — RHEL 10 (ppc64le)" />
             </Select>
 
             <Select
@@ -382,7 +382,7 @@ export default function InputSection({ onRunTriage, isRunning, presets, activePr
               helperText="Match availability against the artefact type you intend to deploy."
             >
               <SelectItem value="container"    text="Container — OCI/Docker image" />
-              <SelectItem value="build"        text="Build — compiled binary, RPM, or wheel" />
+              <SelectItem value="build"        text="Build — compiled wheel" />
               <SelectItem value="build_script" text="Build Script — IBM ppc64le build recipe" />
             </Select>
 
