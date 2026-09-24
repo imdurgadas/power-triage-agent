@@ -42,18 +42,18 @@ The **Autonomous IBM Power Porting Triage Agent** qualifies a full migration in 
 
 ## Key Innovations
 
-1. **Recursive Iceberg Scoping** — Transitive build graph fully scoped before work begins; each node has its own person-day estimate.
-2. **4-Tier SIMD Classification** — `DIRECT` → `SIMDE_COMPATIBLE` → `PARTIAL_REWRITE` → `FULL_REDESIGN` (1.0×–4.0×) with SIMD volume brackets.
+1. **Recursive Iceberg Scoping** — Full transitive build graph scoped before work; each node has its own person-day estimate.
+2. **4-Tier SIMD Classification** — `DIRECT`→`SIMDE_COMPATIBLE`→`PARTIAL_REWRITE`→`FULL_REDESIGN` (1.0×–4.0×) with volume brackets.
 3. **Fibonacci Sizing Ceiling** — One defensible number (e.g., 21 PD) replacing ambiguous ranges.
 4. **64KB Page-Size Awareness** — Detects jemalloc-style allocators; prescribes `--with-lg-page=16`.
-5. **Constructive Tiers** — *Turnkey → Significant Effort → Alternative Required* with drop-in substitutes (IBM ESSL for Intel MKL).
-6. **Live URL Ingestion** — Crawls GitHub repos and docs; no structured manifest required from the customer.
+5. **Constructive Tiers** — *Turnkey → Significant → Alternative Required* with drop-ins (IBM ESSL for Intel MKL).
+6. **Live URL Ingestion** — Crawls GitHub repos and docs; no structured manifest required.
 
 ---
 
 ## Strategic Alignment
 
-Eliminates the longest bottleneck in the IBM Power pre-sales cycle, protects Porting Lab capacity, and proves hybrid AI leadership — deterministic correctness paired with generative communication.
+Eliminates the longest bottleneck in the IBM Power pre-sales cycle, protects Porting Lab capacity, and proves hybrid AI leadership — deterministic correctness with generative communication.
 
 ---
 
