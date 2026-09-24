@@ -1,6 +1,6 @@
-# IBM Power Porting Triage Agent — Submission Brief
+# Power Porting Triage Agent — Submission Brief
 
-**AI Elite Program · Autonomous AI Agent Prototype**
+**AI Elite Program · Autonomous AI Agent**
 **Target:** IBM Power (`ppc64le`) — RHEL 8/9, OpenShift OCP, Ubuntu, SLES
 
 ---
