@@ -1,6 +1,6 @@
-# Power Porting Triage Agent — Submission Brief
+# Power Porting Triage Agent
 
-**AI Elite Program · Autonomous AI Agent**
+***Autonomous AI Agent**
 **Target:** IBM Power (`ppc64le`) — RHEL 8/9, OpenShift OCP, Ubuntu, SLES
 
 ---
@@ -57,4 +57,3 @@ Eliminates the longest bottleneck in the IBM Power pre-sales cycle, protects Por
 
 ---
 
-*Submitted for the AI Elite Program Prototype Evaluation.*
