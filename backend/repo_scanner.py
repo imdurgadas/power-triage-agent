@@ -194,7 +194,7 @@ class RepoScanner:
 
     @classmethod
     def llm_infer_arch_support(cls, package_name: str, gemini_client=None, llm_service=None) -> ArchSupportScan:
-        """Infers repository architecture posture using LLM (IBM Bob Shell or Gemini) when no git repo URL is provided."""
+        """Infers repository architecture posture using LLM (IBM Bob or Gemini) when no git repo URL is provided."""
         if not package_name:
             return ArchSupportScan(scan_source="default_heuristic")
 

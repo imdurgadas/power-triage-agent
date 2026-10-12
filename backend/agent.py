@@ -297,7 +297,7 @@ class TriageAgent:
 
         # --- Image ingestion: extract manifest text from uploaded image via LLM vision ---
         if request.image_data_base64 and self.llm_service.is_active():
-            provider_label = "IBM Bob Shell" if self.llm_service.provider == "ibm_bob" else "LLM Vision"
+            provider_label = "IBM Bob" if self.llm_service.provider == "ibm_bob" else "LLM Vision"
             yield {
                 "type": "step",
                 "step": AgentStep(
@@ -990,7 +990,7 @@ class TriageAgent:
 
         # Telemetry Agent step
         step_counter += 1
-        provider_label = "IBM Bob Shell" if token_usage.llm_provider == "ibm_bob" else "Google Gemini"
+        provider_label = "IBM Bob" if token_usage.llm_provider == "ibm_bob" else "Google Gemini"
         breakdown_detail = (
             "Breakdown: " + ", ".join([f"{b.stage}: ${b.cost_usd:.4f} ({b.percentage}%)" for b in token_usage.breakdown])
             if token_usage.breakdown
@@ -1245,7 +1245,7 @@ class TriageAgent:
         # Section: LLM Telemetry & Accounting
         token_usage = summary.token_usage
         if token_usage:
-            engine_label = "IBM Bob Shell" if token_usage.llm_provider == "ibm_bob" else "Google Gemini"
+            engine_label = "IBM Bob" if token_usage.llm_provider == "ibm_bob" else "Google Gemini"
             breakdown_md = ""
             if token_usage.breakdown:
                 breakdown_md = "\n**Cost & Token Breakdown by Triage Stage:**\n\n"

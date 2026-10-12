@@ -265,7 +265,7 @@ export default function Scorecard({ summary, triageResult, tokenUsage, onOpenExp
                 LLM Token &amp; Cost Usage
               </p>
               <Tag type={usage.llm_provider === 'ibm_bob' ? 'blue' : 'purple'} size="sm" style={{ margin: 0 }}>
-                {usage.llm_provider === 'ibm_bob' ? 'IBM Bob Shell' : 'Google Gemini'}
+                {usage.llm_provider === 'ibm_bob' ? 'IBM Bob' : 'Google Gemini'}
               </Tag>
             </div>
 

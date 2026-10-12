@@ -1,6 +1,6 @@
 """
 llm_client.py
-Unified LLM Orchestrator supporting IBM Bob Shell and Google Gemini with
+Unified LLM Orchestrator supporting IBM Bob and Google Gemini with
 fine-grained token usage and cost accounting.
 """
 
@@ -93,7 +93,7 @@ class TokenTracker:
 
 
 class LLMService:
-    """Multi-provider LLM gateway supporting IBM Bob Shell and Google Gemini."""
+    """Multi-provider LLM gateway supporting IBM Bob and Google Gemini."""
 
     def __init__(
         self,
@@ -165,7 +165,7 @@ class LLMService:
         stage: Optional[str] = None,
     ) -> Optional[str]:
         """Routes prompt to the configured LLM provider and records token/cost usage."""
-        # 1. Primary: IBM Bob Shell
+        # 1. Primary: IBM Bob
         if self.provider == "ibm_bob":
             if self.bob_client.is_available():
                 res = self.bob_client.generate_content(
@@ -178,7 +178,7 @@ class LLMService:
                     self.tracker.record(res.input_tokens, res.output_tokens, res.cost_usd, stage=stage)
                     return res.text
                 else:
-                    logger.warning("IBM Bob Shell call failed (%s). Checking Gemini fallback...", res.error)
+                    logger.warning("IBM Bob call failed (%s). Checking Gemini fallback...", res.error)
 
             # Fallback to Gemini if Bob failed or unavailable
             if self.gemini_client:
@@ -209,7 +209,7 @@ class LLMService:
             if text:
                 self.tracker.record(in_tok, out_tok, cost, stage=stage)
                 return text
-            logger.warning("Gemini call failed. Checking Bob Shell fallback...")
+            logger.warning("Gemini call failed. Checking IBM Bob fallback...")
 
         # Fallback to Bob if Gemini failed or unavailable
         if self.bob_client.is_available():

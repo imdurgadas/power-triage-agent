@@ -95,7 +95,7 @@ The **IBM Power Porting Triage Agent** bridges deterministic ecosystem registrie
                                         │ • Persistent Mounted Lookup │
                                         │   (/app/backend/data cache) │
                                         │ • Dual LLM Engine:          │
-                                        │   - IBM Bob Shell (CLI)     │
+                                        │   - IBM Bob (CLI)           │
                                         │   - Google Gemini 2.5 Flash │
                                         └─────────────────────────────┘
 ```
@@ -106,8 +106,8 @@ The **IBM Power Porting Triage Agent** bridges deterministic ecosystem registrie
    Accepts standard enterprise dependency formats via two focused input workflows:
    - **Manifest & Text Input:** CycloneDX/SPDX SBOM JSON/XML, multi-stage Dockerfiles (`FROM ... AS builder`), Python `requirements.txt`, Docker Compose, Kubernetes manifests, and unstructured meeting transcripts.
    - **Git Repository & Documentation URLs:** Direct extraction and inspection from GitHub/GitLab repositories and technical documentation (e.g., `https://github.com/openai/whisper` or `https://rocksdb.org`).
-2. **Dual LLM Provider Support (IBM Bob Shell & Google Gemini):**  
-   Features first-class native support for **IBM Bob Shell (`ibm_bob`)** via headless execution of the `bob` CLI alongside **Google Gemini 2.5 Flash**. Includes auto-detection of local binary paths and environment keys (`BOBSHELL_API_KEY`, `GEMINI_API_KEY`), seamless provider fallback, and provider-agnostic neutral reasoning telemetry in the UI activity feed.
+2. **Dual LLM Provider Support (IBM Bob & Google Gemini):**  
+   Features first-class native support for **IBM Bob (`ibm_bob`)** via headless execution of the `bob` CLI alongside **Google Gemini 2.5 Flash**. Includes auto-detection of local binary paths and environment keys (`BOBSHELL_API_KEY`, `GEMINI_API_KEY`), seamless provider fallback, and provider-agnostic neutral reasoning telemetry in the UI activity feed.
 3. **Persistent Mounted Package Lookup Cache (`packages_lookup.json`):**  
    Maintains a filesystem-mounted lookup index (`backend/data/packages_lookup.json` mounted into `/app/backend/data`) that persists and refreshes analyzed packages, versions, and verified architecture findings across container restarts. Eliminates repetitive external LLM and registry round-trips, ensuring instantaneous qualification for previously audited packages.
 4. **Comprehensive Multi-Source Registry Probing:**  
@@ -209,5 +209,5 @@ The solution was validated across representative enterprise migration workloads:
 1. **Compresses Sales Cycles:** Reduces pre-sales qualification turnaround from 5–10 business days to under 30 seconds, accelerating platform modernization pipeline velocity.
 2. **Eliminates Engineering Bottlenecks:** Shields the IBM Power Porting Lab from routine package lookups, ensuring senior specialists focus exclusively on scoped, high-value unported libraries.
 3. **Establishes Unquestioned Estimation Credibility:** Eliminates heuristic guesswork with an auditable mathematical sizing model, multi-tier complexity analysis with debugging room, and transparent derivation drawer.
-4. **Minimizes Operational Cost & Latency:** Persistent mounted lookup cache avoids redundant LLM token expenditures and external registry latency, while supporting dual LLM engines (IBM Bob Shell and Google Gemini).
+4. **Minimizes Operational Cost & Latency:** Persistent mounted lookup cache avoids redundant LLM token expenditures and external registry latency, while supporting dual LLM engines (IBM Bob and Google Gemini).
 5. **Delivers Production-Grade Executive Assets:** Provides one-click executive PDF feasibility memos alongside structured JIRA-ready CSV engineering backlogs, transitioning seamlessly from pre-sales alignment to sprint execution.

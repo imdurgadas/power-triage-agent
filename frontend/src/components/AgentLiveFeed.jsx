@@ -54,7 +54,7 @@ export default function AgentLiveFeed({ steps, isRunning, tokenUsage }) {
               </span>
               <span style={{ color: '#8d8d8d' }}>•</span>
               <span style={{ color: '#a8a8a8' }}>
-                {tokenUsage.llm_provider === 'ibm_bob' ? 'Bob Shell' : 'Gemini'}
+                {tokenUsage.llm_provider === 'ibm_bob' ? 'IBM Bob' : 'Gemini'}
               </span>
             </div>
           )}

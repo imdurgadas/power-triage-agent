@@ -93,7 +93,7 @@ export default function ExportModal({ triageData, markdownContent, csvData, proj
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', padding: '0.6rem 0.85rem', background: 'rgba(15, 98, 254, 0.1)', border: '1px solid #0f62fe', borderRadius: '2px', marginBottom: '1rem', fontSize: '0.82rem' }}>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center' }}>
             <strong style={{ color: '#78a9ff' }}>⚡ LLM Telemetry:</strong>
-            <span style={{ color: '#f4f4f4' }}>Engine: <b>{triageData.token_usage.llm_provider === 'ibm_bob' ? 'IBM Bob Shell' : 'Google Gemini'}</b> ({triageData.token_usage.llm_model})</span>
+            <span style={{ color: '#f4f4f4' }}>Engine: <b>{triageData.token_usage.llm_provider === 'ibm_bob' ? 'IBM Bob' : 'Google Gemini'}</b> ({triageData.token_usage.llm_model})</span>
             <span style={{ color: '#42be65', fontWeight: 700 }}>Cost: ${Number(triageData.token_usage.cost_usd || 0).toFixed(4)} USD</span>
             <span style={{ color: '#a8a8a8' }}>Tokens: {Number(triageData.token_usage.total_tokens || 0).toLocaleString()} ({Number(triageData.token_usage.input_tokens || 0).toLocaleString()} in / {Number(triageData.token_usage.output_tokens || 0).toLocaleString()} out)</span>
           </div>

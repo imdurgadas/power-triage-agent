@@ -216,7 +216,7 @@ export default function InputSection({
                 transition: 'all 0.15s ease-in-out',
               }}
             >
-              <span>IBM Bob (Bob Shell)</span>
+              <span>IBM Bob</span>
               {hasServerBob && (
                 <span style={{ background: '#24a148', color: '#ffffff', fontSize: '0.65rem', padding: '1px 5px', borderRadius: '4px', fontWeight: 700 }}>
                   ACTIVE
@@ -276,8 +276,8 @@ export default function InputSection({
             <div>
               <PasswordInput
                 id="bob-key-input"
-                labelText="IBM Bob Shell Key (BOBSHELL_API_KEY)"
-                helperText={hasServerBob ? "✓ Loaded from server .env file. Enter only to override." : "Enter your IBM Bob Shell API key."}
+                labelText="IBM Bob Key (BOBSHELL_API_KEY)"
+                helperText={hasServerBob ? "✓ Loaded from server .env file. Enter only to override." : "Enter your IBM Bob API key."}
                 placeholder={hasServerBob ? "Configured in server .env" : "your_bob_api_key..."}
                 value={bobKey}
                 onChange={(e) => setBobKey(e.target.value)}

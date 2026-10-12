@@ -34,7 +34,7 @@ class URLExtractor:
         gemini_client: Optional[Any] = None,
         llm_service: Optional[Any] = None,
     ) -> Tuple[List[Dict[str, str]], str, str]:
-        """Fetches URL, extracts text/manifests, and infers dependencies using LLM (IBM Bob Shell or Gemini) or heuristics.
+        """Fetches URL, extracts text/manifests, and infers dependencies using LLM (IBM Bob or Gemini) or heuristics.
         
         Returns:
             (packages, page_title, summary_note)
@@ -139,7 +139,7 @@ class URLExtractor:
         content: str,
         llm_service: Optional[Any] = None,
     ) -> List[Dict[str, str]]:
-        """Uses LLM (IBM Bob Shell or Gemini) to intelligently extract packages, dependencies, and versions."""
+        """Uses LLM (IBM Bob or Gemini) to intelligently extract packages, dependencies, and versions."""
         prompt = (
             f"You are an expert systems architecture and software dependency analyst.\n"
             f"A user wants to migrate a workload or library from this URL to IBM Power (ppc64le):\n"

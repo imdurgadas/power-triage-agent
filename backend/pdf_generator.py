@@ -357,7 +357,7 @@ class ExecutivePDFGenerator:
         # LLM Analysis Telemetry & Cost Accounting
         token_usage = triage_data.get("token_usage") or summary.get("token_usage")
         if token_usage:
-            provider_label = "IBM Bob Shell" if token_usage.get("llm_provider") == "ibm_bob" else "Google Gemini"
+            provider_label = "IBM Bob" if token_usage.get("llm_provider") == "ibm_bob" else "Google Gemini"
             in_t = token_usage.get("input_tokens", 0)
             out_t = token_usage.get("output_tokens", 0)
             tot_t = token_usage.get("total_tokens", in_t + out_t)
@@ -366,7 +366,7 @@ class ExecutivePDFGenerator:
             telemetry_data = [
                 [
                     Paragraph("<b>LLM Analysis Engine</b>", body_style),
-                    Paragraph(f"{provider_label} ({token_usage.get('llm_model', 'bob-shell')})", body_style),
+                    Paragraph(f"{provider_label} ({token_usage.get('llm_model', 'bob')})", body_style),
                     Paragraph("<b>Analysis Cost</b>", body_style),
                     Paragraph(f"<b><font color='{PRIMARY.hexval()}'>${cost_usd:.4f} USD</font></b> ({calls_c} call{'s' if calls_c != 1 else ''})", body_style),
                 ],

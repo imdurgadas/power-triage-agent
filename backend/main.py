@@ -123,7 +123,7 @@ async def get_llm_config():
         "providers": {
             "ibm_bob": {
                 "id": "ibm_bob",
-                "name": "IBM Bob (Bob Shell)",
+                "name": "IBM Bob",
                 "available": bob_client.is_available(),
                 "binary_found": bool(bob_client.binary),
                 "binary_path": bob_client.binary,

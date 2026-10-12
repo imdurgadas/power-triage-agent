@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get install -y --no-install-recommends nodejs \
     && rm -rf /var/lib/apt/lists/*
 
-# Install IBM Bob Shell CLI globally
+# Install IBM Bob CLI globally
 RUN curl -fsSL https://bob.ibm.com/download/bobshell.sh | bash -s -- --pm npm || true
 
 # Set up Bob configuration directory

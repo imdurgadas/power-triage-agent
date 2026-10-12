@@ -284,14 +284,14 @@ def build_presentation_pdf(output_path="customer_presentation.pdf"):
     story.append(PageBreak())
     story.append(Paragraph("4. Solution Architecture & Ecosystem Intelligence Pipeline", h1_style))
     story.append(Paragraph(
-        "The <b>IBM Power Porting Triage Agent</b> seamlessly bridges deterministic ecosystem registry connectors, a persistent mounted knowledge cache, dual LLM reasoning engines (IBM Bob Shell &amp; Google Gemini), and an enterprise lifecycle sizing engine to provide real-time feasibility analysis and defensible delivery estimates:",
+        "The <b>IBM Power Porting Triage Agent</b> seamlessly bridges deterministic ecosystem registry connectors, a persistent mounted knowledge cache, dual LLM reasoning engines (IBM Bob &amp; Google Gemini), and an enterprise lifecycle sizing engine to provide real-time feasibility analysis and defensible delivery estimates:",
         body_style
     ))
     story.append(Spacer(1, 2))
 
     innovations = [
         ("Streamlined Dual-Input Ingestion", "Ingests CycloneDX/SPDX SBOMs, multi-stage Dockerfiles (<code>FROM ... AS builder</code>), Python requirements, Docker Compose, Kubernetes manifests, raw client text, and direct <b>Git repository &amp; documentation URLs</b> (e.g., <code>https://github.com/openai/whisper</code> or <code>https://rocksdb.org</code>)."),
-        ("Dual LLM Reasoning Engine (IBM Bob Shell &amp; Gemini)", "Features first-class native support for <b>IBM Bob Shell (<code>ibm_bob</code>)</b> headless execution alongside Google Gemini. Auto-detects local CLI binaries and keys with dynamic fallback and neutral, provider-agnostic telemetry in the live activity feed."),
+        ("Dual LLM Reasoning Engine (IBM Bob &amp; Gemini)", "Features first-class native support for <b>IBM Bob (<code>ibm_bob</code>)</b> headless execution alongside Google Gemini. Auto-detects local CLI binaries and keys with dynamic fallback and neutral, provider-agnostic telemetry in the live activity feed."),
         ("Persistent Mounted Package Knowledge Cache", "Maintains a filesystem-mounted cache (<code>backend/data/packages_lookup.json</code> at <code>/app/backend/data</code>) that persists and dynamically refreshes analyzed packages and versions, eliminating repetitive LLM and registry lookups."),
         ("Multi-Tier Package Complexity &amp; Dedicated Debugging Room", "Replaces flat 1 PD assumptions with dynamic complexity tiers (Systems/Storage: 5.5–8.5d, Vector Math: 8.5–9d, Native C/C++: 3.5–4d, Rust/Go: 3d). Explicitly allocates <b>1.0–1.5 PD</b> for compiler flag adaptation, 64KB page-size alignment, and test suite debugging."),
         ("IBM DevPi Wheels &amp; ICR Multi-Arch Containers", "Directly matches optimized ppc64le wheels (PyTorch, Numba, NumPy, Tiktoken) in IBM DevPi and enterprise multi-arch images in IBM Cloud Registry (ICR) and <code>ppc64le/build-scripts</code>."),
@@ -492,14 +492,14 @@ def build_presentation_pdf(output_path="customer_presentation.pdf"):
     story.append(Paragraph("1. <b>Compresses Sales Cycles:</b> Reduces pre-sales qualification turnaround from 5–10 business days to under 30 seconds, arming client teams with authoritative migration roadmaps within seconds of first contact.", bullet_style))
     story.append(Paragraph("2. <b>Optimizes Engineering Capacity:</b> Shields the IBM Power Porting Lab from routine package lookups, ensuring senior specialists focus exclusively on scoped, high-value unported libraries.", bullet_style))
     story.append(Paragraph("3. <b>Establishes Unquestioned Sizing Credibility:</b> Replaces heuristic guesswork with a transparent 6-stage lifecycle WBS, multi-tier complexity analysis with debugging room, and an interactive derivation drawer.", bullet_style))
-    story.append(Paragraph("4. <b>Minimizes Operational Cost &amp; Latency:</b> Persistent mounted lookup cache avoids redundant LLM token expenditures and registry latency, while supporting dual LLM engines (IBM Bob Shell and Google Gemini).", bullet_style))
+    story.append(Paragraph("4. <b>Minimizes Operational Cost &amp; Latency:</b> Persistent mounted lookup cache avoids redundant LLM token expenditures and registry latency, while supporting dual LLM engines (IBM Bob and Google Gemini).", bullet_style))
     story.append(Paragraph("5. <b>Actionable Developer Deliverables:</b> Generates one-click executive proposals alongside structured JIRA-ready CSV engineering backlogs ready for immediate sprint execution.", bullet_style))
     story.append(Spacer(1, 4))
 
     # Executive Sign-off Callout
     callout_data = [[
         Paragraph(
-            "<b>Executive Deployment Status:</b> The IBM Power Porting Triage Agent is fully operational and containerized via Podman and Docker Compose. It features native integration with seven ecosystem registries, dual LLM engine execution (IBM Bob Shell &amp; Google Gemini), persistent mounted lookup caching, and delivers compliant IBM Carbon Design System (g100) interfaces ready for client demonstrations and automated API deployment.",
+            "<b>Executive Deployment Status:</b> The IBM Power Porting Triage Agent is fully operational and containerized via Podman and Docker Compose. It features native integration with seven ecosystem registries, dual LLM engine execution (IBM Bob &amp; Google Gemini), persistent mounted lookup caching, and delivers compliant IBM Carbon Design System (g100) interfaces ready for client demonstrations and automated API deployment.",
             callout_style
         )
     ]]

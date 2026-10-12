@@ -1,6 +1,6 @@
 """
 bob_client.py
-Encapsulates interaction with the IBM Bob Shell CLI: headless execution,
+Encapsulates interaction with the IBM Bob CLI: headless execution,
 structured output extraction, and real-time token/cost telemetry.
 Referenced from bob-shell-agents/pr-reviewer.
 """
@@ -36,7 +36,7 @@ class BobExecutionResult:
 
 
 class BobClient:
-    """Dedicated client to execute and manage IBM Bob Shell headless runs with telemetry."""
+    """Dedicated client to execute and manage IBM Bob headless runs with telemetry."""
 
     def __init__(
         self,
@@ -70,9 +70,9 @@ class BobClient:
         image_data_base64: Optional[str] = None,
         image_media_type: str = "image/png",
     ) -> BobExecutionResult:
-        """Executes Bob Shell in headless mode and extracts response text, tokens, and cost."""
+        """Executes IBM Bob in headless mode and extracts response text, tokens, and cost."""
         if not self.is_available():
-            err_msg = "IBM Bob Shell is not available (missing binary or BOBSHELL_API_KEY)."
+            err_msg = "IBM Bob is not available (missing binary or BOBSHELL_API_KEY)."
             logger.warning(err_msg)
             return BobExecutionResult(is_success=False, error=err_msg)
 
@@ -125,7 +125,7 @@ class BobClient:
             env["BOBSHELL_API_KEY"] = self.api_key
 
         logger.info(
-            "Executing IBM Bob Shell headless run (binary: %s, prompt size: %d bytes)",
+            "Executing IBM Bob headless run (binary: %s, prompt size: %d bytes)",
             self.binary, len(augmented_prompt)
         )
 
@@ -191,7 +191,7 @@ class BobClient:
             logger.exception("Error executing Bob CLI: %s", str(e))
             return BobExecutionResult(
                 is_success=False,
-                error=f"Failed to execute Bob Shell: {str(e)}"
+                error=f"Failed to execute IBM Bob: {str(e)}"
             )
         finally:
             shutil.rmtree(workspace_dir, ignore_errors=True)

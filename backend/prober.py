@@ -494,7 +494,7 @@ class MultiSourceProber:
             self.lookup_mgr.save_or_refresh(clean_name, version, raw)
             return classify_deliverable_match(raw, version, deliverable_type)
 
-        # 9. LLM agentic research (IBM Bob Shell or Gemini)
+        # 9. LLM agentic research (IBM Bob or Gemini)
         if (self.llm_service and self.llm_service.is_active()) or self.gemini_client:
             llm_res = await self._probe_gemini_llm(clean_name, version, ecosystem, target_os)
             if llm_res:

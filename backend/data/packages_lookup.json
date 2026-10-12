@@ -323,12 +323,26 @@
   "lz4": {
     "package_name": "lz4",
     "ecosystem": "native_c",
-    "version": "1.9.4",
-    "status": "NATIVE_AVAILABLE",
-    "available_version": "1.9.4",
-    "tier": "Core OS Library",
-    "evidence": "RHEL 8/9 AppStream ppc64le",
-    "url": "https://github.com/lz4/lz4"
+    "version": "1.9.3",
+    "status": "native_available",
+    "available_version": "4.4.5",
+    "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+    "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'lz4' (version 4.4.5). Build script: lz4_4.4.5_ubi_9.6.sh",
+    "url": "https://github.com/ppc64le/build-scripts/tree/master/l/lz4",
+    "last_analyzed": "2026-10-12T10:49:30.348150+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "1.9.3": {
+        "status": "native_available",
+        "available_version": "4.4.5",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'lz4' (version 4.4.5). Build script: lz4_4.4.5_ubi_9.6.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/l/lz4",
+        "substitute": null,
+        "version_warning": "Requested version 1.9.3 is older than build-scripts version 4.4.5; recommend upgrading to 4.4.5.",
+        "last_analyzed": "2026-10-12T10:49:30.348150+00:00"
+      }
+    }
   },
   "rocksdb": {
     "package_name": "rocksdb",
@@ -1165,5 +1179,53 @@
       "scan_source": "llm_inference",
       "effort_adjustment_factor": 1.0
     }
+  },
+  "bzip2": {
+    "package_name": "bzip2",
+    "version": "1.0.8",
+    "last_analyzed": "2026-10-12T10:49:28.947092+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "1.0.8": {
+        "status": "native_available",
+        "available_version": "1.0.8",
+        "tier": "Tier 1 – RHEL 9 BaseOS (official Red Hat repository, ppc64le native)",
+        "evidence": "bzip2 1.0.8 is shipped in the RHEL 9 BaseOS repository for all supported architectures including ppc64le (IBM Power). It is a mandatory base system package maintained by Red Hat.",
+        "url": "https://packages.fedoraproject.org/pkgs/bzip2/bzip2/",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T10:49:28.947092+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "1.0.8",
+    "tier": "Tier 1 – RHEL 9 BaseOS (official Red Hat repository, ppc64le native)",
+    "evidence": "bzip2 1.0.8 is shipped in the RHEL 9 BaseOS repository for all supported architectures including ppc64le (IBM Power). It is a mandatory base system package maintained by Red Hat.",
+    "url": "https://packages.fedoraproject.org/pkgs/bzip2/bzip2/",
+    "substitute": null
+  },
+  "gtest": {
+    "package_name": "gtest",
+    "version": "1.13.0",
+    "last_analyzed": "2026-10-12T10:50:00.005383+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "1.13.0": {
+        "status": "native_available",
+        "available_version": "1.13.0",
+        "tier": "Tier 1 - Native ppc64le build via conda-forge (linux-ppc64le); RHEL 9 CRB ships older gtest 1.11.0",
+        "evidence": "conda-forge publishes gtest 1.13.0 for linux-ppc64le. RHEL 9 CodeReady Builder (ppc64le) provides gtest/gtest-devel 1.11.0 (older than requested); Fedora/EPEL-style source RPM rebuild of 1.13.0 is also straightforward since googletest is pure C++/CMake with no arch-specific code.",
+        "url": "https://anaconda.org/conda-forge/gtest",
+        "substitute": null,
+        "version_warning": "RHEL 9 CRB packages gtest 1.11.0 (< 1.13.0); use conda-forge gtest 1.13.0 or build googletest v1.13.0 from source with CMake to get the exact requested version. Not verified live in this environment.",
+        "last_analyzed": "2026-10-12T10:50:00.005383+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "1.13.0",
+    "tier": "Tier 1 - Native ppc64le build via conda-forge (linux-ppc64le); RHEL 9 CRB ships older gtest 1.11.0",
+    "evidence": "conda-forge publishes gtest 1.13.0 for linux-ppc64le. RHEL 9 CodeReady Builder (ppc64le) provides gtest/gtest-devel 1.11.0 (older than requested); Fedora/EPEL-style source RPM rebuild of 1.13.0 is also straightforward since googletest is pure C++/CMake with no arch-specific code.",
+    "url": "https://anaconda.org/conda-forge/gtest",
+    "substitute": null
   }
 }
