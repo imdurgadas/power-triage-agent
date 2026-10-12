@@ -85,7 +85,7 @@ class AvailabilityStatus(str, Enum):
     BLOCKER                  = "blocker"
 
 
-# v4: positive effort-oriented tiers (Fibonacci sizing)
+# v4: positive effort-oriented tiers (Porting Lifecycle WBS sizing)
 class SalesRecommendationTier(str, Enum):
     MINIMAL_EFFORT      = "Minimal Effort"
     MINOR_EFFORT        = "Minor Effort"
@@ -217,6 +217,19 @@ class PackageTriageResult(BaseModel):
     porting_notes: str = ""
 
 
+class SizingBreakdown(BaseModel):
+    prep_env_pd: float = 0.0               # Environment & Toolchain Preparation
+    readiness_audit_pd: float = 0.0        # Architecture Readiness & Feasibility Inspection
+    build_source_pd: float = 0.0           # Source Compilation & Core Porting
+    ci_pipeline_pd: float = 0.0            # CI Pipeline & Multi-Arch Container Integration
+    bug_fix_validation_pd: float = 0.0     # Testing, Bug Fixing & Stabilization
+    contingency_buffer_pd: float = 0.0     # Risk & Upstream Contingency Buffer (20-25%)
+    contingency_pct: float = 20.0          # Percentage buffer applied
+    subtotal_pd: float = 0.0               # Subtotal effort before buffer
+    total_estimated_pd: int = 0            # Total committed person-days
+    methodology_note: str = ""
+
+
 class TriageSummary(BaseModel):
     total_packages: int
     native_count: int
@@ -227,12 +240,38 @@ class TriageSummary(BaseModel):
     readiness_score_pct: float
     recommendation: SalesRecommendationTier
     recommendation_reason: str
-    fibonacci_effort_pd: int = 0
+    estimated_effort_pd: int = 0
     min_total_person_days: int = 0
     max_total_person_days: int = 0
     unported_transitive_deps_count: int
     test_deps_unresolved_count: int = 0
     partial_support_count: int = 0   # packages with PARTIAL_* deliverable match
+    sizing_breakdown: Optional[SizingBreakdown] = None
+    token_usage: Optional['TokenUsage'] = None
+
+
+class TokenStageBreakdown(BaseModel):
+    stage: str
+    calls_count: int = 1
+    input_tokens: int = 0
+    output_tokens: int = 0
+    total_tokens: int = 0
+    cost_usd: float = 0.0
+    percentage: float = 0.0
+
+
+class TokenUsage(BaseModel):
+    input_tokens: int = 0
+    output_tokens: int = 0
+    total_tokens: int = 0
+    cost_usd: float = 0.0
+    llm_provider: str = "ibm_bob"
+    llm_model: str = "bob-shell"
+    calls_count: int = 0
+    breakdown: List[TokenStageBreakdown] = Field(default_factory=list)
+
+
+TriageSummary.model_rebuild()
 
 
 class AgentStep(BaseModel):
@@ -273,6 +312,8 @@ class TriageRequest(BaseModel):
     image_media_type: Optional[str] = "image/png"
 
     # LLM config override
+    llm_provider: Optional[str] = "ibm_bob"  # "ibm_bob" | "gemini" | "auto"
+    bobshell_api_key: Optional[str] = None
     gemini_api_key: Optional[str] = None
 
     def effective_os(self) -> str:
@@ -299,3 +340,4 @@ class TriageResponse(BaseModel):
     source_url: Optional[str] = None
     package_ecosystem: Optional[str] = None
     package_version: Optional[str] = None
+    token_usage: Optional[TokenUsage] = None

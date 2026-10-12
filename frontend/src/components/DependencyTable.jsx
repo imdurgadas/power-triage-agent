@@ -481,6 +481,24 @@ export default function DependencyTable({ packages, onOpenCodeAudit }) {
               );
             })}
           </tbody>
+          <tfoot>
+            <tr style={{ background: '#1c1c1c', borderTop: '2px solid #393939' }}>
+              <td colSpan={6} style={{ padding: '0.9rem 1rem', textAlign: 'right', fontWeight: 600, color: '#c6c6c6' }}>
+                Total Direct Package Porting &amp; Adaptation Effort:
+              </td>
+              <td style={{ padding: '0.9rem 1rem' }}>
+                <div style={{ fontSize: '1.15rem', fontWeight: 800, color: '#78a9ff' }}>
+                  {packages.reduce((sum, p) => sum + (p.total_effort_pd || 0), 0)} PD
+                </div>
+                <div style={{ fontSize: '0.72rem', color: '#a8a8a8' }}>
+                  Sum of table rows
+                </div>
+              </td>
+              <td style={{ padding: '0.9rem 1rem', fontSize: '0.74rem', color: '#8d8d8d' }}>
+                Direct component build tasks
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </Tile>

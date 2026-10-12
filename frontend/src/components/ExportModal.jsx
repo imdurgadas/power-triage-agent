@@ -80,11 +80,33 @@ export default function ExportModal({ triageData, markdownContent, csvData, proj
 
       {/* Workload provenance banner */}
       {(primaryPkg || gitUrl || docUrl) && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center', padding: '0.5rem 0.85rem', background: 'var(--cds-layer-02)', border: '1px solid var(--cds-border-subtle-01)', borderRadius: '2px', marginBottom: '1rem', fontSize: '0.82rem' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center', padding: '0.5rem 0.85rem', background: 'var(--cds-layer-02)', border: '1px solid var(--cds-border-subtle-01)', borderRadius: '2px', marginBottom: '0.75rem', fontSize: '0.82rem' }}>
           <strong style={{ color: 'var(--cds-text-primary)' }}>Qualified Workload:</strong>
           {primaryPkg && <span style={{ color: 'var(--cds-interactive)' }}>📦 {primaryPkg}</span>}
           {gitUrl && <span style={{ color: 'var(--cds-text-secondary)' }}>GitHub: <a href={gitUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--cds-link-primary)' }}>{gitUrl.replace('https://github.com/', '')}</a></span>}
           {docUrl && <span style={{ color: 'var(--cds-text-secondary)' }}>Docs: <a href={docUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--cds-link-primary)' }}>{docUrl.replace(/^https?:\/\//, '')}</a></span>}
+        </div>
+      )}
+
+      {/* LLM Telemetry banner */}
+      {triageData?.token_usage && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', padding: '0.6rem 0.85rem', background: 'rgba(15, 98, 254, 0.1)', border: '1px solid #0f62fe', borderRadius: '2px', marginBottom: '1rem', fontSize: '0.82rem' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center' }}>
+            <strong style={{ color: '#78a9ff' }}>⚡ LLM Telemetry:</strong>
+            <span style={{ color: '#f4f4f4' }}>Engine: <b>{triageData.token_usage.llm_provider === 'ibm_bob' ? 'IBM Bob Shell' : 'Google Gemini'}</b> ({triageData.token_usage.llm_model})</span>
+            <span style={{ color: '#42be65', fontWeight: 700 }}>Cost: ${Number(triageData.token_usage.cost_usd || 0).toFixed(4)} USD</span>
+            <span style={{ color: '#a8a8a8' }}>Tokens: {Number(triageData.token_usage.total_tokens || 0).toLocaleString()} ({Number(triageData.token_usage.input_tokens || 0).toLocaleString()} in / {Number(triageData.token_usage.output_tokens || 0).toLocaleString()} out)</span>
+          </div>
+          {triageData.token_usage.breakdown && triageData.token_usage.breakdown.length > 0 && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', borderTop: '1px solid rgba(15, 98, 254, 0.25)', paddingTop: '0.4rem', fontSize: '0.74rem' }}>
+              <span style={{ color: '#78a9ff', fontWeight: 600 }}>Where cost was incurred:</span>
+              {triageData.token_usage.breakdown.map((b, i) => (
+                <span key={i} style={{ background: 'rgba(255,255,255,0.06)', padding: '0.1rem 0.4rem', borderRadius: '2px', color: '#e0e0e0' }}>
+                  {b.stage}: <b style={{ color: '#42be65' }}>${Number(b.cost_usd || 0).toFixed(4)}</b> ({b.percentage}%)
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       )}
 

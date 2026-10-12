@@ -159,24 +159,18 @@ class UniversalNormalizer:
         results = []
         found_names = set()
 
-        # Common tech keywords to look for
-        known_tokens = [
-            "rocksdb", "simdjson", "nginx", "redis", "postgres", "postgresql", "mysql", "mongodb", "kafka", "rabbitmq",
-            "elasticsearch", "opensearch", "torch", "pytorch", "tensorflow", "scipy", "numpy",
-            "pandas", "onnxruntime", "grpc", "leveldb", "fastapi", "flask", "django",
-            "express", "spring-boot", "golang", "rust", "llvm", "bazel", "cmake", "libdeflate",
-            "openssl", "zlib", "spdk", "dpdk", "arrow", "parquet", "faiss",
-            "intel-mkl", "mkl", "openblas", "blis", "essl", "snappy", "lz4", "jemalloc"
-        ]
+        # Look up recognizable packages dynamically from package lookup file
+        lookup_map = {}
+        try:
+            from .package_lookup import get_lookup_manager
+            tokens = get_lookup_manager().get_known_tokens()
+            lookup_map = {token: eco for token, eco in tokens}
+            known_tokens = list(lookup_map.keys())
+        except Exception:
+            known_tokens = []
 
         def guess_ecosystem(token: str) -> str:
-            if token in ["torch", "pytorch", "tensorflow", "scipy", "numpy", "pandas", "fastapi", "flask", "django"]:
-                return "pypi"
-            elif token in ["nginx", "redis", "postgres", "postgresql", "mysql", "mongodb", "kafka", "rabbitmq"]:
-                return "container"
-            elif token in ["rocksdb", "leveldb", "simdjson", "spdk", "dpdk", "libdeflate", "openssl", "faiss", "zlib", "intel-mkl", "mkl", "openblas", "blis", "essl", "snappy", "lz4", "jemalloc"]:
-                return "native_c"
-            return "container"
+            return lookup_map.get(token, "container")
 
         # Pass 1: Line-by-line inspection (prioritizes bullet points and listed components in order)
         for line in text.splitlines():

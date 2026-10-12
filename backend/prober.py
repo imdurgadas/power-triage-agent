@@ -112,143 +112,29 @@ def compare_versions(requested: str, available: str) -> int:
             return 0
 
 
-# Pre-compiled high-fidelity database of known Power ecosystem components to provide instant responses
-# and augment live API checks
-POWER_ECOSYSTEM_CACHE = {
-    # Containers with native ppc64le multi-arch tags on Docker Hub / Quay / Red Hat Registry
-    "nginx": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "available_version": "1.24", "tier": "Official multi-arch container", "evidence": "Docker Hub Official (linux/ppc64le)", "url": "https://hub.docker.com/_/nginx"},
-    "redis": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "available_version": "7.2", "tier": "Official multi-arch container", "evidence": "Docker Hub Official (linux/ppc64le)", "url": "https://hub.docker.com/_/redis"},
-    "postgres": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "available_version": "15.0", "tier": "Official multi-arch container", "evidence": "Docker Hub Official (linux/ppc64le)", "url": "https://hub.docker.com/_/postgres"},
-    "postgresql": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "available_version": "15.0", "tier": "Official multi-arch container", "evidence": "Docker Hub Official (linux/ppc64le)", "url": "https://hub.docker.com/_/postgres"},
-    "mysql": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "available_version": "8.0", "tier": "Red Hat / CentOS Stream container", "evidence": "Red Hat Ecosystem Catalog (ppc64le)", "url": "https://catalog.redhat.com"},
-    "kafka": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "available_version": "3.6.0", "tier": "Red Hat Strimzi / Apache Kafka multi-arch", "evidence": "Quay.io/strimzi/kafka (linux on ppc64le verified)", "url": "https://quay.io/repository/strimzi/kafka"},
-    "strimzi/kafka": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "available_version": "3.6.0", "tier": "Red Hat Strimzi / Apache Kafka multi-arch", "evidence": "Quay.io/strimzi/kafka (linux on ppc64le verified)", "url": "https://quay.io/repository/strimzi/kafka"},
-    "rabbitmq": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "available_version": "3.12", "tier": "Official multi-arch container", "evidence": "Docker Hub Official (linux/ppc64le)", "url": "https://hub.docker.com/_/rabbitmq"},
-    "node": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "available_version": "20.0", "tier": "Official multi-arch container", "evidence": "Docker Hub Official (linux/ppc64le)", "url": "https://hub.docker.com/_/node"},
-    "python": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "available_version": "3.11", "tier": "Official multi-arch container", "evidence": "Docker Hub Official (linux/ppc64le)", "url": "https://hub.docker.com/_/python"},
-    "golang": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "available_version": "1.21", "tier": "Official multi-arch container", "evidence": "Docker Hub Official (linux/ppc64le)", "url": "https://hub.docker.com/_/golang"},
+from .package_lookup import get_lookup_manager
 
-    # Core System & Compression Libraries natively shipped in all Linux distributions for ppc64le
-    "zlib": {
-        "status": AvailabilityStatus.NATIVE_AVAILABLE,
-        "available_version": "1.2.11",
-        "tier": "Core OS Library / Compression",
-        "evidence": "Native package in RHEL / SLES / Ubuntu BaseOS (zlib, zlib-devel ppc64le with hardware vector acceleration)",
-        "url": "https://www.zlib.net"
-    },
-    "zlib-devel": {
-        "status": AvailabilityStatus.NATIVE_AVAILABLE,
-        "available_version": "1.2.11",
-        "tier": "Core OS Development Headers",
-        "evidence": "RHEL / SLES / Ubuntu BaseOS ppc64le",
-        "url": "https://www.zlib.net"
-    },
-    "libz": {
-        "status": AvailabilityStatus.NATIVE_AVAILABLE,
-        "available_version": "1.2.11",
-        "tier": "Core OS Library / Compression",
-        "evidence": "Standard shared library in Linux on Power (ppc64le)",
-        "url": "https://www.zlib.net"
-    },
-    "libdeflate": {
-        "status": AvailabilityStatus.NATIVE_AVAILABLE,
-        "available_version": "1.18",
-        "tier": "EPEL 9 repository for ppc64le",
-        "evidence": "EPEL 9 ppc64le / Conda-forge",
-        "url": "https://packages.fedoraproject.org/pkgs/libdeflate/"
-    },
-    "openssl": {
-        "status": AvailabilityStatus.NATIVE_AVAILABLE,
-        "available_version": "3.0.7",
-        "tier": "Core OS Library / Cryptography",
-        "evidence": "Native package in RHEL / SLES / Ubuntu BaseOS ppc64le",
-        "url": "https://www.openssl.org"
-    },
-    "openssl-devel": {
-        "status": AvailabilityStatus.NATIVE_AVAILABLE,
-        "available_version": "3.0.7",
-        "tier": "Core OS Development Headers",
-        "evidence": "RHEL / SLES / Ubuntu BaseOS ppc64le",
-        "url": "https://www.openssl.org"
-    },
-    "snappy": {
-        "status": AvailabilityStatus.NATIVE_AVAILABLE,
-        "available_version": "1.2.2",
-        "tier": "Core OS Library",
-        "evidence": "RHEL 8/9 AppStream ppc64le; ppc64le/build-scripts v1.2.2",
-        "url": "https://github.com/google/snappy"
-    },
-    "lz4": {
-        "status": AvailabilityStatus.NATIVE_AVAILABLE,
-        "tier": "Core OS Library",
-        "evidence": "RHEL 8/9 AppStream ppc64le",
-        "url": "https://github.com/lz4/lz4"
-    },
 
-    # Python packages with native ppc64le wheels or Open-CE support
-    "numpy": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "tier": "PyPI native ppc64le wheel", "evidence": "PyPI release (ppc64le wheel available)", "url": "https://pypi.org/project/numpy"},
-    "pandas": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "tier": "PyPI native ppc64le wheel", "evidence": "PyPI release (ppc64le wheel available)", "url": "https://pypi.org/project/pandas"},
-    "scipy": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "tier": "PyPI native ppc64le wheel", "evidence": "PyPI release (ppc64le wheel available)", "url": "https://pypi.org/project/scipy"},
-    # torch and tensorflow are intentionally absent here — the ppc64le/pyeco DevPi
-    # wheels index has native ppc64le wheels for both and is more authoritative.
-    # _probe_devpi_wheels() handles them and returns NATIVE_AVAILABLE.
-    # pytorch (conda name, no devpi entry) and faiss (no devpi entry) remain below.
-    "pytorch": {
-        "status": AvailabilityStatus.SUBSTITUTE_AVAILABLE,
-        "tier": "IBM Open-CE optimized package",
-        "evidence": "IBM Open-CE / RocketCE repository (conda-forge ppc64le)",
-        "url": "https://github.com/open-ce/open-ce",
-        "substitute": "open-ce/pytorch-ppc64le (optimized with Power VSX / MMA)"
-    },
-    "fastapi": {"status": AvailabilityStatus.PLATFORM_AGNOSTIC, "tier": "Pure Python package (noarch)", "evidence": "PyPI (py2.py3-none-any.whl)", "url": "https://pypi.org/project/fastapi"},
-    "flask": {"status": AvailabilityStatus.PLATFORM_AGNOSTIC, "tier": "Pure Python package (noarch)", "evidence": "PyPI (py2.py3-none-any.whl)", "url": "https://pypi.org/project/flask"},
-    "requests": {"status": AvailabilityStatus.PLATFORM_AGNOSTIC, "tier": "Pure Python package (noarch)", "evidence": "PyPI (py2.py3-none-any.whl)", "url": "https://pypi.org/project/requests"},
-    "pydantic": {"status": AvailabilityStatus.NATIVE_AVAILABLE, "tier": "PyPI native ppc64le wheel", "evidence": "PyPI release (pydantic-core ppc64le wheel)", "url": "https://pypi.org/project/pydantic"},
+class _DynamicEcosystemCache(dict):
+    """Dynamic lookup view backed by packages_lookup.json to eliminate hardcoded package data."""
+    def __getitem__(self, key):
+        entry = get_lookup_manager().get(key)
+        if entry is not None:
+            return entry
+        raise KeyError(key)
 
-    # NOTE: rocksdb and simdjson have active build recipes in ppc64le/build-scripts
-    # and are intentionally absent here so _probe_build_scripts() handles them.
-    "faiss": {
-        "status": AvailabilityStatus.SUBSTITUTE_AVAILABLE,
-        "tier": "IBM Open-CE optimized build",
-        "evidence": "Conda-forge / Open-CE channel",
-        "url": "https://github.com/open-ce/open-ce",
-        "substitute": "open-ce/faiss-ppc64le"
-    },
+    def __contains__(self, key):
+        return get_lookup_manager().get(key) is not None
 
-    # Math Kernel Libraries
-    "intel-mkl": {
-        "status": AvailabilityStatus.BLOCKER,
-        "tier": "x86-proprietary Intel Math Kernel Library",
-        "evidence": "Intel closed-source binary library; only supports x86_64 architecture",
-        "url": "https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html",
-        "substitute": "IBM ESSL (Engineering and Scientific Subroutine Library) or OpenBLAS / BLIS (MMA/VSX accelerated)"
-    },
-    "mkl": {
-        "status": AvailabilityStatus.BLOCKER,
-        "tier": "x86-proprietary Intel Math Kernel Library",
-        "evidence": "Intel closed-source binary library; only supports x86_64 architecture",
-        "url": "https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html",
-        "substitute": "IBM ESSL (Engineering and Scientific Subroutine Library) or OpenBLAS / BLIS (MMA/VSX accelerated)"
-    },
-    "openblas": {
-        "status": AvailabilityStatus.NATIVE_AVAILABLE,
-        "tier": "Native High-Performance BLAS / Math Library",
-        "evidence": "RHEL AppStream / EPEL ppc64le (optimized with Power10 MMA / Power9 VSX)",
-        "url": "https://www.openblas.net"
-    },
-    "blis": {
-        "status": AvailabilityStatus.NATIVE_AVAILABLE,
-        "tier": "Native BLAS Library Framework",
-        "evidence": "Fedora / EPEL / Source (Power VSX accelerated)",
-        "url": "https://github.com/flame/blis"
-    },
-    "essl": {
-        "status": AvailabilityStatus.NATIVE_AVAILABLE,
-        "tier": "IBM Engineering and Scientific Subroutine Library",
-        "evidence": "IBM Power native high-performance mathematical computing library",
-        "url": "https://www.ibm.com/products/engineering-scientific-subroutine-library"
-    }
-}
+    def get(self, key, default=None):
+        entry = get_lookup_manager().get(key)
+        return entry if entry is not None else default
+
+    def copy(self):
+        return get_lookup_manager().all_packages()
+
+
+POWER_ECOSYSTEM_CACHE = _DynamicEcosystemCache()
 
 
 def classify_deliverable_match(
@@ -461,14 +347,20 @@ def classify_deliverable_match(
 
 class MultiSourceProber:
     """Probes Docker Hub, Quay.io, PyPI, RHEL/EPEL Koji, ICR Power catalogue,
-    ppc64le/pyeco DevPi wheels index, ppc64le/build-scripts, and Gemini LLM."""
+    ppc64le/pyeco DevPi wheels index, ppc64le/build-scripts, and Gemini/Bob LLM.
+    Uses dynamic lookup file (packages_lookup.json) to reuse past analyses and avoid repeated LLM calls."""
 
-    def __init__(self, gemini_client=None):
-        self._cache = POWER_ECOSYSTEM_CACHE.copy()
+    def __init__(self, gemini_client=None, llm_service=None):
+        self.lookup_mgr = get_lookup_manager()
+        self._cache = self.lookup_mgr.all_packages()
         self.gemini_client = gemini_client
+        self.llm_service = llm_service
 
     def set_gemini_client(self, client):
         self.gemini_client = client
+
+    def set_llm_service(self, service):
+        self.llm_service = service
 
     async def probe_component(
         self,
@@ -488,6 +380,12 @@ class MultiSourceProber:
         elif clean_name.startswith("docker.io/"):
             clean_name = clean_name.replace("docker.io/", "")
 
+        # 0. Check dynamic lookup file first: if this package and version was already analyzed, REUSE IT!
+        lookup_hit = self.lookup_mgr.get(clean_name, version)
+        if lookup_hit:
+            logger.info("Package lookup cache hit for %s:%s (reusing without LLM)", clean_name, version)
+            return classify_deliverable_match(lookup_hit, version, deliverable_type)
+
         # Probe priority order:
         #   RedHat distro repos and Docker Hub take precedence over IBM-specific
         #   sources (build-scripts, ICR) so that the most broadly available and
@@ -499,14 +397,16 @@ class MultiSourceProber:
         #   4. DevPi wheels index      — IBM pyeco (Python only, fallback)
         #   5. ICR Power catalogue     — IBM Container Registry (container fallback)
         #   6. build-scripts index     — IBM build recipes (last resort before static cache)
-        #   7. Static cache            — hand-curated entries (e.g. mkl blocker, essl, blis)
-        #   8. Gemini LLM              — AI research for unknown packages
-        #   9. Default fallback
+        #   7. Lookup file fallback    — general package knowledge (e.g. mkl blocker, essl, blis)
+        #   8. Arch-independent        — npm / maven noarch
+        #   9. Gemini / Bob LLM        — AI research for unknown packages / new versions
+        #   10. Default fallback
 
         # 1. RHEL/EPEL Koji repository check (rpm ecosystem, native C/C++, containers, or any RHEL target)
         if ecosystem in ["rpm", "native_c", "container"] or target_os.startswith("rhel"):
             rhel_res = await self._probe_rhel_epel(clean_name, version)
             if rhel_res:
+                self.lookup_mgr.save_or_refresh(clean_name, version, rhel_res)
                 self._cache[clean_name] = rhel_res
                 return classify_deliverable_match(rhel_res, version, deliverable_type)
 
@@ -515,11 +415,13 @@ class MultiSourceProber:
             if ecosystem == "quay" or "strimzi" in clean_name or "redhat" in clean_name:
                 quay_res = await self._probe_quay(clean_name, version)
                 if quay_res and quay_res.get("status") == AvailabilityStatus.NATIVE_AVAILABLE:
+                    self.lookup_mgr.save_or_refresh(clean_name, version, quay_res)
                     self._cache[clean_name] = quay_res
                     return classify_deliverable_match(quay_res, version, deliverable_type)
 
             docker_res = await self._probe_docker_hub(clean_name, version)
             if docker_res and docker_res.get("status") == AvailabilityStatus.NATIVE_AVAILABLE:
+                self.lookup_mgr.save_or_refresh(clean_name, version, docker_res)
                 self._cache[clean_name] = docker_res
                 return classify_deliverable_match(docker_res, version, deliverable_type)
 
@@ -527,6 +429,7 @@ class MultiSourceProber:
         if ecosystem == "pypi":
             pypi_res = await self._probe_pypi(clean_name, version)
             if pypi_res and pypi_res.get("status") in [AvailabilityStatus.NATIVE_AVAILABLE, AvailabilityStatus.PLATFORM_AGNOSTIC]:
+                self.lookup_mgr.save_or_refresh(clean_name, version, pypi_res)
                 self._cache[clean_name] = pypi_res
                 return classify_deliverable_match(pypi_res, version, deliverable_type)
 
@@ -534,6 +437,7 @@ class MultiSourceProber:
         if ecosystem == "pypi":
             devpi_res = self._probe_devpi_wheels(clean_name, version)
             if devpi_res:
+                self.lookup_mgr.save_or_refresh(clean_name, version, devpi_res)
                 self._cache[clean_name] = devpi_res
                 return classify_deliverable_match(devpi_res, version, deliverable_type)
 
@@ -541,19 +445,21 @@ class MultiSourceProber:
         if ecosystem in ["container", "docker", "quay"] or "/" in clean_name:
             icr_res = self._probe_icr_power(clean_name, version)
             if icr_res:
+                self.lookup_mgr.save_or_refresh(clean_name, version, icr_res)
                 self._cache[clean_name] = icr_res
                 return classify_deliverable_match(icr_res, version, deliverable_type)
 
         # 6. ppc64le/build-scripts index — IBM build recipes (any ecosystem, last resort before cache)
         bs_res = self._probe_build_scripts(clean_name, version)
         if bs_res:
+            self.lookup_mgr.save_or_refresh(clean_name, version, bs_res)
             self._cache[clean_name] = bs_res
             return classify_deliverable_match(bs_res, version, deliverable_type)
 
-        # 7. Static curated cache (POWER_ECOSYSTEM_CACHE) — covers packages not yet
-        #    in any of the live indexes above (e.g. mkl blocker, essl, blis)
-        if clean_name in self._cache:
-            item = self._cache[clean_name].copy()
+        # 7. Dynamic lookup file fallback — covers general package knowledge (e.g. mkl blocker, essl, blis)
+        cached_entry = self.lookup_mgr.get(clean_name)
+        if cached_entry:
+            item = dict(cached_entry)
             avail_ver = item.get("available_version")
             if avail_ver and version and version != "latest":
                 cmp = compare_versions(version, avail_ver)
@@ -576,6 +482,7 @@ class MultiSourceProber:
                 "evidence": f"NPM Registry: {clean_name} runs on Node.js ppc64le engine",
                 "url": f"https://www.npmjs.com/package/{clean_name}",
             }
+            self.lookup_mgr.save_or_refresh(clean_name, version, raw)
             return classify_deliverable_match(raw, version, deliverable_type)
         elif ecosystem == "maven":
             raw = {
@@ -584,12 +491,15 @@ class MultiSourceProber:
                 "evidence": f"Maven Central: {clean_name} runs on OpenJDK ppc64le JVM",
                 "url": f"https://search.maven.org/artifact/{clean_name}",
             }
+            self.lookup_mgr.save_or_refresh(clean_name, version, raw)
             return classify_deliverable_match(raw, version, deliverable_type)
 
-        # 9. Gemini LLM agentic research
-        if self.gemini_client:
+        # 9. LLM agentic research (IBM Bob Shell or Gemini)
+        if (self.llm_service and self.llm_service.is_active()) or self.gemini_client:
             llm_res = await self._probe_gemini_llm(clean_name, version, ecosystem, target_os)
             if llm_res:
+                # Save & refresh newly analyzed version in lookup file
+                self.lookup_mgr.save_or_refresh(clean_name, version, llm_res)
                 self._cache[clean_name] = llm_res
                 return classify_deliverable_match(llm_res, version, deliverable_type)
 
@@ -784,8 +694,18 @@ class MultiSourceProber:
         Returns NATIVE_AVAILABLE if confirmed, None if not found or on error.
         """
         try:
+            class TimeoutTransport(xmlrpc.client.SafeTransport):
+                def __init__(self, timeout=4.0):
+                    super().__init__()
+                    self.timeout = timeout
+                def make_connection(self, host):
+                    conn = super().make_connection(host)
+                    conn.timeout = self.timeout
+                    return conn
+
             proxy = xmlrpc.client.ServerProxy(
                 "https://koji.fedoraproject.org/kojihub",
+                transport=TimeoutTransport(timeout=4.0),
                 allow_none=True,
             )
             results = await _run_sync(proxy.search, name, "package", "glob")
@@ -1020,7 +940,13 @@ class MultiSourceProber:
             "JSON:"
         )
         try:
-            resp_text = generate_gemini_content(self.gemini_client, prompt, json_mode=True)
+            if self.llm_service and self.llm_service.is_active():
+                resp_text = self.llm_service.generate_content(prompt, json_mode=True, stage="Component Qualification")
+            elif self.gemini_client:
+                resp_text = generate_gemini_content(self.gemini_client, prompt, json_mode=True)
+            else:
+                resp_text = None
+
             if resp_text:
                 clean = resp_text.replace("```json", "").replace("```", "").strip()
                 parsed = json.loads(clean)
@@ -1066,16 +992,16 @@ class MultiSourceProber:
                         else:
                             target_url = f"https://github.com/search?q={name}"
 
-                    logger.info(f"Gemini LLM availability reasoning for {name}: status={status_val}, url={target_url}")
+                    logger.info(f"LLM availability reasoning for {name}: status={status_val}, url={target_url}")
                     return {
                         "status": status_map[status_val],
                         "tier": tier_str,
-                        "evidence": evidence_str or "Gemini AI Qualified via Power/Distro knowledge",
+                        "evidence": evidence_str or "LLM Qualified via Power/Distro knowledge",
                         "available_version": avail_ver,
                         "version_warning": ver_warn,
                         "url": target_url,
                         "substitute": parsed.get("substitute")
                     }
         except Exception as e:
-            logger.warning(f"Gemini LLM availability evaluation failed for {name}: {e}")
+            logger.warning(f"LLM availability evaluation failed for {name}: {e}")
         return None

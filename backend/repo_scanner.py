@@ -47,6 +47,35 @@ X86_ONLY_MARKERS = [
     r"linux/amd64"
 ]
 
+from .package_lookup import get_lookup_manager
+
+
+def _get_dynamic_arch_postures():
+    mgr = get_lookup_manager()
+    postures = {}
+    for pkg, data in mgr.all_packages().items():
+        if "arch_posture" in data:
+            postures[pkg] = ArchSupportScan(**data["arch_posture"])
+    return postures
+
+
+class _DynamicArchPostures(dict):
+    """Dynamic view over packages_lookup.json for arch postures."""
+    def __getitem__(self, key):
+        p = get_lookup_manager().get_arch_posture(key)
+        if p:
+            return ArchSupportScan(**p)
+        raise KeyError(key)
+
+    def __contains__(self, key):
+        return get_lookup_manager().get_arch_posture(key) is not None
+
+    def items(self):
+        return _get_dynamic_arch_postures().items()
+
+
+KNOWN_ARCH_POSTURES = _DynamicArchPostures()
+
 
 class RepoScanner:
     """Scans repositories (local directory or shallow Git clone) for:
@@ -56,23 +85,28 @@ class RepoScanner:
     """
 
     @classmethod
-    def shallow_clone_repo(cls, git_url: str, depth: int = 1) -> Optional[str]:
-        """Performs a temporary shallow git clone. Returns temporary directory path or None."""
+    def shallow_clone_repo(cls, git_url: str, depth: int = 1, timeout_sec: int = 8) -> Optional[str]:
+        """Performs a temporary shallow git clone with strict timeout. Returns temporary directory path or None."""
         if not git_url or not (git_url.startswith("http://") or git_url.startswith("https://") or git_url.startswith("git@")):
             return None
 
         temp_dir = tempfile.mkdtemp(prefix="ppc_triage_repo_")
-        cmd = f"git clone --depth {depth} {git_url} {temp_dir}"
         logger.info(f"Cloning repository shallowly: {git_url}")
         try:
-            ret = os.system(f"{cmd} > /dev/null 2>&1")
-            if ret == 0:
+            import subprocess
+            proc = subprocess.run(
+                ["git", "clone", "--depth", str(depth), "--single-branch", git_url, temp_dir],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                timeout=timeout_sec,
+            )
+            if proc.returncode == 0:
                 return temp_dir
             else:
                 shutil.rmtree(temp_dir, ignore_errors=True)
                 return None
         except Exception as e:
-            logger.warning(f"Git clone failed for {git_url}: {e}")
+            logger.warning(f"Git clone failed or timed out for {git_url}: {e}")
             shutil.rmtree(temp_dir, ignore_errors=True)
             return None
 
@@ -159,9 +193,18 @@ class RepoScanner:
         )
 
     @classmethod
-    def llm_infer_arch_support(cls, package_name: str, gemini_client=None) -> ArchSupportScan:
-        """Infers repository architecture posture using Gemini when no git repo URL is provided."""
-        if not gemini_client:
+    def llm_infer_arch_support(cls, package_name: str, gemini_client=None, llm_service=None) -> ArchSupportScan:
+        """Infers repository architecture posture using LLM (IBM Bob Shell or Gemini) when no git repo URL is provided."""
+        if not package_name:
+            return ArchSupportScan(scan_source="default_heuristic")
+
+        # Fast lookup in curated known postures
+        pkg_lower = package_name.lower().replace("-", "").replace("_", "").replace(" ", "")
+        for k, v in KNOWN_ARCH_POSTURES.items():
+            if k in pkg_lower or pkg_lower in k:
+                return v
+
+        if not gemini_client and not (llm_service and getattr(llm_service, "is_active", lambda: True)()):
             return ArchSupportScan(scan_source="default_heuristic")
 
         prompt = (
@@ -179,17 +222,30 @@ class RepoScanner:
         )
         try:
             import json
-            resp = generate_gemini_content(gemini_client, prompt, json_mode=True)
+            if llm_service and hasattr(llm_service, "generate_content"):
+                resp = llm_service.generate_content(prompt, json_mode=True, stage="Architecture Posture Inference")
+            elif gemini_client:
+                resp = generate_gemini_content(gemini_client, prompt, json_mode=True)
+            else:
+                resp = None
             if resp:
                 clean = resp.replace("```json", "").replace("```", "").strip()
                 data = json.loads(clean)
-                return ArchSupportScan(
+                scan_res = ArchSupportScan(
                     ppc64le_markers_found=data.get("ppc64le_markers", []),
                     x86_only_markers_found=data.get("x86_only_markers", []),
                     ci_matrix_has_power=bool(data.get("ci_matrix_has_power", False)),
                     scan_source="llm_inference",
                     effort_adjustment_factor=float(data.get("effort_adjustment_factor", 1.0))
                 )
+                try:
+                    get_lookup_manager().save_or_refresh(
+                        package_name,
+                        arch_posture=scan_res.model_dump()
+                    )
+                except Exception as save_err:
+                    logger.debug("Could not cache arch posture: %s", save_err)
+                return scan_res
         except Exception as e:
             logger.warning(f"LLM arch support inference failed for {package_name}: {e}")
 

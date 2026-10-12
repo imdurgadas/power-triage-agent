@@ -1,8 +1,9 @@
 import os
 import re
+import math
 import asyncio
 import logging
-from typing import List, Dict, Any, AsyncGenerator, Optional
+from typing import List, Dict, Any, AsyncGenerator, Optional, Tuple
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -23,6 +24,7 @@ from .models import (
     ArchSupportScan,
     DockerfileImageFinding,
     ConfigImageFinding,
+    SizingBreakdown,
 )
 from .normalizer import UniversalNormalizer
 from .prober import MultiSourceProber
@@ -30,77 +32,206 @@ from .build_analyzer import BuildAnalyzer, scale_arch_effort, get_simd_multiplie
 from .repo_scanner import RepoScanner
 from .gemini_helper import generate_gemini_content
 from .url_extractor import URLExtractor
+from .llm_client import LLMService
 
 logger = logging.getLogger("agent")
 
-FIBONACCI_NUMBERS = [0, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610]
-
-
-def next_fibonacci_effort(effort: float) -> int:
-    """Returns the single Fibonacci value that is strictly greater than the input effort.
-    For example: 5 -> 8 (as requested), 26 -> 34, 34 -> 55, 0 -> 0.
+def calculate_lifecycle_sizing(
+    triaged_packages: List[Any],
+    deliverable_type: Any = DeliverableType.CONTAINER,
+    readiness_pct: float = 100.0,
+    unported_count: int = 0,
+    blocker_count: int = 0,
+    unported_transitive_count: int = 0,
+    dockerfile_findings: Optional[List[Any]] = None,
+    config_findings: Optional[List[Any]] = None,
+) -> Tuple[SizingBreakdown, int, int, int]:
+    """Calculates engineering sizing across all standard enterprise porting lifecycle stages:
+    1. prep_env_pd: Environment & Toolchain Preparation
+    2. readiness_audit_pd: Architecture Readiness & Feasibility Inspection
+    3. build_source_pd: Source Compilation & Core Porting (including transitive deps & SIMD)
+    4. ci_pipeline_pd: CI Matrix & Multi-Arch Container Integration
+    5. bug_fix_validation_pd: Testing, Bug Fixing & Stabilization
+    6. contingency_buffer_pd: Decent Risk & Upstream Contingency Buffer (20-25%)
+    
+    Returns (breakdown, total_estimated_pd, min_total_pd, max_total_pd).
     """
-    if effort <= 0:
-        return 0
-    for fib in FIBONACCI_NUMBERS:
-        if fib > effort:
-            return fib
-KNOWN_ECOSYSTEM_DETAILS: Dict[str, Dict[str, str]] = {
-    "rocksdb": {
-        "git_repo_url": "https://github.com/facebook/rocksdb",
-        "doc_url": "https://rocksdb.org",
-        "ecosystem": "native_c",
-        "version": "8.6",
-    },
-    "redis": {
-        "git_repo_url": "https://github.com/redis/redis",
-        "doc_url": "https://redis.io",
-        "ecosystem": "container",
-        "version": "7.2",
-    },
-    "nginx": {
-        "git_repo_url": "https://github.com/nginx/nginx",
-        "doc_url": "https://nginx.org",
-        "ecosystem": "container",
-        "version": "1.24",
-    },
-    "fastapi": {
-        "git_repo_url": "https://github.com/tiangolo/fastapi",
-        "doc_url": "https://fastapi.tiangolo.com",
-        "ecosystem": "pypi",
-        "version": "0.110.0",
-    },
-    "pytorch": {
-        "git_repo_url": "https://github.com/pytorch/pytorch",
-        "doc_url": "https://pytorch.org",
-        "ecosystem": "pypi",
-        "version": "2.1.0",
-    },
-    "torch": {
-        "git_repo_url": "https://github.com/pytorch/pytorch",
-        "doc_url": "https://pytorch.org",
-        "ecosystem": "pypi",
-        "version": "2.1.0",
-    },
-    "simdjson": {
-        "git_repo_url": "https://github.com/simdjson/simdjson",
-        "doc_url": "https://simdjson.org",
-        "ecosystem": "native_c",
-        "version": "3.6",
-    },
-    "snappy": {
-        "git_repo_url": "https://github.com/google/snappy",
-        "doc_url": "https://github.com/google/snappy",
-        "ecosystem": "native_c",
-        "version": "1.1.9",
-    },
-    "jemalloc": {
-        "git_repo_url": "https://github.com/jemalloc/jemalloc",
-        "doc_url": "http://jemalloc.net",
-        "ecosystem": "native_c",
-        "version": "5.3.0",
-    },
-}
+    def _val(item: Any, attr: str, default: Any = 0):
+        if isinstance(item, dict):
+            return item.get(attr, default)
+        return getattr(item, attr, default)
+
+    table_packages_effort = sum(_val(p, "total_effort_pd", 0) for p in triaged_packages)
+
+    # Turnkey native deployment
+    if table_packages_effort == 0 and unported_count == 0 and blocker_count == 0:
+        breakdown = SizingBreakdown(
+            prep_env_pd=0.0,
+            readiness_audit_pd=0.0,
+            build_source_pd=0.0,
+            ci_pipeline_pd=0.0,
+            bug_fix_validation_pd=0.0,
+            contingency_buffer_pd=0.0,
+            contingency_pct=0.0,
+            subtotal_pd=0.0,
+            total_estimated_pd=0,
+            methodology_note="All components are natively available on IBM Power (ppc64le). Turnkey deployment ready with 0 Person-Days build effort.",
+        )
+        return breakdown, 0, 0, 0
+
+    deliv_val = deliverable_type.value if hasattr(deliverable_type, "value") else str(deliverable_type)
+
+    # Count packages that require engineering work (unported or partial deliverable match)
+    packages_needing_effort = [p for p in triaged_packages if _val(p, "total_effort_pd", 0) > 0]
+    num_effort_pkgs = len(packages_needing_effort)
+
+    # Stage 1: Environment Preparation & Toolchain Setup
+    if deliv_val in ("build", "rpm"):
+        prep_env = 2.0 if num_effort_pkgs >= 3 else 1.5
+    else:
+        # Container or build script deliverable
+        if readiness_pct >= 90.0 and unported_count <= 1 and num_effort_pkgs <= 1:
+            prep_env = 0.5
+        elif num_effort_pkgs >= 4:
+            prep_env = 1.5
+        else:
+            prep_env = 1.0
+
+    # Stage 2: Architecture Readiness & Feasibility Inspection
+    def _has_friction(p: Any) -> bool:
+        arch = _val(p, "arch_sensitivity", None)
+        if not arch:
+            return False
+        return bool(_val(arch, "has_simd_avx", False) or _val(arch, "has_64k_page_risk", False) or _val(arch, "has_inline_asm", False))
+
+    has_arch_friction = any(_has_friction(p) for p in triaged_packages)
+    readiness_audit = 0.5
+    if has_arch_friction:
+        readiness_audit += 0.5
+    if unported_transitive_count >= 2:
+        readiness_audit += 0.5
+    if num_effort_pkgs >= 4:
+        readiness_audit += 0.5
+    readiness_audit = min(2.5, readiness_audit)
+
+    # Stage 3: Source Compilation & Core Porting
+    # Must account for all packages requiring compilation, porting, or deliverable adaptation in the matrix!
+    total_test_deps_effort = sum(float(_val(p, "test_effort_pd", 0.0)) for p in triaged_packages)
+
+    build_source = 0.0
+    for p in triaged_packages:
+        tot_e = float(_val(p, "total_effort_pd", 0))
+        test_e = float(_val(p, "test_effort_pd", 0.0))
+        # The build/compilation portion is the package effort minus its unit test effort
+        build_portion = max(0.0, tot_e - test_e)
+
+        # Detailed component breakdown
+        detailed_e = (
+            float(_val(p, "base_build_effort_pd", 0.0))
+            + float(_val(p, "transitive_deps_effort_pd", 0.0))
+            + float(_val(p, "arch_complexity_effort_pd", 0.0))
+        )
+        pkg_build = max(build_portion, detailed_e)
+        if pkg_build < 1.0 and tot_e >= 1.0:
+            pkg_build = tot_e - test_e if (tot_e - test_e) > 0 else tot_e
+        build_source += pkg_build
+
+    build_source = round(build_source, 1)
+    if build_source < 1.0 and (unported_count > 0 or num_effort_pkgs > 0):
+        build_source = 1.0
+
+    # Stage 4: CI Pipeline & Multi-Arch Container Integration
+    has_multi_configs = bool((dockerfile_findings and len(dockerfile_findings) > 1) or (config_findings and len(config_findings) > 1))
+    if deliv_val in ("build", "rpm"):
+        ci_pipeline = 2.5 if num_effort_pkgs >= 4 else 2.0
+    elif deliv_val == "container":
+        if has_multi_configs or num_effort_pkgs >= 4:
+            ci_pipeline = 2.0
+        elif num_effort_pkgs >= 2:
+            ci_pipeline = 1.5
+        else:
+            ci_pipeline = 1.0
+    else:
+        ci_pipeline = 1.0
+
+    # Stage 5: Testing, Bug Fixing & Stabilization
+    # Package test effort + systemic regression testing & stabilization across integrated components
+    stabilization_base = 1.0 if (unported_count > 0 or num_effort_pkgs > 0) else 0.5
+    if num_effort_pkgs >= 3:
+        stabilization_base += min(2.5, round(0.4 * (num_effort_pkgs - 1), 1))
+
+    def _has_deep_simd(p: Any) -> bool:
+        arch = _val(p, "arch_sensitivity", None)
+        if not arch:
+            return False
+        comp = _val(arch, "simd_porting_complexity", None)
+        comp_val = comp.value if hasattr(comp, "value") else str(comp)
+        return comp_val in ("PARTIAL_REWRITE", "FULL_REDESIGN", "partial_rewrite", "full_redesign")
+
+    has_deep_simd = any(_has_deep_simd(p) for p in triaged_packages)
+    if has_deep_simd:
+        stabilization_base += 1.0
+
+    bug_fix_validation = round(total_test_deps_effort + stabilization_base, 1)
+
+    # Stage 6: Decent Risk & Upstream Contingency Buffer (20% to 25%)
+    subtotal = round(prep_env + readiness_audit + build_source + ci_pipeline + bug_fix_validation, 1)
+    contingency_rate = 25.0 if (has_arch_friction or unported_transitive_count >= 3 or num_effort_pkgs >= 3) else 20.0
+    contingency_buffer = round(max(1.0, subtotal * (contingency_rate / 100.0)), 1)
+
+    total_estimated = int(math.ceil(subtotal + contingency_buffer))
+
+    # Invariant: Project committed sizing MUST be strictly greater than or equal to the sum of direct package tasks
+    # because project sizing encompasses package porting + infrastructure + CI + stabilization + 20-25% contingency buffer!
+    min_committed = int(math.ceil(table_packages_effort * (1.0 + contingency_rate / 100.0)))
+    if total_estimated < min_committed:
+        total_estimated = min_committed
+
+    min_total = max(1, int(math.floor(subtotal)))
+    max_total = total_estimated
+
+    methodology = (
+        f"Lifecycle WBS Sizing: {prep_env:.1f}d Prep Env + {readiness_audit:.1f}d Readiness + "
+        f"{build_source:.1f}d Build from Source + {ci_pipeline:.1f}d CI Pipeline + "
+        f"{bug_fix_validation:.1f}d Bug Fix/Test = {subtotal:.1f}d Subtotal + "
+        f"{contingency_buffer:.1f}d Buffer ({int(contingency_rate)}%) → {total_estimated} Person-Days."
+    )
+
+    breakdown = SizingBreakdown(
+        prep_env_pd=prep_env,
+        readiness_audit_pd=readiness_audit,
+        build_source_pd=build_source,
+        ci_pipeline_pd=ci_pipeline,
+        bug_fix_validation_pd=bug_fix_validation,
+        contingency_buffer_pd=contingency_buffer,
+        contingency_pct=contingency_rate,
+        subtotal_pd=subtotal,
+        total_estimated_pd=total_estimated,
+        methodology_note=methodology,
+    )
+    return breakdown, total_estimated, min_total, max_total
+
+
+from .package_lookup import get_lookup_manager
+
+
+class _DynamicEcosystemDetails(dict):
+    """Dynamic lookup over packages_lookup.json for package metadata."""
+    def __getitem__(self, key):
+        meta = get_lookup_manager().get_metadata(key)
+        if meta:
+            return meta
+        raise KeyError(key)
+
+    def __contains__(self, key):
+        return get_lookup_manager().get_metadata(key) is not None
+
+    def get(self, key, default=None):
+        meta = get_lookup_manager().get_metadata(key)
+        return meta if meta is not None else default
+
+
+KNOWN_ECOSYSTEM_DETAILS = _DynamicEcosystemDetails()
 
 
 class TriageAgent:
@@ -108,32 +239,33 @@ class TriageAgent:
     analyzes SIMD instructions & complexity, checks test dependencies, scans Dockerfiles & configs, and synthesizes reports.
     """
 
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(
+        self,
+        api_key: Optional[str] = None,
+        llm_provider: Optional[str] = None,
+        bobshell_api_key: Optional[str] = None,
+    ):
         self.api_key = api_key or os.getenv("GEMINI_API_KEY")
-        self.gemini_client = None
-
-        if self.api_key and self.api_key.strip() and not self.api_key.startswith("your_"):
-            try:
-                from google import genai
-                self.gemini_client = genai.Client(api_key=self.api_key.strip())
-                logger.info("Gemini LLM Client successfully initialized with provided API key.")
-            except Exception as e:
-                logger.warning(f"Could not initialize Google GenAI Client: {e}")
-        else:
-            logger.info("Running in autonomous simulation mode (no live GEMINI_API_KEY provided).")
-
-        self.prober = MultiSourceProber(gemini_client=self.gemini_client)
+        self.llm_service = LLMService(
+            provider=llm_provider,
+            bobshell_api_key=bobshell_api_key,
+            gemini_api_key=self.api_key,
+        )
+        self.gemini_client = self.llm_service.gemini_client
+        self.prober = MultiSourceProber(gemini_client=self.gemini_client, llm_service=self.llm_service)
 
     async def run_triage_stream(self, request: TriageRequest) -> AsyncGenerator[Dict[str, Any], None]:
         """Runs the triage pipeline yielding live agent steps and the final comprehensive response."""
-        # Update gemini client if request includes an override key
-        if request.gemini_api_key and not self.gemini_client:
-            try:
-                from google import genai
-                self.gemini_client = genai.Client(api_key=request.gemini_api_key.strip())
-                self.prober.set_gemini_client(self.gemini_client)
-            except Exception as e:
-                logger.warning(f"Could not initialize requested Gemini client: {e}")
+        # Update LLM service if request includes an override provider or keys
+        if request.llm_provider or request.bobshell_api_key or request.gemini_api_key:
+            self.llm_service = LLMService(
+                provider=request.llm_provider,
+                bobshell_api_key=request.bobshell_api_key,
+                gemini_api_key=request.gemini_api_key or self.api_key,
+            )
+            self.gemini_client = self.llm_service.gemini_client
+            self.prober.set_gemini_client(self.gemini_client)
+            self.prober.set_llm_service(self.llm_service)
 
         steps: List[AgentStep] = []
         step_counter = 1
@@ -163,8 +295,9 @@ class TriageAgent:
 
         raw_text = request.raw_manifest or ""
 
-        # --- Image ingestion: extract manifest text from uploaded image via Gemini vision ---
-        if request.image_data_base64 and self.gemini_client:
+        # --- Image ingestion: extract manifest text from uploaded image via LLM vision ---
+        if request.image_data_base64 and self.llm_service.is_active():
+            provider_label = "IBM Bob Shell" if self.llm_service.provider == "ibm_bob" else "LLM Vision"
             yield {
                 "type": "step",
                 "step": AgentStep(
@@ -172,7 +305,7 @@ class TriageAgent:
                     agent_name="VisionAgent",
                     action_type="llm_reasoning",
                     target="Uploaded Image",
-                    thought="Analysing uploaded image with Gemini Vision to extract dependency manifest text.",
+                    thought="Analysing uploaded image with LLM Vision to extract dependency manifest text.",
                     detail="OCR + semantic extraction of packages, versions, and ecosystems visible in the image."
                 ).model_dump()
             }
@@ -188,12 +321,12 @@ class TriageAgent:
                 "If the image contains a Dockerfile, reproduce the FROM and RUN apt-get/pip install lines verbatim. "
                 "Output ONLY the extracted manifest text — no commentary, no markdown fences."
             )
-            extracted = generate_gemini_content(
-                self.gemini_client,
+            extracted = self.llm_service.generate_content(
                 vision_prompt,
                 json_mode=False,
                 image_data_base64=request.image_data_base64,
                 image_media_type=request.image_media_type or "image/png",
+                stage="Vision Manifest Ingestion",
             )
             if extracted and extracted.strip():
                 # Merge with any typed text — image text takes precedence if no text was supplied
@@ -256,7 +389,11 @@ class TriageAgent:
             await asyncio.sleep(0.3)
             step_counter += 1
 
-            url_pkgs, url_title, url_note = await URLExtractor.extract_from_url(candidate_url, gemini_client=self.gemini_client)
+            url_pkgs, url_title, url_note = await URLExtractor.extract_from_url(
+                candidate_url,
+                gemini_client=self.gemini_client,
+                llm_service=self.llm_service
+            )
             if url_pkgs:
                 parsed_items.extend(url_pkgs)
                 primary_pkg_name = url_pkgs[0]["name"]
@@ -357,16 +494,35 @@ class TriageAgent:
             await asyncio.sleep(0.2)
             step_counter += 1
 
-            temp_repo = RepoScanner.shallow_clone_repo(scan_repo_url)
+            temp_repo = await asyncio.to_thread(RepoScanner.shallow_clone_repo, scan_repo_url, 1, 8)
             if temp_repo:
-                arch_scan = RepoScanner.scan_arch_support(temp_repo)
-                docker_findings = RepoScanner.scan_dockerfiles(temp_repo)
-                config_findings = RepoScanner.scan_config_images(temp_repo)
-                RepoScanner.cleanup_repo(temp_repo)
+                arch_scan = await asyncio.to_thread(RepoScanner.scan_arch_support, temp_repo)
+                docker_findings = await asyncio.to_thread(RepoScanner.scan_dockerfiles, temp_repo)
+                config_findings = await asyncio.to_thread(RepoScanner.scan_config_images, temp_repo)
+                await asyncio.to_thread(RepoScanner.cleanup_repo, temp_repo)
+
+            yield {
+                "type": "step",
+                "step": AgentStep(
+                    step_id=step_counter,
+                    agent_name="RepoScanAgent",
+                    action_type="scan",
+                    target=scan_repo_url,
+                    thought="Repository architecture scan complete. Verified CI matrix and architecture markers.",
+                    detail=f"Power CI Runner: {'Verified' if (arch_scan and arch_scan.ci_matrix_has_power) else 'None'} | Effort adjustment: {arch_scan.effort_adjustment_factor if arch_scan else 1.0}x"
+                ).model_dump()
+            }
+            await asyncio.sleep(0.1)
+            step_counter += 1
 
         if not arch_scan:
             target_pkg_name = request.project_name or (unique_items[0]["name"] if unique_items else "workload")
-            arch_scan = RepoScanner.llm_infer_arch_support(target_pkg_name, gemini_client=self.gemini_client)
+            arch_scan = await asyncio.to_thread(
+                RepoScanner.llm_infer_arch_support,
+                target_pkg_name,
+                self.gemini_client,
+                self.llm_service
+            )
 
         # Step 2: Multi-Source Availability Probing (Sub-Task 1 Version-Aware)
         triaged_packages: List[PackageTriageResult] = []
@@ -384,7 +540,7 @@ class TriageAgent:
                     agent_name="AvailabilityProber",
                     action_type="lookup",
                     target=f"{name} ({eco})",
-                    thought=f"Consulting live registries (Quay.io/Docker Hub), {effective_os} repos, and Gemini LLM for {name} ({version}) on ppc64le...",
+                    thought=f"Consulting live registries (Quay.io/Docker Hub), {effective_os} repos, and LLM for {name} ({version}) on ppc64le...",
                 ).model_dump()
             }
             await asyncio.sleep(0.15)
@@ -559,9 +715,9 @@ class TriageAgent:
                     await asyncio.sleep(0.15)
                     step_counter += 1
 
-                # Sub-Task 2 & 3: SIMD instruction count & 4-tier complexity analysis via Gemini
+                # Sub-Task 2 & 3: SIMD instruction count & 4-tier complexity analysis via LLM
                 if pkg.arch_sensitivity and (pkg.arch_sensitivity.has_simd_avx or pkg.arch_sensitivity.has_64k_page_risk or pkg.arch_sensitivity.has_inline_asm):
-                    if self.gemini_client:
+                    if (self.llm_service and self.llm_service.is_active()) or self.gemini_client:
                         try:
                             prompt = (
                                 f"You are an IBM Power (ppc64le) porting specialist. Analyze this unported library '{pkg.package_name}'.\n"
@@ -579,7 +735,15 @@ class TriageAgent:
                                 "}\n"
                                 "JSON:"
                             )
-                            resp_text = generate_gemini_content(self.gemini_client, prompt, json_mode=True)
+                            if self.llm_service and self.llm_service.is_active():
+                                resp_text = await asyncio.to_thread(
+                                    self.llm_service.generate_content,
+                                    prompt,
+                                    json_mode=True,
+                                    stage="SIMD Architecture Complexity",
+                                )
+                            else:
+                                resp_text = await asyncio.to_thread(generate_gemini_content, self.gemini_client, prompt, True)
                             if resp_text:
                                 import json
                                 parsed_simd = json.loads(resp_text.replace("```json", "").replace("```", "").strip())
@@ -624,7 +788,7 @@ class TriageAgent:
                                 )
                                 pkg.total_effort_pd = int(round(total))
                         except Exception as llm_err:
-                            logger.warning(f"Gemini code analysis call skipped: {llm_err}")
+                            logger.warning(f"LLM code analysis call skipped: {llm_err}")
 
                     yield {
                         "type": "step",
@@ -647,18 +811,6 @@ class TriageAgent:
             for pkg in triaged_packages:
                 BuildAnalyzer.analyze_package_build(pkg, effective_os)
 
-        # Apply partial deliverable match multiplier to every package with effort > 0
-        for pkg in triaged_packages:
-            dm = pkg.deliverable_match
-            if dm in (DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE, DeliverableMatchStatus.PARTIAL_DIFFERENT_VERSION):
-                from .models import _PARTIAL_EFFORT_MULTIPLIERS
-                mult = _PARTIAL_EFFORT_MULTIPLIERS[dm]
-                if pkg.total_effort_pd > 0:
-                    pkg.total_effort_pd = max(1, int(round(pkg.total_effort_pd * mult)))
-                elif pkg.status in (AvailabilityStatus.NATIVE_AVAILABLE, AvailabilityStatus.PLATFORM_AGNOSTIC):
-                    # Partial match on a previously "zero effort" package — add integration overhead
-                    pkg.total_effort_pd = 1 if dm == DeliverableMatchStatus.PARTIAL_DIFFERENT_VERSION else 2
-
         # Apply Sub-Task 6 architecture support scan factor to unported components
         if arch_scan and arch_scan.effort_adjustment_factor != 1.0:
             for p in triaged_packages:
@@ -673,10 +825,25 @@ class TriageAgent:
                 if total > 0:
                     p.total_effort_pd = max(1, int(round(total)))
 
+        # Apply partial deliverable match multiplier to every package with effort > 0
+        for pkg in triaged_packages:
+            dm = pkg.deliverable_match
+            if dm in (DeliverableMatchStatus.PARTIAL_DIFFERENT_TYPE, DeliverableMatchStatus.PARTIAL_DIFFERENT_VERSION):
+                from .models import _PARTIAL_EFFORT_MULTIPLIERS
+                mult = _PARTIAL_EFFORT_MULTIPLIERS[dm]
+                if pkg.total_effort_pd > 0:
+                    pkg.total_effort_pd = max(1, int(round(pkg.total_effort_pd * mult)))
+                    pkg.base_build_effort_pd = round(pkg.base_build_effort_pd * mult, 1)
+                elif pkg.status in (AvailabilityStatus.NATIVE_AVAILABLE, AvailabilityStatus.PLATFORM_AGNOSTIC):
+                    # Partial match on a previously "zero effort" package — add integration overhead
+                    pkg.total_effort_pd = 1 if dm == DeliverableMatchStatus.PARTIAL_DIFFERENT_VERSION else 2
+                    pkg.base_build_effort_pd = float(pkg.total_effort_pd)
+
         # Add Sub-Task 5 & 7 container image effort into primary package
         container_extra_pd = sum(f.effort_pd for f in docker_findings) + sum(f.effort_pd for f in config_findings)
         if container_extra_pd > 0 and triaged_packages:
             triaged_packages[0].total_effort_pd += int(round(container_extra_pd))
+            triaged_packages[0].base_build_effort_pd += container_extra_pd
 
         # Step 4: Aggregate Metrics & Scoring
         total_count = len(triaged_packages)
@@ -712,43 +879,40 @@ class TriageAgent:
         )
         readiness_pct = round((max(ready_units, 0) / max(total_count, 1)) * 100.0, 1)
 
-        # Effort Summation with Fibonacci single-value sizing (based on max effort)
-        BUFFER_PERSON_DAYS = 5  # 1 Person-Week buffer
-        raw_total_pd = sum(p.total_effort_pd for p in triaged_packages)
-
-        if raw_total_pd == 0 and unported_count == 0:
-            base_max_pd = 0
-            fib_pd = 0
-        elif raw_total_pd == 0:
-            base_max_pd = BUFFER_PERSON_DAYS
-            fib_pd = next_fibonacci_effort(base_max_pd)
-        else:
-            buffered_total = raw_total_pd + BUFFER_PERSON_DAYS
-            base_max_pd = int(round(buffered_total * 1.30))
-            fib_pd = next_fibonacci_effort(base_max_pd)
+        # Enterprise Porting Lifecycle Work Breakdown Structure (WBS) Sizing
+        breakdown, total_estimated_pd, min_total_pd, max_total_pd = calculate_lifecycle_sizing(
+            triaged_packages=triaged_packages,
+            deliverable_type=deliverable_type,
+            readiness_pct=readiness_pct,
+            unported_count=unported_count,
+            blocker_count=blocker_count,
+            unported_transitive_count=unported_transitive_count,
+            dockerfile_findings=docker_findings,
+            config_findings=config_findings,
+        )
 
         # Positive Effort-Oriented Qualification Recommendations
         if blocker_count > 0:
             rec = SalesRecommendationTier.NOT_POSSIBLE_AS_IS
             rec_reason = f"Workload contains {blocker_count} proprietary x86 component(s) requiring architectural substitution (e.g. OpenBLAS / ESSL alternatives recommended)."
-        elif readiness_pct >= 90 and raw_total_pd == 0 and blocker_count == 0:
+        elif readiness_pct >= 90 and total_estimated_pd == 0 and blocker_count == 0:
             rec = SalesRecommendationTier.MINIMAL_EFFORT
-            rec_reason = f"Turnkey readiness ({readiness_pct}%). All components run out-of-the-box on IBM Power (0 Person-Days)."
+            rec_reason = f"Turnkey readiness ({readiness_pct}%). All components run out-of-the-box on IBM Power (0 Person-Days build effort)."
         elif partial_count > 0 and readiness_pct >= 70:
             rec = SalesRecommendationTier.MODERATE_EFFORT
             rec_reason = (
                 f"Moderate readiness ({readiness_pct}%) with {partial_count} partial deliverable match(es) "
-                f"for '{deliverable_type.value}' deliverable type. Effort: {fib_pd} Person-Days (Fibonacci)."
+                f"for '{deliverable_type.value}' deliverable type. Estimated porting effort: {total_estimated_pd} Person-Days."
             )
-        elif fib_pd <= 8:
+        elif total_estimated_pd <= 5:
             rec = SalesRecommendationTier.MINOR_EFFORT
-            rec_reason = f"High readiness ({readiness_pct}%). Light build verification estimated at {fib_pd} Person-Days (Fibonacci max estimate)."
-        elif fib_pd <= 34:
+            rec_reason = f"High readiness ({readiness_pct}%). Comprehensive porting lifecycle (env prep, build, CI, validation & buffer) estimated at {total_estimated_pd} Person-Days."
+        elif total_estimated_pd <= 20:
             rec = SalesRecommendationTier.MODERATE_EFFORT
-            rec_reason = f"Moderate porting scope ({readiness_pct}% ready). Transitive dependencies and build verification estimated at {fib_pd} Person-Days (Fibonacci max estimate)."
+            rec_reason = f"Moderate porting scope ({readiness_pct}% ready). Transitive builds, CI integration, bug fixing & contingency buffer estimated at {total_estimated_pd} Person-Days."
         else:
             rec = SalesRecommendationTier.SIGNIFICANT_EFFORT
-            rec_reason = f"Extensive porting investment ({readiness_pct}% ready). Multi-tier transitive dependencies or vector kernels estimated at {fib_pd} Person-Days (Fibonacci max estimate)."
+            rec_reason = f"Extensive porting investment ({readiness_pct}% ready). Multi-tier transitive dependencies, SIMD adaptations, CI matrix & buffer estimated at {total_estimated_pd} Person-Days."
 
         summary = TriageSummary(
             total_packages=total_count,
@@ -760,12 +924,13 @@ class TriageAgent:
             readiness_score_pct=readiness_pct,
             recommendation=rec,
             recommendation_reason=rec_reason,
-            fibonacci_effort_pd=fib_pd,
-            min_total_person_days=fib_pd,
-            max_total_person_days=fib_pd,
+            estimated_effort_pd=total_estimated_pd,
+            min_total_person_days=min_total_pd,
+            max_total_person_days=max_total_pd,
             unported_transitive_deps_count=unported_transitive_count,
             test_deps_unresolved_count=unported_test_count,
             partial_support_count=partial_count,
+            sizing_breakdown=breakdown,
         )
 
         # Step 5: Final Executive Synthesis
@@ -781,7 +946,7 @@ class TriageAgent:
         }
         await asyncio.sleep(0.3)
 
-        # Attach repository and documentation links to triaged packages
+        # Attach repository and documentation links to triaged packages & refresh lookup file
         for p in triaged_packages:
             p_name_lower = p.package_name.lower()
             if p_name_lower in KNOWN_ECOSYSTEM_DETAILS:
@@ -796,8 +961,66 @@ class TriageAgent:
                 if not p.evidence_url:
                     p.evidence_url = detected_git_url or detected_doc_url
 
+            # Automatically persist & refresh analyzed package in the lookup file to avoid future LLM trips
+            try:
+                get_lookup_manager().save_or_refresh(
+                    package_name=p.package_name,
+                    version=p.requested_version or "latest",
+                    probe_result={
+                        "status": p.status.value if hasattr(p.status, "value") else str(p.status),
+                        "available_version": p.available_version,
+                        "tier": p.tier,
+                        "evidence": p.evidence,
+                        "url": p.evidence_url or p.git_repo_url or p.doc_url,
+                        "substitute": p.substitute,
+                        "version_warning": p.version_warning,
+                    },
+                    metadata={
+                        "git_repo_url": p.git_repo_url,
+                        "doc_url": p.doc_url,
+                        "ecosystem": p.ecosystem,
+                    }
+                )
+            except Exception as e:
+                logger.debug("Lookup auto-refresh skipped for %s: %s", p.package_name, e)
+
+        # Record and attach Token & Cost Telemetry
+        token_usage = self.llm_service.get_token_usage()
+        summary.token_usage = token_usage
+
+        # Telemetry Agent step
+        step_counter += 1
+        provider_label = "IBM Bob Shell" if token_usage.llm_provider == "ibm_bob" else "Google Gemini"
+        breakdown_detail = (
+            "Breakdown: " + ", ".join([f"{b.stage}: ${b.cost_usd:.4f} ({b.percentage}%)" for b in token_usage.breakdown])
+            if token_usage.breakdown
+            else f"Engine: {token_usage.llm_model} • Provider: {token_usage.llm_provider}"
+        )
+        yield {
+            "type": "step",
+            "step": AgentStep(
+                step_id=step_counter,
+                agent_name="TelemetryAgent",
+                action_type="synthesis",
+                target="LLM Cost & Token Accounting",
+                thought=(
+                    f"Qualification telemetry recorded via {provider_label}: {token_usage.total_tokens:,} total tokens "
+                    f"({token_usage.input_tokens:,} in / {token_usage.output_tokens:,} out). "
+                    f"Associated cost: ${token_usage.cost_usd:.4f} USD across {token_usage.calls_count} request(s)."
+                ),
+                detail=breakdown_detail,
+            ).model_dump()
+        }
+
+        # Stream token usage event
+        yield {
+            "type": "token_usage",
+            "usage": token_usage.model_dump()
+        }
+
         # Generate Executive Brief Markdown
-        brief_md = self._generate_executive_brief(
+        brief_md = await asyncio.to_thread(
+            self._generate_executive_brief,
             request, summary, triaged_packages, arch_scan, docker_findings, config_findings,
             primary_package_name=primary_pkg_name,
             git_repo_url=detected_git_url,
@@ -826,6 +1049,7 @@ class TriageAgent:
             source_url=detected_source_url,
             package_ecosystem=primary_ecosystem,
             package_version=primary_version,
+            token_usage=token_usage,
         )
 
         yield {
@@ -884,7 +1108,7 @@ class TriageAgent:
 | :--- | :--- |
 | **Porting Readiness Score** | **{summary.readiness_score_pct}%** |
 | **Sales Recommendation Tier** | **{traffic_emoji} {summary.recommendation.value}** |
-| **Estimated Porting Sizing** | **{summary.fibonacci_effort_pd} Person-Days (Fibonacci Sized)** |
+| **Estimated Porting Sizing** | **{summary.estimated_effort_pd} Person-Days ({summary.recommendation.value})** |
 | **Total Components Analyzed** | **{summary.total_packages}** ({summary.native_count} Native, {summary.agnostic_count} Script/Bytecode, {summary.substitute_count} Substitute, {summary.unported_count} Unported) |
 | **Transitive Build Dependencies Scoped** | **{summary.unported_transitive_deps_count} unported build-time requirements uncovered** |
 | **Test Dependencies Unresolved** | **{summary.test_deps_unresolved_count} unported test suites/harnesses** |
@@ -894,9 +1118,25 @@ class TriageAgent:
 
 ---
 
-## 2. Key Technical Findings & Sizing Breakdown
+## 2. Key Technical Findings & Lifecycle Sizing Breakdown
 
-> **Effort Sizing Methodology:** Sizing estimates utilize a single Fibonacci-calibrated ceiling (e.g. 5→8, 26→34, 34→55) covering environment provisioning, source compilation, transitive dependencies, SIMD/VSX adaptation, and test validation on IBM Power architecture. All estimates are rounded to integer person-days.
+> **Effort Sizing Methodology (Lifecycle WBS):** Sizing estimates are structured across all distinct porting stages: (1) Environment & Toolchain Preparation, (2) Architecture Readiness & Feasibility Inspection, (3) Source Build & Core Porting, (4) CI Pipeline & Multi-Arch Container Integration, (5) Testing, Bug Fixing & Stabilization, plus a 20-25% Risk & Upstream Contingency Buffer.
+
+"""
+        if summary.sizing_breakdown and summary.estimated_effort_pd > 0:
+            sb = summary.sizing_breakdown
+            md += f"""### 📋 Enterprise Porting Lifecycle Breakdown
+
+| Stage | Activity Scope | Sizing (PD) |
+| :--- | :--- | :---: |
+| **1. Prep Environment & Toolchains** | PowerVM/LPAR/OCP cluster setup, GCC/Clang compilers, SIMDe/VSX dev headers | {sb.prep_env_pd:.1f} PD |
+| **2. Architecture Readiness Inspection** | Endianness, 64KB page risks, build scripts & license qualification | {sb.readiness_audit_pd:.1f} PD |
+| **3. Build from Source & Core Porting** | Core unported libraries, transitive dependencies & vector code compilation | {sb.build_source_pd:.1f} PD |
+| **4. CI Pipeline & Container Integration** | ppc64le CI matrix runners & multi-arch container manifest packaging | {sb.ci_pipeline_pd:.1f} PD |
+| **5. Testing, Bug Fixing & Stabilization** | Test harness execution, runtime defect resolution & SMT8 stabilization | {sb.bug_fix_validation_pd:.1f} PD |
+| **Engineering Subtotal** | Direct engineering activities subtotal | **{sb.subtotal_pd:.1f} PD** |
+| **6. Contingency Buffer ({sb.contingency_pct:.0f}%)** | Risk buffer covering unforeseen upstream friction | **+{sb.contingency_buffer_pd:.1f} PD** |
+| **Total Committed Sizing** | **Comprehensive end-to-end delivery commitment** | **{summary.estimated_effort_pd} Person-Days** |
 
 """
         # Section 2.1: Version Warnings (Sub-Task 1)
@@ -979,9 +1219,10 @@ class TriageAgent:
                 md += f"- {icon} `{cf.config_file_path}` ({cf.config_file_type}): image `{cf.image_ref}` — Status: {cf.status.value} ({cf.effort_pd} PD). {cf.notes or ''}\n"
             md += "\n"
 
-        # Strategic Sales Proposal via Gemini AI
+        # Strategic Sales Proposal via AI
         llm_sales_narrative = ""
-        if self.gemini_client:
+        if (self.llm_service and self.llm_service.is_active()) or self.gemini_client:
+            provider_title = "IBM Bob AI" if (self.llm_service and self.llm_service.provider == "ibm_bob") else "LLM AI"
             try:
                 prompt = (
                     f"You are an executive IBM Power pre-sales architect. Write a 2-paragraph strategic sales rationale for moving this customer workload ({request.project_name}) to IBM Power (ppc64le) on {request.target_os.value.upper()}.\n"
@@ -989,18 +1230,51 @@ class TriageAgent:
                     f"Key unported/scoped components: {[p.package_name for p in packages if p.status == AvailabilityStatus.UNPORTED_BUILD_REQUIRED]}.\n"
                     "Highlight IBM Power's specific hardware strengths (e.g. high memory bandwidth, SMT8 core threading, enterprise reliability, and Open-CE optimization). Keep it professional, crisp, and compelling."
                 )
-                resp_text = generate_gemini_content(self.gemini_client, prompt)
+                if self.llm_service and self.llm_service.is_active():
+                    resp_text = self.llm_service.generate_content(prompt, stage="Executive Sales Proposal")
+                else:
+                    resp_text = generate_gemini_content(self.gemini_client, prompt)
                 if resp_text:
-                    llm_sales_narrative = f"\n### 🤖 Gemini AI Strategic Sales Proposal:\n{resp_text}\n\n"
+                    llm_sales_narrative = f"\n### 🤖 {provider_title} Strategic Sales Proposal:\n{resp_text}\n\n"
             except Exception as e:
-                logger.warning(f"Gemini executive sales pitch generation skipped: {e}")
+                logger.warning(f"Executive sales pitch generation skipped: {e}")
 
         if llm_sales_narrative:
             md += llm_sales_narrative
 
-        md += """---
+        # Section: LLM Telemetry & Accounting
+        token_usage = summary.token_usage
+        if token_usage:
+            engine_label = "IBM Bob Shell" if token_usage.llm_provider == "ibm_bob" else "Google Gemini"
+            breakdown_md = ""
+            if token_usage.breakdown:
+                breakdown_md = "\n**Cost & Token Breakdown by Triage Stage:**\n\n"
+                breakdown_md += "| Triage Stage | Calls | In Tokens | Out Tokens | Total Tokens | Cost (USD) | Share |\n"
+                breakdown_md += "|:---|:---:|:---:|:---:|:---:|:---:|:---:|\n"
+                for item in token_usage.breakdown:
+                    breakdown_md += (
+                        f"| {item.stage} | {item.calls_count} | {item.input_tokens:,} | "
+                        f"{item.output_tokens:,} | {item.total_tokens:,} | ${item.cost_usd:.4f} | {item.percentage}% |\n"
+                    )
+                breakdown_md += "\n"
 
-## 3. Next Steps for Technical Sales
+            md += f"""---
+
+## 3. LLM Analysis Telemetry & Cost Accounting
+- **LLM Engine:** {engine_label} (`{token_usage.llm_model}`)
+- **Total Tokens Consumed:** **{token_usage.total_tokens:,}** tokens
+  - **Input Tokens (Prompt/Context):** {token_usage.input_tokens:,} tokens
+  - **Output Tokens (Reasoning/Synthesis):** {token_usage.output_tokens:,} tokens
+- **Total Associated Cost:** **${token_usage.cost_usd:.4f} USD** across {token_usage.calls_count} request(s)
+{breakdown_md}
+"""
+            next_header = "## 4. Next Steps for Technical Sales"
+        else:
+            next_header = "## 3. Next Steps for Technical Sales"
+
+        md += f"""---
+
+{next_header}
 1. Present this qualification memo to client architecture team to establish feasibility.
 2. Hand over scoped transitive build dependency specs to the IBM Power Porting Lab for unported libraries.
 3. Utilize IBM Open-CE channels for accelerated AI/data libraries.

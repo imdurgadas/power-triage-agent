@@ -31,9 +31,10 @@ class URLExtractor:
     async def extract_from_url(
         cls,
         url: str,
-        gemini_client: Optional[Any] = None
+        gemini_client: Optional[Any] = None,
+        llm_service: Optional[Any] = None,
     ) -> Tuple[List[Dict[str, str]], str, str]:
-        """Fetches URL, extracts text/manifests, and infers dependencies using Gemini LLM or heuristics.
+        """Fetches URL, extracts text/manifests, and infers dependencies using LLM (IBM Bob Shell or Gemini) or heuristics.
         
         Returns:
             (packages, page_title, summary_note)
@@ -80,8 +81,8 @@ class URLExtractor:
 
         # Step 2: Extract Dependencies (LLM or Heuristic)
         packages: List[Dict[str, str]] = []
-        if gemini_client and content_text:
-            packages = cls._infer_with_gemini(gemini_client, url, page_title, content_text)
+        if (llm_service or gemini_client) and content_text:
+            packages = cls._infer_with_gemini(gemini_client, url, page_title, content_text, llm_service=llm_service)
 
         # Fallback to heuristic extraction if LLM is not configured or returned empty
         if not packages:
@@ -135,9 +136,10 @@ class URLExtractor:
         gemini_client: Any,
         url: str,
         title: str,
-        content: str
+        content: str,
+        llm_service: Optional[Any] = None,
     ) -> List[Dict[str, str]]:
-        """Uses Gemini to intelligently extract packages, dependencies, and versions."""
+        """Uses LLM (IBM Bob Shell or Gemini) to intelligently extract packages, dependencies, and versions."""
         prompt = (
             f"You are an expert systems architecture and software dependency analyst.\n"
             f"A user wants to migrate a workload or library from this URL to IBM Power (ppc64le):\n"
@@ -154,7 +156,13 @@ class URLExtractor:
             "JSON:"
         )
         try:
-            resp_text = generate_gemini_content(gemini_client, prompt, json_mode=True)
+            if llm_service and hasattr(llm_service, "generate_content"):
+                resp_text = llm_service.generate_content(prompt, json_mode=True, stage="Manifest URL Inference")
+            elif gemini_client:
+                resp_text = generate_gemini_content(gemini_client, prompt, json_mode=True)
+            else:
+                resp_text = None
+
             if resp_text:
                 import json
                 cleaned = resp_text.replace("```json", "").replace("```", "").strip()
@@ -170,7 +178,7 @@ class URLExtractor:
                             })
                     return valid
         except Exception as e:
-            logger.warning(f"Gemini URL dependency inference failed: {e}")
+            logger.warning(f"LLM URL dependency inference failed: {e}")
 
         return []
 
@@ -229,15 +237,12 @@ class URLExtractor:
             repo_name = github_match.group(1).replace(".git", "").lower()
             add_pkg(repo_name, "latest", "native_c")
 
-        # Scan text for common technology patterns
-        known_tokens = [
-            ("nginx", "container"), ("redis", "container"), ("postgres", "container"),
-            ("postgresql", "container"), ("kafka", "container"), ("torch", "pypi"),
-            ("pytorch", "pypi"), ("tensorflow", "pypi"), ("numpy", "pypi"),
-            ("scipy", "pypi"), ("pandas", "pypi"), ("fastapi", "pypi"),
-            ("rocksdb", "native_c"), ("simdjson", "native_c"), ("snappy", "native_c"),
-            ("zlib", "native_c"), ("openssl", "native_c"), ("jemalloc", "native_c")
-        ]
+        # Scan text for common technology patterns from dynamic package lookup
+        try:
+            from .package_lookup import get_lookup_manager
+            known_tokens = get_lookup_manager().get_known_tokens()
+        except Exception:
+            known_tokens = []
 
         for token, eco in known_tokens:
             if re.search(rf"\b{re.escape(token)}\b", content_lower):

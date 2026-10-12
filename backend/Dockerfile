@@ -8,7 +8,19 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
+    ca-certificates \
+    git \
+    && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
+    && apt-get install -y --no-install-recommends nodejs \
     && rm -rf /var/lib/apt/lists/*
+
+# Install IBM Bob Shell CLI globally
+RUN curl -fsSL https://bob.ibm.com/download/bobshell.sh | bash -s -- --pm npm || true
+
+# Set up Bob configuration directory
+ENV HOME=/root \
+    PATH="/usr/local/bin:/usr/bin:/bin:${PATH}"
+RUN mkdir -p /root/.bob && chmod -R 777 /root/.bob
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir --upgrade pip && \

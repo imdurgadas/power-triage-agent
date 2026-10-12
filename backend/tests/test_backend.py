@@ -268,7 +268,8 @@ def test_api_triage_flow_with_gaps():
     assert data.get("target_environment") == "OpenShift Platform (ppc64le)"
     assert data.get("deliverable_type") == "container"
     assert "Person-Days" in data["executive_brief_markdown"]
-    assert "fibonacci_effort_pd" in data["summary"]
+    assert "estimated_effort_pd" in data["summary"]
+    assert "sizing_breakdown" in data["summary"]
     payload2 = {**payload, "raw_manifest": "FROM mysql:9.5\nRUN pip install libcustom-dsp-kernel==1.0"}
     response2 = client.post("/api/triage", json=payload2)
     assert response2.status_code == 200
@@ -276,15 +277,64 @@ def test_api_triage_flow_with_gaps():
     assert any(p.get("version_warning") is not None for p in data2["packages"])
 
 
-def test_fibonacci_effort_calculation():
-    """Verify single-value Fibonacci effort mapping strictly greater than base effort."""
-    from backend.agent import next_fibonacci_effort
-    assert next_fibonacci_effort(0) == 0
-    assert next_fibonacci_effort(1) == 2
-    assert next_fibonacci_effort(2) == 3
-    assert next_fibonacci_effort(5) == 8
-    assert next_fibonacci_effort(26) == 34
-    assert next_fibonacci_effort(34) == 55
+def test_porting_lifecycle_sizing_calculation():
+    """Verify 6-stage lifecycle sizing breakdown and buffer calculation."""
+    import math
+    from backend.agent import calculate_lifecycle_sizing
+
+    # Fully native workload with 0 unported packages -> 0 PD turnkey
+    zero_sb, zero_total, _, _ = calculate_lifecycle_sizing(
+        triaged_packages=[],
+        deliverable_type="container",
+        readiness_pct=100.0,
+        unported_count=0,
+        blocker_count=0,
+    )
+    assert zero_sb.total_estimated_pd == 0
+    assert zero_sb.subtotal_pd == 0.0
+    assert zero_total == 0
+
+    # Workload with unported package
+    sb, total, _, _ = calculate_lifecycle_sizing(
+        triaged_packages=[{
+            "package_name": "rocksdb",
+            "total_effort_pd": 5,
+            "arch_sensitivity": {"has_simd_avx": True},
+        }],
+        deliverable_type="container",
+        readiness_pct=75.0,
+        unported_count=1,
+        blocker_count=0,
+        unported_transitive_count=2,
+    )
+    assert sb.prep_env_pd >= 1.0
+    assert sb.readiness_audit_pd >= 0.5
+    assert sb.build_source_pd >= 5.0
+    assert sb.ci_pipeline_pd >= 1.0
+    assert sb.bug_fix_validation_pd >= 1.0
+    assert sb.contingency_buffer_pd >= 1.0
+    assert sb.contingency_pct == 25.0  # 25% due to arch friction
+    assert sb.total_estimated_pd > sb.subtotal_pd
+    assert total == sb.total_estimated_pd
+    assert sb.total_estimated_pd == int(math.ceil(sb.subtotal_pd + sb.contingency_buffer_pd))
+
+    # Multi-package workload verifying total sizing is strictly greater than table sum
+    multi_pkgs = [
+        {"package_name": f"pkg_{i}", "total_effort_pd": 2, "test_effort_pd": 0.5, "base_build_effort_pd": 1.5}
+        for i in range(8)
+    ]
+    table_sum = sum(p["total_effort_pd"] for p in multi_pkgs)  # 16 PD
+    multi_sb, multi_total, _, _ = calculate_lifecycle_sizing(
+        triaged_packages=multi_pkgs,
+        deliverable_type="container",
+        readiness_pct=60.0,
+        unported_count=8,
+        blocker_count=0,
+        unported_transitive_count=3,
+    )
+    assert multi_sb.build_source_pd >= 12.0
+    assert multi_total > table_sum  # Must be greater than table sum
+    assert multi_sb.total_estimated_pd > table_sum
 
 
 def test_positive_sales_recommendations():
@@ -318,7 +368,7 @@ def test_export_executive_pdf_endpoint():
             "readiness_score_pct": 76.5,
             "recommendation": "Minor Effort",
             "recommendation_reason": "High readiness (76.5%). Light build verification estimated at 8 Person-Days.",
-            "fibonacci_effort_pd": 8,
+            "estimated_effort_pd": 8,
             "min_total_person_days": 8,
             "max_total_person_days": 8,
             "unported_transitive_deps_count": 1,
@@ -472,3 +522,84 @@ def test_api_triage_deliverable_partial_effort_increase():
     summary_container = r_container.json()["summary"]
     summary_build     = r_build.json()["summary"]
     assert summary_build["partial_support_count"] >= summary_container["partial_support_count"]
+
+
+def test_unported_package_complexity_and_debugging_room():
+    """Verify that unported source builds are never sized at 1 PD, evaluate package complexity, and allocate debugging room."""
+    # 1. Systems / Storage / DB package
+    pkg_sys = PackageTriageResult(
+        package_name="custom-storage-engine",
+        requested_version="2.1",
+        ecosystem="native_c",
+        status=AvailabilityStatus.UNPORTED_BUILD_REQUIRED,
+        tier_description="Requires source build"
+    )
+    triaged_sys = BuildAnalyzer.analyze_package_build(pkg_sys, "rhel9")
+    assert triaged_sys.total_effort_pd >= 5
+    assert triaged_sys.base_build_effort_pd >= 2.5
+    assert triaged_sys.test_effort_pd >= 1.5
+    assert triaged_sys.arch_sensitivity.has_64k_page_risk is True
+    assert any("debugging" in (t.notes or "").lower() or "room" in (t.notes or "").lower() for t in triaged_sys.test_dependencies)
+
+    # 2. Native C/C++ library
+    pkg_c = PackageTriageResult(
+        package_name="libcustom-algo",
+        requested_version="1.0",
+        ecosystem="native_c",
+        status=AvailabilityStatus.UNPORTED_BUILD_REQUIRED,
+        tier_description="Requires source build"
+    )
+    triaged_c = BuildAnalyzer.analyze_package_build(pkg_c, "rhel9")
+    assert triaged_c.total_effort_pd >= 3  # Never 1 PD!
+    assert triaged_c.base_build_effort_pd >= 2.0
+    assert triaged_c.test_effort_pd >= 1.0
+
+    # 3. Rust / Go native
+    pkg_rust = PackageTriageResult(
+        package_name="crypto-service-rs",
+        requested_version="0.9",
+        ecosystem="rust",
+        status=AvailabilityStatus.UNPORTED_BUILD_REQUIRED,
+        tier_description="Requires source build"
+    )
+    triaged_rust = BuildAnalyzer.analyze_package_build(pkg_rust, "rhel9")
+    assert triaged_rust.total_effort_pd >= 3
+    assert triaged_rust.test_effort_pd >= 1.0
+
+    # 4. Python C-extension
+    pkg_py = PackageTriageResult(
+        package_name="fast-matrix-py",
+        requested_version="1.4",
+        ecosystem="pypi",
+        status=AvailabilityStatus.UNPORTED_BUILD_REQUIRED,
+        tier_description="Requires source build"
+    )
+    triaged_py = BuildAnalyzer.analyze_package_build(pkg_py, "rhel9")
+    assert triaged_py.total_effort_pd >= 3
+    assert triaged_py.test_effort_pd >= 1.0
+
+    # 5. Generic unported component
+    pkg_generic = PackageTriageResult(
+        package_name="unknown-utility",
+        requested_version="3.0",
+        ecosystem="container",
+        status=AvailabilityStatus.UNPORTED_BUILD_REQUIRED,
+        tier_description="Requires source build"
+    )
+    triaged_generic = BuildAnalyzer.analyze_package_build(pkg_generic, "rhel9")
+    assert triaged_generic.total_effort_pd >= 3  # strictly > 1 PD
+    assert triaged_generic.test_effort_pd >= 1.0
+    assert "debugging" in triaged_generic.porting_notes.lower()
+
+    # 6. SPDK from knowledge base
+    pkg_spdk = PackageTriageResult(
+        package_name="spdk",
+        requested_version="23.05",
+        ecosystem="native_c",
+        status=AvailabilityStatus.UNPORTED_BUILD_REQUIRED,
+        tier_description="Requires source build"
+    )
+    triaged_spdk = BuildAnalyzer.analyze_package_build(pkg_spdk, "rhel9")
+    assert triaged_spdk.total_effort_pd >= 6
+    assert triaged_spdk.test_effort_pd >= 1.5
+

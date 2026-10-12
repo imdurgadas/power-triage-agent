@@ -1,15 +1,19 @@
 import os
 import base64
 import logging
-from typing import Optional, List
+from typing import Optional, List, Tuple
 from google.genai import types
 
 logger = logging.getLogger("gemini_helper")
 
 
+# In-memory prompt cache to speed up repeated queries and avoid re-triggering API quotas
+_GEMINI_PROMPT_CACHE = {}
+
+
 def get_candidate_models() -> List[str]:
-    primary = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash").strip()
-    fallbacks = ["gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-2.5-flash-lite"]
+    primary = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite").strip()
+    fallbacks = ["gemini-3.5-flash-lite", "gemini-2.5-flash", "gemini-3.5-flash", "gemini-2.5-flash-lite"]
     models = []
     for m in [primary] + fallbacks:
         if m and m not in models:
@@ -17,29 +21,38 @@ def get_candidate_models() -> List[str]:
     return models
 
 
-def generate_gemini_content(
+def generate_gemini_content_with_usage(
     client,
     contents: str,
     json_mode: bool = False,
     image_data_base64: Optional[str] = None,
     image_media_type: str = "image/png",
-) -> Optional[str]:
-    """Generates content using Gemini with automatic rate-limit (429) fallback across candidate models.
+    timeout_ms: int = 15000,
+) -> Tuple[Optional[str], int, int, float]:
+    """Generates content using Gemini, capturing prompt tokens, candidate tokens, and cost.
 
-    When ``image_data_base64`` is supplied, the prompt is sent as a multipart
-    vision request: the image is prepended as an inline_data part so Gemini can
-    read text/diagrams visible in the screenshot before processing the manifest.
+    Returns:
+        (text, input_tokens, output_tokens, cost_usd)
     """
     if not client:
-        return None
+        return None, 0, 0, 0.0
+
+    cache_key = None
+    if not image_data_base64 and isinstance(contents, str):
+        cache_key = f"{json_mode}::{contents}"
+        if cache_key in _GEMINI_PROMPT_CACHE:
+            cached_text = _GEMINI_PROMPT_CACHE[cache_key]
+            in_tok = max(1, len(contents) // 4)
+            out_tok = max(1, len(cached_text) // 4)
+            return cached_text, in_tok, out_tok, (in_tok * 0.000000075 + out_tok * 0.00000030)
 
     candidate_models = get_candidate_models()
+    http_opts = types.HttpOptions(timeout=timeout_ms)
     config = types.GenerateContentConfig(
-        response_mime_type="application/json"
-    ) if json_mode else None
+        response_mime_type="application/json" if json_mode else None,
+        http_options=http_opts,
+    )
 
-    # Build the contents list — always include the text prompt; optionally
-    # prepend an image part for vision models.
     if image_data_base64:
         try:
             raw_bytes = base64.b64decode(image_data_base64)
@@ -67,12 +80,27 @@ def generate_gemini_content(
                 config=config
             )
             if resp and resp.text:
-                return resp.text.strip()
+                result = resp.text.strip()
+                if cache_key:
+                    _GEMINI_PROMPT_CACHE[cache_key] = result
+
+                input_tokens = 0
+                output_tokens = 0
+                if getattr(resp, "usage_metadata", None):
+                    input_tokens = int(getattr(resp.usage_metadata, "prompt_token_count", 0) or 0)
+                    output_tokens = int(getattr(resp.usage_metadata, "candidates_token_count", 0) or 0)
+
+                if input_tokens == 0:
+                    input_tokens = max(1, len(contents) // 4)
+                if output_tokens == 0:
+                    output_tokens = max(1, len(result) // 4)
+
+                cost_usd = round((input_tokens * 0.000000075) + (output_tokens * 0.00000030), 6)
+                return result, input_tokens, output_tokens, cost_usd
         except Exception as e:
             err_str = str(e)
             last_error = e
-            # If rate-limited (429 / RESOURCE_EXHAUSTED), unavailable (503), or not found (404), fall back
-            if any(code in err_str for code in ["429", "RESOURCE_EXHAUSTED", "503", "404"]):
+            if any(code in err_str.lower() for code in ["429", "resource_exhausted", "503", "404", "timeout", "timed out", "deadline"]):
                 logger.warning(f"Gemini model '{model_name}' hit rate limit/unavailable ({err_str[:90]}...). Trying fallback model...")
                 continue
             else:
@@ -81,4 +109,25 @@ def generate_gemini_content(
 
     if last_error:
         logger.warning(f"All candidate Gemini models failed. Last error: {last_error}")
-    return None
+    return None, 0, 0, 0.0
+
+
+def generate_gemini_content(
+    client,
+    contents: str,
+    json_mode: bool = False,
+    image_data_base64: Optional[str] = None,
+    image_media_type: str = "image/png",
+    timeout_ms: int = 15000,
+) -> Optional[str]:
+    """Generates content using Gemini with backwards-compatible return signature."""
+    text, _, _, _ = generate_gemini_content_with_usage(
+        client=client,
+        contents=contents,
+        json_mode=json_mode,
+        image_data_base64=image_data_base64,
+        image_media_type=image_media_type,
+        timeout_ms=timeout_ms,
+    )
+    return text
+

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Tile,
   Tabs,
@@ -8,6 +8,7 @@ import {
   TabPanel,
   TextArea,
   TextInput,
+  PasswordInput,
   Select,
   SelectItem,
   Button,
@@ -16,9 +17,6 @@ import {
 } from '@carbon/react';
 import {
   Play,
-  CloudUpload,
-  TrashCan,
-  Image,
   DocumentBlank,
   Chip,
   Layers,
@@ -27,8 +25,6 @@ import {
   Key,
 } from '@carbon/icons-react';
 
-const ACCEPTED_IMAGE_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif'];
-
 export default function InputSection({
   onRunTriage,
   isRunning,
@@ -36,22 +32,30 @@ export default function InputSection({
   activePreset,
   onSelectPreset,
 }) {
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0); // 0: Text, 1: URL, 2: Image
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0); // 0: Text, 1: URL
   const [manifestText, setManifestText] = useState('');
   const [inputUrl, setInputUrl] = useState('');
   const [targetEnvironment, setTargetEnvironment] = useState('rhel9_ocp');
   const [deliverableType, setDeliverableType] = useState('build');
   const [triageDepth, setTriageDepth] = useState('deep');
+  const [llmProvider, setLlmProvider] = useState('ibm_bob');
+  const [bobKey, setBobKey] = useState('');
   const [geminiKey, setGeminiKey] = useState('');
   const [showKeyInput, setShowKeyInput] = useState(false);
+  const [llmConfig, setLlmConfig] = useState(null);
 
-  // Image upload state
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
-  const [imageDataBase64, setImageDataBase64] = useState(null);
-  const [imageMediaType, setImageMediaType] = useState('image/png');
-  const [imageFileName, setImageFileName] = useState('');
-  const imageDropRef = useRef(null);
+  // Fetch detected LLM config from server on mount
+  useEffect(() => {
+    fetch('/api/llm-config')
+      .then(res => res.json())
+      .then(cfg => {
+        setLlmConfig(cfg);
+        if (cfg.default_provider) {
+          setLlmProvider(cfg.default_provider);
+        }
+      })
+      .catch(err => console.debug('Could not fetch LLM config:', err));
+  }, []);
 
   // When active preset changes, populate text, environment, and deliverable type
   useEffect(() => {
@@ -84,71 +88,32 @@ export default function InputSection({
     if (p.deliverable) setDeliverableType(p.deliverable);
   };
 
-  const processImageFile = (file) => {
-    if (!file) return;
-    if (!ACCEPTED_IMAGE_TYPES.includes(file.type) && !file.name.match(/\.(png|jpe?g|webp|gif)$/i)) {
-      alert('Please upload a PNG, JPEG, WebP, or GIF image.');
-      return;
-    }
-    setImageFile(file);
-    setImageFileName(file.name);
-    setImageMediaType(file.type || 'image/png');
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const dataUrl = e.target.result;
-      setImagePreviewUrl(dataUrl);
-      const base64 = dataUrl.split(',')[1];
-      setImageDataBase64(base64);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleImageFileInput = (e) => {
-    const file = e.target.files?.[0];
-    if (file) processImageFile(file);
-  };
-
-  const handleImageDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const file = e.dataTransfer.files?.[0];
-    if (file) processImageFile(file);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const clearImage = () => {
-    setImageFile(null);
-    setImagePreviewUrl(null);
-    setImageDataBase64(null);
-    setImageFileName('');
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Map targetEnvironment to targetOs & targetPlatform
     let targetOs = 'rhel9';
     let targetPlatform = 'ocp';
     if (targetEnvironment.startsWith('rhel10')) targetOs = 'rhel10';
     if (targetEnvironment.includes('baremetal')) targetPlatform = 'baremetal';
 
+    const commonPayload = {
+      target_os: targetOs,
+      target_platform: targetPlatform,
+      target_environment: targetEnvironment,
+      deliverable_type: deliverableType,
+      triage_depth: triageDepth,
+      llm_provider: llmProvider,
+      bobshell_api_key: bobKey.trim() || null,
+      gemini_api_key: geminiKey.trim() || null,
+    };
+
     if (selectedTabIndex === 0) {
       if (!manifestText.trim()) return;
       onRunTriage({
+        ...commonPayload,
         project_name: activePreset ? activePreset.name : "Workload Migration",
-        target_os: targetOs,
-        target_platform: targetPlatform,
-        target_environment: targetEnvironment,
-        deliverable_type: deliverableType,
-        triage_depth: triageDepth,
         raw_manifest: manifestText,
         manifest_type: "auto",
-        gemini_api_key: geminiKey || null,
       });
     } else if (selectedTabIndex === 1) {
       if (!inputUrl.trim()) return;
@@ -168,76 +133,167 @@ export default function InputSection({
       }
 
       onRunTriage({
+        ...commonPayload,
         project_name: `${extractedPkgName} Porting Qualification`,
-        target_os: targetOs,
-        target_platform: targetPlatform,
-        target_environment: targetEnvironment,
-        deliverable_type: deliverableType,
-        triage_depth: triageDepth,
         raw_manifest: raw,
         manifest_type: "url",
         doc_url: !isGithub ? raw : null,
         git_repo_url: isGithub ? raw : null,
-        gemini_api_key: geminiKey || null,
-      });
-    } else if (selectedTabIndex === 2) {
-      if (!imageDataBase64) return;
-      onRunTriage({
-        project_name: imageFileName ? `${imageFileName.replace(/\.[^/.]+$/, '')} (Vision Triage)` : "Vision Architecture Triage",
-        target_os: targetOs,
-        target_platform: targetPlatform,
-        target_environment: targetEnvironment,
-        deliverable_type: deliverableType,
-        triage_depth: triageDepth,
-        raw_manifest: manifestText || "",
-        manifest_type: "auto",
-        image_data_base64: imageDataBase64,
-        image_media_type: imageMediaType,
-        gemini_api_key: geminiKey || null,
       });
     }
   };
 
   const canSubmit = !isRunning && (
     (selectedTabIndex === 0 && manifestText.trim().length > 0) ||
-    (selectedTabIndex === 1 && inputUrl.trim().length > 0) ||
-    (selectedTabIndex === 2 && imageDataBase64 != null)
+    (selectedTabIndex === 1 && inputUrl.trim().length > 0)
   );
+
+  const isBobActive = llmProvider === 'ibm_bob';
+  const hasServerBob = llmConfig?.providers?.ibm_bob?.key_configured;
+  const hasServerGemini = llmConfig?.providers?.gemini?.key_configured;
 
   return (
     <Tile id="input-section" style={{ padding: '1.5rem', background: 'var(--cds-layer-01)' }}>
-      {/* Title + Preset selector */}
+      {/* Title + AI Engine Selector */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.25rem' }}>
         <div>
           <h2 className="cds--productive-heading-03" style={{ color: 'var(--cds-text-primary)' }}>
             Workload Specification &amp; Qualification Vector
           </h2>
           <p className="cds--body-short-01" style={{ color: 'var(--cds-text-secondary)' }}>
-            Analyze manifests, URLs, or architecture diagrams to evaluate IBM Power (ppc64le) porting feasibility.
+            Analyze manifests, package lists, or GitHub repositories to evaluate IBM Power (ppc64le) porting feasibility.
           </p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <Button
-            kind="ghost"
+            kind={showKeyInput ? "secondary" : "ghost"}
             size="sm"
             renderIcon={Key}
             onClick={() => setShowKeyInput(!showKeyInput)}
+            id="configure-keys-btn"
           >
-            {showKeyInput ? 'Hide API Key' : 'Custom Gemini Key'}
+            {showKeyInput ? 'Hide Engine Config' : 'Configure LLM Engine & Keys'}
           </Button>
         </div>
       </div>
 
+      {/* AI Engine Selection Bar */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexWrap: 'wrap',
+        gap: '0.75rem',
+        padding: '0.65rem 1rem',
+        background: '#1f1f1f',
+        border: '1px solid #333333',
+        borderRadius: '3px',
+        marginBottom: '1.25rem'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#c6c6c6', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            <Chip size={15} style={{ color: '#78a9ff' }} /> LLM Orchestrator:
+          </span>
+
+          <div style={{ display: 'inline-flex', gap: '0.4rem' }}>
+            {/* IBM Bob Button */}
+            <button
+              type="button"
+              id="engine-bob-toggle"
+              onClick={() => setLlmProvider('ibm_bob')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                padding: '0.35rem 0.8rem',
+                borderRadius: '3px',
+                border: isBobActive ? '2px solid #0f62fe' : '1px solid #4a4a4a',
+                background: isBobActive ? 'rgba(15, 98, 254, 0.22)' : '#161616',
+                color: isBobActive ? '#78a9ff' : '#a8a8a8',
+                fontWeight: isBobActive ? 700 : 500,
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease-in-out',
+              }}
+            >
+              <span>IBM Bob (Bob Shell)</span>
+              {hasServerBob && (
+                <span style={{ background: '#24a148', color: '#ffffff', fontSize: '0.65rem', padding: '1px 5px', borderRadius: '4px', fontWeight: 700 }}>
+                  ACTIVE
+                </span>
+              )}
+            </button>
+
+            {/* Google Gemini Button */}
+            <button
+              type="button"
+              id="engine-gemini-toggle"
+              onClick={() => setLlmProvider('gemini')}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                padding: '0.35rem 0.8rem',
+                borderRadius: '3px',
+                border: !isBobActive ? '2px solid #8a3ffc' : '1px solid #4a4a4a',
+                background: !isBobActive ? 'rgba(138, 63, 252, 0.22)' : '#161616',
+                color: !isBobActive ? '#d4bbff' : '#a8a8a8',
+                fontWeight: !isBobActive ? 700 : 500,
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease-in-out',
+              }}
+            >
+              <Flash size={13} />
+              <span>Google Gemini</span>
+            </button>
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.78rem', color: '#8d8d8d' }}>
+          {isBobActive ? (
+            <span>⚡ Headless CLI Execution • Real-time Token &amp; Cost Telemetry</span>
+          ) : (
+            <span>🌐 Google GenAI Cloud API • Prompt / Candidate Token Tracking</span>
+          )}
+        </div>
+      </div>
+
+      {/* Collapsible Key Configuration Drawer */}
       {showKeyInput && (
-        <div style={{ marginBottom: '1.25rem', padding: '0.75rem 1rem', background: 'var(--cds-layer-02)', borderRadius: '2px', border: '1px solid var(--cds-border-subtle-01)' }}>
-          <TextInput.PasswordInput
-            id="gemini-key-input"
-            labelText="Optional Gemini API Key"
-            helperText="Leave empty to use server-side GEMINI_API_KEY environment variable."
-            placeholder="AIzaSy..."
-            value={geminiKey}
-            onChange={(e) => setGeminiKey(e.target.value)}
-          />
+        <div style={{
+          marginBottom: '1.25rem',
+          padding: '1rem',
+          background: '#1e1e1e',
+          borderRadius: '3px',
+          border: '1px solid #3d3d3d',
+          borderLeft: isBobActive ? '4px solid #0f62fe' : '4px solid #8a3ffc',
+        }}>
+          <h4 style={{ fontSize: '0.88rem', fontWeight: 700, color: '#f4f4f4', marginBottom: '0.75rem' }}>
+            LLM Provider Configuration &amp; Credentials
+          </h4>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
+            <div>
+              <PasswordInput
+                id="bob-key-input"
+                labelText="IBM Bob Shell Key (BOBSHELL_API_KEY)"
+                helperText={hasServerBob ? "✓ Loaded from server .env file. Enter only to override." : "Enter your IBM Bob Shell API key."}
+                placeholder={hasServerBob ? "Configured in server .env" : "your_bob_api_key..."}
+                value={bobKey}
+                onChange={(e) => setBobKey(e.target.value)}
+              />
+            </div>
+            <div>
+              <PasswordInput
+                id="gemini-key-input"
+                labelText="Google Gemini API Key (GEMINI_API_KEY)"
+                helperText={hasServerGemini ? "✓ Loaded from server .env file. Enter only to override." : "Enter your Google Gemini API key."}
+                placeholder={hasServerGemini ? "Configured in server .env" : "AIzaSy..."}
+                value={geminiKey}
+                onChange={(e) => setGeminiKey(e.target.value)}
+              />
+            </div>
+          </div>
         </div>
       )}
 
@@ -252,7 +308,6 @@ export default function InputSection({
               <TabList aria-label="Input specification type" contained>
                 <Tab renderIcon={DocumentBlank}>Manifest / Text</Tab>
                 <Tab renderIcon={Launch}>GitHub Repo / URL</Tab>
-                <Tab renderIcon={Image}>Architecture Image</Tab>
               </TabList>
               <TabPanels>
                 {/* Panel 0: Manifest Text */}
@@ -327,98 +382,6 @@ export default function InputSection({
                   <p className="cds--helper-text-01" style={{ marginTop: '0.65rem' }}>
                     Autonomous agents will clone the repo or scrape docs to identify C/C++ SIMD intrinsics, build systems, test suites, and container dependencies.
                   </p>
-                </TabPanel>
-
-                {/* Panel 2: Image */}
-                <TabPanel style={{ padding: '1rem 0' }}>
-                  {imagePreviewUrl ? (
-                    <div style={{ border: '1px solid var(--cds-border-subtle-01)', borderRadius: '2px', overflow: 'hidden' }}>
-                      <div
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          padding: '0.5rem 0.75rem',
-                          background: 'var(--cds-layer-02)',
-                          borderBottom: '1px solid var(--cds-border-subtle-01)',
-                        }}
-                      >
-                        <span className="cds--label" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                          <Image size={14} /> {imageFileName}
-                        </span>
-                        <Button
-                          kind="ghost"
-                          size="sm"
-                          renderIcon={TrashCan}
-                          iconDescription="Remove image"
-                          hasIconOnly
-                          tooltipPosition="left"
-                          onClick={clearImage}
-                        />
-                      </div>
-                      <img
-                        src={imagePreviewUrl}
-                        alt="Uploaded architecture preview"
-                        style={{ width: '100%', maxHeight: '260px', objectFit: 'contain', background: 'var(--cds-layer-01)', display: 'block' }}
-                      />
-                      <p className="cds--helper-text-01" style={{ padding: '0.4rem 0.75rem' }}>
-                        Gemini Vision OCR will extract architectural components and dependencies from this diagram.
-                      </p>
-                    </div>
-                  ) : (
-                    <div
-                      ref={imageDropRef}
-                      onDrop={handleImageDrop}
-                      onDragOver={handleDragOver}
-                      style={{
-                        border: '2px dashed var(--cds-border-subtle-01)',
-                        borderRadius: '2px',
-                        minHeight: '200px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '0.75rem',
-                        padding: '2rem',
-                        textAlign: 'center',
-                        background: 'var(--cds-layer-02)',
-                      }}
-                    >
-                      <Image size={36} style={{ color: 'var(--cds-text-secondary)' }} />
-                      <div>
-                        <p className="cds--body-short-01" style={{ color: 'var(--cds-text-primary)' }}>
-                          Drag &amp; drop an architecture diagram or screenshot here, or browse
-                        </p>
-                        <p className="cds--helper-text-01">
-                          Supports PNG, JPEG, WebP, GIF (up to 10 MB)
-                        </p>
-                      </div>
-                      <label>
-                        <Button kind="tertiary" size="sm" renderIcon={CloudUpload} as="span">
-                          Select Image
-                        </Button>
-                        <input
-                          type="file"
-                          accept={ACCEPTED_IMAGE_TYPES.join(',')}
-                          style={{ display: 'none' }}
-                          onChange={handleImageFileInput}
-                        />
-                      </label>
-                    </div>
-                  )}
-
-                  <div style={{ marginTop: '0.75rem' }}>
-                    <TextArea
-                      id="image-context-input"
-                      labelText="Additional context (optional)"
-                      helperText="Specify any extra requirements or notes regarding this architecture diagram."
-                      rows={2}
-                      value={manifestText}
-                      onChange={(e) => setManifestText(e.target.value)}
-                      placeholder="e.g. Include RocksDB for cache layer and Redis for session broker"
-                      style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.85rem' }}
-                    />
-                  </div>
                 </TabPanel>
               </TabPanels>
             </Tabs>

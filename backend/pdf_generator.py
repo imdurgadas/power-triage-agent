@@ -137,7 +137,8 @@ class ExecutivePDFGenerator:
         if not primary_pkg and packages:
             primary_pkg = packages[0].get("package_name")
         if not primary_pkg:
-            for cand in ["rocksdb", "redis", "nginx", "fastapi", "pytorch", "torch", "simdjson"]:
+            from .package_lookup import get_lookup_manager
+            for cand, _ in get_lookup_manager().get_known_tokens():
                 if cand in project_name.lower():
                     primary_pkg = cand
                     break
@@ -146,27 +147,13 @@ class ExecutivePDFGenerator:
         doc_url = triage_data.get("doc_url")
         source_url = triage_data.get("source_url") or git_repo_url or doc_url
 
-        # Well-known fallback enrichment for known packages if not already present
+        # Fallback provenance enrichment via dynamic package lookup
         if primary_pkg:
-            pkg_lower = primary_pkg.lower()
-            if "rocksdb" in pkg_lower:
-                git_repo_url = git_repo_url or "https://github.com/facebook/rocksdb"
-                doc_url = doc_url or "https://rocksdb.org"
-            elif "redis" in pkg_lower:
-                git_repo_url = git_repo_url or "https://github.com/redis/redis"
-                doc_url = doc_url or "https://redis.io"
-            elif "nginx" in pkg_lower:
-                git_repo_url = git_repo_url or "https://github.com/nginx/nginx"
-                doc_url = doc_url or "https://nginx.org"
-            elif "fastapi" in pkg_lower:
-                git_repo_url = git_repo_url or "https://github.com/tiangolo/fastapi"
-                doc_url = doc_url or "https://fastapi.tiangolo.com"
-            elif "pytorch" in pkg_lower or "torch" in pkg_lower:
-                git_repo_url = git_repo_url or "https://github.com/pytorch/pytorch"
-                doc_url = doc_url or "https://pytorch.org"
-            elif "simdjson" in pkg_lower:
-                git_repo_url = git_repo_url or "https://github.com/simdjson/simdjson"
-                doc_url = doc_url or "https://simdjson.org"
+            from .package_lookup import get_lookup_manager
+            meta = get_lookup_manager().get_metadata(primary_pkg)
+            if meta:
+                git_repo_url = git_repo_url or meta.get("git_repo_url")
+                doc_url = doc_url or meta.get("doc_url")
 
         pkg_version = triage_data.get("package_version")
         if not pkg_version and packages:
@@ -192,10 +179,10 @@ class ExecutivePDFGenerator:
             NumberedCanvas.header_subtitle = f"Qualification: {project_name}"
             doc_heading = f"Executive Qualification Memo: {project_name}"
 
-        # Fibonacci Effort
-        fib_effort = summary.get("fibonacci_effort_pd", 0)
-        if not fib_effort:
-            fib_effort = summary.get("max_total_person_days", 5)
+        # Estimated Porting Effort
+        estimated_effort = summary.get("estimated_effort_pd", 0)
+        if not estimated_effort:
+            estimated_effort = summary.get("max_total_person_days", 0)
 
         readiness_pct = summary.get("readiness_score_pct", 0.0)
         rec = summary.get("recommendation", "Minor Effort")
@@ -272,8 +259,8 @@ class ExecutivePDFGenerator:
                 Paragraph(f"<b><font color='{rec_color.hexval()}'>{rec}</font></b>", body_style),
             ],
             [
-                Paragraph("<b>Fibonacci Effort Estimate</b>", body_style),
-                Paragraph(f"<b><font color='{PRIMARY.hexval()}'>{fib_effort} Person-Days</font></b>", body_style),
+                Paragraph("<b>Estimated Porting Effort</b>", body_style),
+                Paragraph(f"<b><font color='{PRIMARY.hexval()}'>{estimated_effort} Person-Days</font></b><br/><font size='7' color='#64748b'>(Lifecycle WBS Sized)</font>", body_style),
                 Paragraph("<b>Analyzed Components</b>", body_style),
                 Paragraph(f"{summary.get('total_packages', len(packages))} ({summary.get('native_count', 0)} Native, {summary.get('substitute_count', 0)} Sub, {summary.get('unported_count', 0)} Unported)", body_style),
             ],
@@ -307,7 +294,142 @@ class ExecutivePDFGenerator:
             ('PADDING', (0, 0), (-1, -1), 6),
         ]))
         story.append(t_callout)
-        story.append(Spacer(1, 10))
+        story.append(Spacer(1, 6))
+
+        # Lifecycle Sizing Breakdown Table in PDF
+        sizing_bd = summary.get("sizing_breakdown")
+        if sizing_bd and estimated_effort > 0:
+            lifecycle_rows = [
+                [
+                    Paragraph("<b><font color='white'>Porting Stage</font></b>", body_style),
+                    Paragraph("<b><font color='white'>Activity Description</font></b>", body_style),
+                    Paragraph("<b><font color='white'>Effort</font></b>", body_style),
+                ],
+                [
+                    Paragraph("<b>1. Prep Environment</b>", body_style),
+                    Paragraph("PowerVM/LPAR/OCP cluster, GCC/Clang compilers, SIMDe/VSX dev headers", body_style),
+                    Paragraph(f"{sizing_bd.get('prep_env_pd', 0.0):.1f} PD", body_style),
+                ],
+                [
+                    Paragraph("<b>2. Readiness Inspection</b>", body_style),
+                    Paragraph("Architecture qualification, endianness, 64KB page risks & build scripts audit", body_style),
+                    Paragraph(f"{sizing_bd.get('readiness_audit_pd', 0.0):.1f} PD", body_style),
+                ],
+                [
+                    Paragraph("<b>3. Build from Source</b>", body_style),
+                    Paragraph("Core unported libraries, transitive dependencies & vector code compilation", body_style),
+                    Paragraph(f"{sizing_bd.get('build_source_pd', 0.0):.1f} PD", body_style),
+                ],
+                [
+                    Paragraph("<b>4. CI & Packaging</b>", body_style),
+                    Paragraph("ppc64le CI matrix runners & multi-arch container manifest packaging", body_style),
+                    Paragraph(f"{sizing_bd.get('ci_pipeline_pd', 0.0):.1f} PD", body_style),
+                ],
+                [
+                    Paragraph("<b>5. Test & Bug Fix</b>", body_style),
+                    Paragraph("Test harness execution, runtime defect resolution & SMT8 stabilization", body_style),
+                    Paragraph(f"{sizing_bd.get('bug_fix_validation_pd', 0.0):.1f} PD", body_style),
+                ],
+                [
+                    Paragraph("<b>6. Contingency Buffer</b>", body_style),
+                    Paragraph(f"Risk buffer covering upstream friction ({sizing_bd.get('contingency_pct', 20.0):.0f}%)", body_style),
+                    Paragraph(f"+{sizing_bd.get('contingency_buffer_pd', 0.0):.1f} PD", body_style),
+                ],
+                [
+                    Paragraph("<b>Total Committed Sizing</b>", body_style),
+                    Paragraph("<b>End-to-end delivery commitment</b>", body_style),
+                    Paragraph(f"<b><font color='{PRIMARY.hexval()}'>{estimated_effort} Person-Days</font></b>", body_style),
+                ],
+            ]
+            t_lifecycle = Table(lifecycle_rows, colWidths=[130, 310, 82])
+            t_lifecycle.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), PRIMARY),
+                ('ROWBACKGROUNDS', (0, 1), (-1, -2), [colors.white, colors.HexColor("#f8fafc")]),
+                ('BACKGROUND', (0, -1), (-1, -1), colors.HexColor("#eff6ff")),
+                ('BOX', (0, 0), (-1, -1), 1, BORDER_COLOR),
+                ('INNERGRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                ('PADDING', (0, 0), (-1, -1), 3),
+            ]))
+            story.append(t_lifecycle)
+            story.append(Spacer(1, 6))
+
+        # LLM Analysis Telemetry & Cost Accounting
+        token_usage = triage_data.get("token_usage") or summary.get("token_usage")
+        if token_usage:
+            provider_label = "IBM Bob Shell" if token_usage.get("llm_provider") == "ibm_bob" else "Google Gemini"
+            in_t = token_usage.get("input_tokens", 0)
+            out_t = token_usage.get("output_tokens", 0)
+            tot_t = token_usage.get("total_tokens", in_t + out_t)
+            cost_usd = token_usage.get("cost_usd", 0.0)
+            calls_c = token_usage.get("calls_count", 1)
+            telemetry_data = [
+                [
+                    Paragraph("<b>LLM Analysis Engine</b>", body_style),
+                    Paragraph(f"{provider_label} ({token_usage.get('llm_model', 'bob-shell')})", body_style),
+                    Paragraph("<b>Analysis Cost</b>", body_style),
+                    Paragraph(f"<b><font color='{PRIMARY.hexval()}'>${cost_usd:.4f} USD</font></b> ({calls_c} call{'s' if calls_c != 1 else ''})", body_style),
+                ],
+                [
+                    Paragraph("<b>Total Tokens Consumed</b>", body_style),
+                    Paragraph(f"<b>{tot_t:,}</b> tokens", body_style),
+                    Paragraph("<b>Token Breakdown</b>", body_style),
+                    Paragraph(f"{in_t:,} Prompt / {out_t:,} Output", body_style),
+                ]
+            ]
+            t_telemetry = Table(telemetry_data, colWidths=[140, 120, 140, 122])
+            t_telemetry.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#f8fafc")),
+                ('BOX', (0, 0), (-1, -1), 1, BORDER_COLOR),
+                ('INNERGRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                ('PADDING', (0, 0), (-1, -1), 4),
+            ]))
+            story.append(t_telemetry)
+
+            breakdown_list = token_usage.get("breakdown") or []
+            if breakdown_list:
+                story.append(Spacer(1, 4))
+                breakdown_rows = [
+                    [
+                        Paragraph("<b><font color='white'>Triage Stage</font></b>", body_style),
+                        Paragraph("<b><font color='white'>Calls</font></b>", body_style),
+                        Paragraph("<b><font color='white'>Tokens (In / Out / Total)</font></b>", body_style),
+                        Paragraph("<b><font color='white'>Cost (USD)</font></b>", body_style),
+                        Paragraph("<b><font color='white'>Share</font></b>", body_style),
+                    ]
+                ]
+                for b in breakdown_list:
+                    b_stage = b.get("stage", "Analysis")
+                    b_calls = b.get("calls_count", 1)
+                    b_in = b.get("input_tokens", 0)
+                    b_out = b.get("output_tokens", 0)
+                    b_tot = b.get("total_tokens", b_in + b_out)
+                    b_cost = b.get("cost_usd", 0.0)
+                    b_pct = b.get("percentage", 0.0)
+                    breakdown_rows.append([
+                        Paragraph(f"<b>{b_stage}</b>", body_style),
+                        Paragraph(str(b_calls), body_style),
+                        Paragraph(f"{b_in:,} / {b_out:,} ({b_tot:,})", body_style),
+                        Paragraph(f"${b_cost:.4f}", body_style),
+                        Paragraph(f"{b_pct}%", body_style),
+                    ])
+                t_breakdown = Table(breakdown_rows, colWidths=[150, 45, 175, 90, 62])
+                header_color = colors.HexColor("#0f62fe" if token_usage.get("llm_provider") == "ibm_bob" else "#8a3ffc")
+                t_breakdown.setStyle(TableStyle([
+                    ('BACKGROUND', (0, 0), (-1, 0), header_color),
+                    ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                    ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor("#f8fafc")]),
+                    ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+                    ('INNERGRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
+                    ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                    ('PADDING', (0, 0), (-1, -1), 3),
+                ]))
+                story.append(t_breakdown)
+
+            story.append(Spacer(1, 8))
+        else:
+            story.append(Spacer(1, 4))
 
         # Section 2: IBM Power Hardware Value Proposition
         story.append(Paragraph("2. Strategic Value of Migrating to IBM Power (ppc64le)", h1_style))

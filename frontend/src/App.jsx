@@ -22,6 +22,7 @@ export default function App() {
   const [isRunning, setIsRunning] = useState(false);
   const [agentSteps, setAgentSteps] = useState([]);
   const [triageResult, setTriageResult] = useState(null);
+  const [tokenUsage, setTokenUsage] = useState(null);
   const [selectedAuditPkg, setSelectedAuditPkg] = useState(null);
   const [showExportModal, setShowExportModal] = useState(false);
   const [backendOnline, setBackendOnline] = useState(true);
@@ -46,6 +47,7 @@ export default function App() {
     setIsRunning(true);
     setAgentSteps([]);
     setTriageResult(null);
+    setTokenUsage(null);
 
     try {
       const response = await fetch('/api/triage/stream', {
@@ -78,8 +80,13 @@ export default function App() {
               const event = JSON.parse(rawJson);
               if (event.type === 'step') {
                 setAgentSteps(prev => [...prev, event.step]);
+              } else if (event.type === 'token_usage') {
+                setTokenUsage(event.usage);
               } else if (event.type === 'result') {
                 setTriageResult(event.data);
+                if (event.data?.token_usage) {
+                  setTokenUsage(event.data.token_usage);
+                }
               }
             } catch (jsonErr) {
               console.error('Error parsing SSE event:', jsonErr);
@@ -97,6 +104,9 @@ export default function App() {
         });
         const data = await fallbackRes.json();
         setTriageResult(data);
+        if (data?.token_usage) {
+          setTokenUsage(data.token_usage);
+        }
       } catch (postErr) {
         alert('Could not communicate with backend: ' + postErr.message);
       }
@@ -144,12 +154,13 @@ export default function App() {
             onSelectPreset={setActivePreset}
           />
 
-          <AgentLiveFeed steps={agentSteps} isRunning={isRunning} />
+          <AgentLiveFeed steps={agentSteps} isRunning={isRunning} tokenUsage={tokenUsage} />
 
           {triageResult && (
             <Scorecard
               summary={triageResult.summary}
               triageResult={triageResult}
+              tokenUsage={tokenUsage || triageResult.token_usage || triageResult.summary?.token_usage}
               onOpenExport={() => setShowExportModal(true)}
             />
           )}

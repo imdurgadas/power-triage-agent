@@ -1,0 +1,1169 @@
+{
+  "nginx": {
+    "package_name": "nginx",
+    "ecosystem": "container",
+    "version": "1.25",
+    "status": "native_available",
+    "available_version": "1.25",
+    "tier": "Official Docker Hub Multi-Arch Container",
+    "evidence": "Docker Hub library/nginx:1.25 verified multi-arch (linux/ppc64le)",
+    "url": "https://hub.docker.com/r/library/nginx",
+    "git_repo_url": "https://github.com/nginx/nginx",
+    "doc_url": "https://nginx.org",
+    "arch_posture": {
+      "ppc64le_markers_found": [
+        "src/core/ngx_atomic.h: ppc64le atomics"
+      ],
+      "x86_only_markers_found": [],
+      "ci_matrix_has_power": true,
+      "scan_source": "lookup_file",
+      "effort_adjustment_factor": 0.7
+    },
+    "versions": {
+      "1.24": {
+        "status": "NATIVE_AVAILABLE",
+        "available_version": "1.24",
+        "tier": "Official multi-arch container",
+        "evidence": "Docker Hub Official (linux/ppc64le)",
+        "url": "https://hub.docker.com/_/nginx"
+      },
+      "1.25": {
+        "status": "native_available",
+        "available_version": "1.25",
+        "tier": "Official Docker Hub Multi-Arch Container",
+        "evidence": "Docker Hub library/nginx:1.25 verified multi-arch (linux/ppc64le)",
+        "url": "https://hub.docker.com/r/library/nginx",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T05:29:10.302865+00:00"
+      }
+    },
+    "last_analyzed": "2026-10-12T05:29:10.302865+00:00",
+    "analysis_count": 1
+  },
+  "redis": {
+    "package_name": "redis",
+    "ecosystem": "container",
+    "version": "7.2",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "7.2",
+    "tier": "Official multi-arch container",
+    "evidence": "Docker Hub Official (linux/ppc64le)",
+    "url": "https://hub.docker.com/_/redis",
+    "git_repo_url": "https://github.com/redis/redis",
+    "doc_url": "https://redis.io",
+    "arch_posture": {
+      "ppc64le_markers_found": [
+        "src/atomicvar.h: Power memory barriers",
+        "src/sds.h"
+      ],
+      "x86_only_markers_found": [],
+      "ci_matrix_has_power": true,
+      "scan_source": "lookup_file",
+      "effort_adjustment_factor": 0.7
+    },
+    "versions": {
+      "7.2": {
+        "status": "NATIVE_AVAILABLE",
+        "available_version": "7.2",
+        "tier": "Official multi-arch container",
+        "evidence": "Docker Hub Official (linux/ppc64le)",
+        "url": "https://hub.docker.com/_/redis"
+      }
+    }
+  },
+  "postgres": {
+    "package_name": "postgres",
+    "ecosystem": "container",
+    "version": "15.0",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "15.0",
+    "tier": "Official multi-arch container",
+    "evidence": "Docker Hub Official (linux/ppc64le)",
+    "url": "https://hub.docker.com/_/postgres",
+    "git_repo_url": "https://github.com/postgres/postgres",
+    "doc_url": "https://www.postgresql.org",
+    "versions": {
+      "15.0": {
+        "status": "NATIVE_AVAILABLE",
+        "available_version": "15.0",
+        "tier": "Official multi-arch container",
+        "evidence": "Docker Hub Official (linux/ppc64le)",
+        "url": "https://hub.docker.com/_/postgres"
+      }
+    }
+  },
+  "postgresql": {
+    "package_name": "postgresql",
+    "ecosystem": "container",
+    "version": "15.0",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "15.0",
+    "tier": "Official multi-arch container",
+    "evidence": "Docker Hub Official (linux/ppc64le)",
+    "url": "https://hub.docker.com/_/postgres",
+    "git_repo_url": "https://github.com/postgres/postgres",
+    "doc_url": "https://www.postgresql.org"
+  },
+  "mysql": {
+    "package_name": "mysql",
+    "ecosystem": "container",
+    "version": "8.0",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "8.0",
+    "tier": "Red Hat / CentOS Stream container",
+    "evidence": "Red Hat Ecosystem Catalog (ppc64le)",
+    "url": "https://catalog.redhat.com",
+    "git_repo_url": "https://github.com/mysql/mysql-server",
+    "doc_url": "https://dev.mysql.com/doc/",
+    "versions": {
+      "8.0": {
+        "status": "NATIVE_AVAILABLE",
+        "available_version": "8.0",
+        "tier": "Red Hat / CentOS Stream container",
+        "evidence": "Red Hat Ecosystem Catalog (ppc64le)",
+        "url": "https://catalog.redhat.com"
+      }
+    }
+  },
+  "kafka": {
+    "package_name": "kafka",
+    "ecosystem": "container",
+    "version": "3.6.0",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "3.6.0",
+    "tier": "Red Hat Strimzi / Apache Kafka multi-arch",
+    "evidence": "Quay.io/strimzi/kafka (linux on ppc64le verified)",
+    "url": "https://quay.io/repository/strimzi/kafka",
+    "git_repo_url": "https://github.com/apache/kafka",
+    "doc_url": "https://kafka.apache.org"
+  },
+  "strimzi/kafka": {
+    "package_name": "strimzi/kafka",
+    "ecosystem": "container",
+    "version": "3.6.0",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "3.6.0",
+    "tier": "Red Hat Strimzi / Apache Kafka multi-arch",
+    "evidence": "Quay.io/strimzi/kafka (linux on ppc64le verified)",
+    "url": "https://quay.io/repository/strimzi/kafka"
+  },
+  "rabbitmq": {
+    "package_name": "rabbitmq",
+    "ecosystem": "container",
+    "version": "3.12",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "3.12",
+    "tier": "Official multi-arch container",
+    "evidence": "Docker Hub Official (linux/ppc64le)",
+    "url": "https://hub.docker.com/_/rabbitmq",
+    "git_repo_url": "https://github.com/rabbitmq/rabbitmq-server",
+    "doc_url": "https://www.rabbitmq.com"
+  },
+  "node": {
+    "package_name": "node",
+    "ecosystem": "container",
+    "version": "20.0",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "20.0",
+    "tier": "Official multi-arch container",
+    "evidence": "Docker Hub Official (linux/ppc64le)",
+    "url": "https://hub.docker.com/_/node",
+    "git_repo_url": "https://github.com/nodejs/node",
+    "doc_url": "https://nodejs.org"
+  },
+  "python": {
+    "package_name": "python",
+    "ecosystem": "container",
+    "version": "3.11",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "3.11",
+    "tier": "Official multi-arch container",
+    "evidence": "Docker Hub Official (linux/ppc64le)",
+    "url": "https://hub.docker.com/_/python",
+    "git_repo_url": "https://github.com/python/cpython",
+    "doc_url": "https://www.python.org"
+  },
+  "golang": {
+    "package_name": "golang",
+    "ecosystem": "container",
+    "version": "1.21",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "1.21",
+    "tier": "Official multi-arch container",
+    "evidence": "Docker Hub Official (linux/ppc64le)",
+    "url": "https://hub.docker.com/_/golang",
+    "git_repo_url": "https://github.com/golang/go",
+    "doc_url": "https://go.dev"
+  },
+  "zlib": {
+    "package_name": "zlib",
+    "ecosystem": "native_c",
+    "version": "1.2.11",
+    "status": "native_available",
+    "available_version": "1.3.1",
+    "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+    "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'zlib' (version 1.3.1). Build script: zlib_v1.3.1_ubi_9.3.sh",
+    "url": "https://github.com/ppc64le/build-scripts/tree/master/z/zlib",
+    "git_repo_url": "https://github.com/madler/zlib",
+    "doc_url": "https://www.zlib.net",
+    "last_analyzed": "2026-10-12T06:14:37.291208+00:00",
+    "analysis_count": 2,
+    "versions": {
+      "1.3.1": {
+        "status": "native_available",
+        "available_version": "1.3.1",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'zlib' (version 1.3.1). Build script: zlib_v1.3.1_ubi_9.3.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/z/zlib",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T05:54:24.765974+00:00"
+      },
+      "1.2.11": {
+        "status": "native_available",
+        "available_version": "1.3.1",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'zlib' (version 1.3.1). Build script: zlib_v1.3.1_ubi_9.3.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/z/zlib",
+        "substitute": null,
+        "version_warning": "Requested version 1.2.11 is older than build-scripts version 1.3.1; recommend upgrading to 1.3.1.",
+        "last_analyzed": "2026-10-12T06:14:37.291208+00:00"
+      }
+    }
+  },
+  "zlib-devel": {
+    "package_name": "zlib-devel",
+    "ecosystem": "native_c",
+    "version": "1.2.11",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "1.2.11",
+    "tier": "Core OS Development Headers",
+    "evidence": "RHEL / SLES / Ubuntu BaseOS ppc64le",
+    "url": "https://www.zlib.net"
+  },
+  "libz": {
+    "package_name": "libz",
+    "ecosystem": "native_c",
+    "version": "1.2.11",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "1.2.11",
+    "tier": "Core OS Library / Compression",
+    "evidence": "Standard shared library in Linux on Power (ppc64le)",
+    "url": "https://www.zlib.net"
+  },
+  "libdeflate": {
+    "package_name": "libdeflate",
+    "ecosystem": "native_c",
+    "version": "1.18",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "1.18",
+    "tier": "EPEL 9 repository for ppc64le",
+    "evidence": "EPEL 9 ppc64le / Conda-forge",
+    "url": "https://packages.fedoraproject.org/pkgs/libdeflate/"
+  },
+  "openssl": {
+    "package_name": "openssl",
+    "ecosystem": "native_c",
+    "version": "3.0.7",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "3.0.7",
+    "tier": "Core OS Library / Cryptography",
+    "evidence": "Native package in RHEL / SLES / Ubuntu BaseOS ppc64le",
+    "url": "https://www.openssl.org",
+    "git_repo_url": "https://github.com/openssl/openssl",
+    "doc_url": "https://www.openssl.org"
+  },
+  "openssl-devel": {
+    "package_name": "openssl-devel",
+    "ecosystem": "native_c",
+    "version": "3.0.7",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "3.0.7",
+    "tier": "Core OS Development Headers",
+    "evidence": "RHEL / SLES / Ubuntu BaseOS ppc64le",
+    "url": "https://www.openssl.org"
+  },
+  "snappy": {
+    "package_name": "snappy",
+    "ecosystem": "native_c",
+    "version": "1.1.9",
+    "status": "native_available",
+    "available_version": "1.2.2",
+    "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+    "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'snappy' (version 1.2.2). Build script: snappy_ubi_9.3.sh",
+    "url": "https://github.com/ppc64le/build-scripts/tree/master/s/snappy",
+    "git_repo_url": "https://github.com/google/snappy",
+    "doc_url": "https://github.com/google/snappy",
+    "last_analyzed": "2026-10-12T06:28:18.037936+00:00",
+    "analysis_count": 2,
+    "versions": {
+      "1.1.10": {
+        "status": "native_available",
+        "available_version": "1.2.2",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'snappy' (version 1.2.2). Build script: snappy_ubi_9.3.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/s/snappy",
+        "substitute": null,
+        "version_warning": "Requested version 1.1.10 is older than build-scripts version 1.2.2; recommend upgrading to 1.2.2.",
+        "last_analyzed": "2026-10-12T05:54:23.120446+00:00"
+      },
+      "1.1.9": {
+        "status": "native_available",
+        "available_version": "1.2.2",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'snappy' (version 1.2.2). Build script: snappy_ubi_9.3.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/s/snappy",
+        "substitute": null,
+        "version_warning": "Requested version 1.1.9 is older than build-scripts version 1.2.2; recommend upgrading to 1.2.2.",
+        "last_analyzed": "2026-10-12T06:28:18.037936+00:00"
+      }
+    }
+  },
+  "lz4": {
+    "package_name": "lz4",
+    "ecosystem": "native_c",
+    "version": "1.9.4",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "1.9.4",
+    "tier": "Core OS Library",
+    "evidence": "RHEL 8/9 AppStream ppc64le",
+    "url": "https://github.com/lz4/lz4"
+  },
+  "rocksdb": {
+    "package_name": "rocksdb",
+    "ecosystem": "native_c",
+    "version": "10.5.1",
+    "status": "native_available",
+    "available_version": "9.4.0",
+    "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+    "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'rocksdb' (version 9.4.0). Build script: rocksdb_ubi_9.3.sh",
+    "url": "https://github.com/ppc64le/build-scripts/tree/master/r/rocksdb",
+    "git_repo_url": "https://github.com/facebook/rocksdb",
+    "doc_url": "https://rocksdb.org",
+    "arch_posture": {
+      "ppc64le_markers_found": [
+        "port/port_posix.h: PowerPC yield (or 27,27,27)",
+        "CMakeLists.txt: ppc64le architecture flag"
+      ],
+      "x86_only_markers_found": [
+        "util/crc32c_arm64.h",
+        "util/crc32c_x86.cc"
+      ],
+      "ci_matrix_has_power": true,
+      "scan_source": "lookup_file",
+      "effort_adjustment_factor": 0.8
+    },
+    "last_analyzed": "2026-10-12T06:48:38.842435+00:00",
+    "analysis_count": 3,
+    "versions": {
+      "10.4": {
+        "status": "native_available",
+        "available_version": "9.4.0",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'rocksdb' (version 9.4.0). Build script: rocksdb_ubi_9.3.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/r/rocksdb",
+        "substitute": null,
+        "version_warning": "Requested version 10.4 is newer than build-scripts version 9.4.0; build script may need updating.",
+        "last_analyzed": "2026-10-12T05:53:11.714737+00:00"
+      },
+      "9.x": {
+        "status": "native_available",
+        "available_version": "9.4.0",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'rocksdb' (version 9.4.0). Build script: rocksdb_ubi_9.3.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/r/rocksdb",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T06:28:03.030994+00:00"
+      },
+      "10.5.1": {
+        "status": "native_available",
+        "available_version": "9.4.0",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'rocksdb' (version 9.4.0). Build script: rocksdb_ubi_9.3.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/r/rocksdb",
+        "substitute": null,
+        "version_warning": "Requested version 10.5.1 is newer than build-scripts version 9.4.0; build script may need updating.",
+        "last_analyzed": "2026-10-12T06:48:38.842435+00:00"
+      }
+    }
+  },
+  "simdjson": {
+    "package_name": "simdjson",
+    "ecosystem": "native_c",
+    "version": "3.6",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "3.6",
+    "tier": "ppc64le/build-scripts build recipe",
+    "evidence": "ppc64le/build-scripts contains verified build recipe for simdjson on Power",
+    "url": "https://github.com/simdjson/simdjson",
+    "git_repo_url": "https://github.com/simdjson/simdjson",
+    "doc_url": "https://simdjson.org",
+    "arch_posture": {
+      "ppc64le_markers_found": [
+        "include/simdjson/ppc64le.h",
+        "CMakeLists.txt: ALTIVEC VSX"
+      ],
+      "x86_only_markers_found": [
+        "include/simdjson/westmere.h (AVX2)",
+        "include/simdjson/haswell.h"
+      ],
+      "ci_matrix_has_power": false,
+      "scan_source": "lookup_file",
+      "effort_adjustment_factor": 1.0
+    }
+  },
+  "whisper": {
+    "package_name": "whisper",
+    "ecosystem": "pypi",
+    "version": "20231117",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "20231117",
+    "tier": "PyPI release",
+    "evidence": "setup.py multi-arch compatibility",
+    "url": "https://github.com/openai/whisper",
+    "arch_posture": {
+      "ppc64le_markers_found": [
+        "setup.py: multi-arch wheel compatibility"
+      ],
+      "x86_only_markers_found": [],
+      "ci_matrix_has_power": false,
+      "scan_source": "lookup_file",
+      "effort_adjustment_factor": 1.0
+    }
+  },
+  "numpy": {
+    "package_name": "numpy",
+    "ecosystem": "pypi",
+    "version": "1.26.0",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "1.26.0",
+    "tier": "PyPI native ppc64le wheel",
+    "evidence": "PyPI release (ppc64le wheel available)",
+    "url": "https://pypi.org/project/numpy",
+    "git_repo_url": "https://github.com/numpy/numpy",
+    "doc_url": "https://numpy.org"
+  },
+  "pandas": {
+    "package_name": "pandas",
+    "ecosystem": "pypi",
+    "version": "2.1.0",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "2.1.0",
+    "tier": "PyPI native ppc64le wheel",
+    "evidence": "PyPI release (ppc64le wheel available)",
+    "url": "https://pypi.org/project/pandas",
+    "git_repo_url": "https://github.com/pandas-dev/pandas",
+    "doc_url": "https://pandas.pydata.org"
+  },
+  "scipy": {
+    "package_name": "scipy",
+    "ecosystem": "pypi",
+    "version": "1.11.0",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "1.11.0",
+    "tier": "PyPI native ppc64le wheel",
+    "evidence": "PyPI release (ppc64le wheel available)",
+    "url": "https://pypi.org/project/scipy",
+    "git_repo_url": "https://github.com/scipy/scipy",
+    "doc_url": "https://scipy.org"
+  },
+  "pytorch": {
+    "package_name": "pytorch",
+    "ecosystem": "pypi",
+    "version": "2.6.0",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "2.6.0",
+    "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+    "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'pytorch' (version 2.6.0). Build script: pytorch_2.7.1_ubi_9.3.sh",
+    "url": "https://github.com/ppc64le/build-scripts/tree/master/p/pytorch",
+    "git_repo_url": "https://github.com/pytorch/pytorch",
+    "doc_url": "https://pytorch.org"
+  },
+  "torch": {
+    "package_name": "torch",
+    "ecosystem": "pypi",
+    "version": "2.1.0",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "2.1.0",
+    "tier": "ppc64le/pyeco DevPi wheels index",
+    "evidence": "ppc64le/pyeco wheel index",
+    "url": "https://pypi.org/project/torch",
+    "git_repo_url": "https://github.com/pytorch/pytorch",
+    "doc_url": "https://pytorch.org"
+  },
+  "fastapi": {
+    "package_name": "fastapi",
+    "ecosystem": "pypi",
+    "version": "0.110.0",
+    "status": "PLATFORM_AGNOSTIC",
+    "available_version": "0.110.0",
+    "tier": "Pure Python package (noarch)",
+    "evidence": "PyPI (py2.py3-none-any.whl)",
+    "url": "https://pypi.org/project/fastapi",
+    "git_repo_url": "https://github.com/tiangolo/fastapi",
+    "doc_url": "https://fastapi.tiangolo.com"
+  },
+  "flask": {
+    "package_name": "flask",
+    "ecosystem": "pypi",
+    "version": "3.0.0",
+    "status": "PLATFORM_AGNOSTIC",
+    "available_version": "3.0.0",
+    "tier": "Pure Python package (noarch)",
+    "evidence": "PyPI (py2.py3-none-any.whl)",
+    "url": "https://pypi.org/project/flask"
+  },
+  "requests": {
+    "package_name": "requests",
+    "ecosystem": "pypi",
+    "version": "2.31.0",
+    "status": "PLATFORM_AGNOSTIC",
+    "available_version": "2.31.0",
+    "tier": "Pure Python package (noarch)",
+    "evidence": "PyPI (py2.py3-none-any.whl)",
+    "url": "https://pypi.org/project/requests"
+  },
+  "pydantic": {
+    "package_name": "pydantic",
+    "ecosystem": "pypi",
+    "version": "2.5.0",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "2.5.0",
+    "tier": "PyPI native ppc64le wheel",
+    "evidence": "PyPI release (pydantic-core ppc64le wheel)",
+    "url": "https://pypi.org/project/pydantic"
+  },
+  "faiss": {
+    "package_name": "faiss",
+    "ecosystem": "pypi",
+    "version": "1.7.4",
+    "status": "SUBSTITUTE_AVAILABLE",
+    "available_version": "1.7.4",
+    "tier": "IBM Open-CE optimized build",
+    "evidence": "Conda-forge / Open-CE channel",
+    "url": "https://github.com/open-ce/open-ce",
+    "substitute": "open-ce/faiss-ppc64le"
+  },
+  "intel-mkl": {
+    "package_name": "intel-mkl",
+    "ecosystem": "native_c",
+    "version": "latest",
+    "status": "BLOCKER",
+    "available_version": null,
+    "tier": "x86-proprietary Intel Math Kernel Library",
+    "evidence": "Intel closed-source binary library; only supports x86_64 architecture",
+    "url": "https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html",
+    "substitute": "IBM ESSL (Engineering and Scientific Subroutine Library) or OpenBLAS / BLIS (MMA/VSX accelerated)"
+  },
+  "mkl": {
+    "package_name": "mkl",
+    "ecosystem": "native_c",
+    "version": "latest",
+    "status": "BLOCKER",
+    "available_version": null,
+    "tier": "x86-proprietary Intel Math Kernel Library",
+    "evidence": "Intel closed-source binary library; only supports x86_64 architecture",
+    "url": "https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html",
+    "substitute": "IBM ESSL (Engineering and Scientific Subroutine Library) or OpenBLAS / BLIS (MMA/VSX accelerated)"
+  },
+  "openblas": {
+    "package_name": "openblas",
+    "ecosystem": "native_c",
+    "version": "0.3.24",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "0.3.24",
+    "tier": "Native High-Performance BLAS / Math Library",
+    "evidence": "RHEL AppStream / EPEL ppc64le (optimized with Power10 MMA / Power9 VSX)",
+    "url": "https://www.openblas.net"
+  },
+  "blis": {
+    "package_name": "blis",
+    "ecosystem": "native_c",
+    "version": "0.9.0",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "0.9.0",
+    "tier": "Native BLAS Library Framework",
+    "evidence": "Fedora / EPEL / Source (Power VSX accelerated)",
+    "url": "https://github.com/flame/blis"
+  },
+  "essl": {
+    "package_name": "essl",
+    "ecosystem": "native_c",
+    "version": "6.3.0",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "6.3.0",
+    "tier": "IBM Engineering and Scientific Subroutine Library",
+    "evidence": "IBM Power native high-performance mathematical computing library",
+    "url": "https://www.ibm.com/products/engineering-scientific-subroutine-library"
+  },
+  "jemalloc": {
+    "package_name": "jemalloc",
+    "ecosystem": "native_c",
+    "version": "5.3.0",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "5.3.0",
+    "tier": "High-performance memory allocator",
+    "evidence": "RHEL/EPEL 8/9 ppc64le package",
+    "url": "http://jemalloc.net",
+    "git_repo_url": "https://github.com/jemalloc/jemalloc",
+    "doc_url": "http://jemalloc.net"
+  },
+  "elasticsearch": {
+    "package_name": "elasticsearch",
+    "ecosystem": "container",
+    "version": "8.12.0",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "8.12.0",
+    "tier": "ICR Power container",
+    "evidence": "icr.io/ppc64le-oss/elasticsearch",
+    "url": "https://www.elastic.co"
+  },
+  "opensearch": {
+    "package_name": "opensearch",
+    "ecosystem": "container",
+    "version": "2.11.0",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "2.11.0",
+    "tier": "ICR Power container",
+    "evidence": "icr.io/ppc64le-oss/opensearch",
+    "url": "https://opensearch.org"
+  },
+  "grpc": {
+    "package_name": "grpc",
+    "ecosystem": "native_c",
+    "version": "1.60.0",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "1.60.0",
+    "tier": "ppc64le build-scripts recipe",
+    "evidence": "ppc64le/build-scripts grpc recipe",
+    "url": "https://grpc.io"
+  },
+  "django": {
+    "package_name": "django",
+    "ecosystem": "pypi",
+    "version": "5.0.0",
+    "status": "PLATFORM_AGNOSTIC",
+    "available_version": "5.0.0",
+    "tier": "Pure Python package (noarch)",
+    "evidence": "PyPI release (py3-none-any.whl)",
+    "url": "https://www.djangoproject.com"
+  },
+  "leveldb": {
+    "package_name": "leveldb",
+    "ecosystem": "native_c",
+    "version": "1.23",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "1.23",
+    "tier": "Core OS Library",
+    "evidence": "RHEL/EPEL ppc64le",
+    "url": "https://github.com/google/leveldb"
+  },
+  "spdk": {
+    "package_name": "spdk",
+    "ecosystem": "native_c",
+    "version": "23.05",
+    "status": "UNPORTED_BUILD_REQUIRED",
+    "tier": "Storage Performance Development Kit",
+    "evidence": "Requires Power vector adaptation and DPDK ppc64le",
+    "url": "https://spdk.io"
+  },
+  "dpdk": {
+    "package_name": "dpdk",
+    "ecosystem": "native_c",
+    "version": "23.11",
+    "status": "NATIVE_AVAILABLE",
+    "available_version": "23.11",
+    "tier": "Core Networking Library",
+    "evidence": "RHEL 9 ppc64le DPDK package",
+    "url": "https://www.dpdk.org"
+  },
+  "libcustom-dsp-kernel": {
+    "package_name": "libcustom-dsp-kernel",
+    "version": "1.0",
+    "last_analyzed": "2026-10-12T05:40:52.115858+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "1.0": {
+        "status": "platform_agnostic",
+        "available_version": "1.0",
+        "tier": "Python Package (assumed pure script)",
+        "evidence": "Standard PyPI package libcustom-dsp-kernel",
+        "url": "https://pypi.org/project/libcustom-dsp-kernel",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T05:40:52.115858+00:00"
+      }
+    },
+    "status": "platform_agnostic",
+    "available_version": "1.0",
+    "tier": "Python Package (assumed pure script)",
+    "evidence": "Standard PyPI package libcustom-dsp-kernel",
+    "url": "https://pypi.org/project/libcustom-dsp-kernel"
+  },
+  "test microservices": {
+    "package_name": "test microservices",
+    "version": "latest",
+    "last_analyzed": "2026-10-12T07:10:16.316602+00:00",
+    "analysis_count": 3,
+    "versions": {},
+    "arch_posture": {
+      "ppc64le_markers_found": [],
+      "x86_only_markers_found": [],
+      "ci_matrix_has_power": false,
+      "scan_source": "llm_inference",
+      "effort_adjustment_factor": 1.0
+    }
+  },
+  "ubuntu": {
+    "package_name": "ubuntu",
+    "version": "22.04",
+    "last_analyzed": "2026-10-12T05:55:39.416040+00:00",
+    "analysis_count": 3,
+    "versions": {
+      "24.04": {
+        "status": "native_available",
+        "available_version": "24.04",
+        "tier": "Official Docker Hub Multi-Arch Container",
+        "evidence": "Docker Hub library/ubuntu:24.04 verified multi-arch (linux/ppc64le)",
+        "url": "https://hub.docker.com/r/library/ubuntu",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T05:42:12.917219+00:00"
+      },
+      "20.04": {
+        "status": "native_available",
+        "available_version": "20.04",
+        "tier": "Official Docker Hub Multi-Arch Container",
+        "evidence": "Docker Hub library/ubuntu:20.04 verified multi-arch (linux/ppc64le)",
+        "url": "https://hub.docker.com/r/library/ubuntu",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T05:55:38.181864+00:00"
+      },
+      "22.04": {
+        "status": "native_available",
+        "available_version": "22.04",
+        "tier": "Official Docker Hub Multi-Arch Container",
+        "evidence": "Docker Hub library/ubuntu:22.04 verified multi-arch (linux/ppc64le)",
+        "url": "https://hub.docker.com/r/library/ubuntu",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T05:55:39.416040+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "22.04",
+    "tier": "Official Docker Hub Multi-Arch Container",
+    "evidence": "Docker Hub library/ubuntu:22.04 verified multi-arch (linux/ppc64le)",
+    "url": "https://hub.docker.com/r/library/ubuntu"
+  },
+  "gcc": {
+    "package_name": "gcc",
+    "version": "11",
+    "last_analyzed": "2026-10-12T05:53:23.267371+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "11": {
+        "status": "native_available",
+        "available_version": "11.5.0",
+        "tier": "Tier 1 – RHEL AppStream/BaseOS native RPM",
+        "evidence": "GCC 11 is the default system compiler shipped in Red Hat Enterprise Linux 9 BaseOS/AppStream repositories for all supported architectures including ppc64le. The package 'gcc' (version 11.x) is part of the RHEL 9 core toolchain and is available natively via 'dnf install gcc' on ppc64le systems.",
+        "url": "https://packages.fedoraproject.org/pkgs/gcc/gcc/",
+        "substitute": null,
+        "version_warning": "Requested version 11 is older than available ppc64le version 11.5.0; recommend upgrading.",
+        "last_analyzed": "2026-10-12T05:53:23.267371+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "11.5.0",
+    "tier": "Tier 1 – RHEL AppStream/BaseOS native RPM",
+    "evidence": "GCC 11 is the default system compiler shipped in Red Hat Enterprise Linux 9 BaseOS/AppStream repositories for all supported architectures including ppc64le. The package 'gcc' (version 11.x) is part of the RHEL 9 core toolchain and is available natively via 'dnf install gcc' on ppc64le systems.",
+    "url": "https://packages.fedoraproject.org/pkgs/gcc/gcc/",
+    "substitute": null
+  },
+  "make": {
+    "package_name": "make",
+    "version": "4.3",
+    "last_analyzed": "2026-10-12T05:53:53.570876+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "4.3": {
+        "status": "native_available",
+        "available_version": "4.3",
+        "tier": "Tier 1 - RHEL 9 BaseOS native ppc64le RPM",
+        "evidence": "GNU make 4.3 ships as the 'make' RPM (make-4.3-8.el9, epoch 1) in the RHEL 9 BaseOS repository for ppc64le (rhel-9-for-ppc64le-baseos-rpms). It is also in CentOS Stream 9 BaseOS ppc64le and the UBI 9 images (registry.access.redhat.com/ubi9), which publish multi-arch manifests that include linux/ppc64le.",
+        "url": "https://packages.fedoraproject.org/pkgs/make/",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T05:53:53.570876+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "4.3",
+    "tier": "Tier 1 - RHEL 9 BaseOS native ppc64le RPM",
+    "evidence": "GNU make 4.3 ships as the 'make' RPM (make-4.3-8.el9, epoch 1) in the RHEL 9 BaseOS repository for ppc64le (rhel-9-for-ppc64le-baseos-rpms). It is also in CentOS Stream 9 BaseOS ppc64le and the UBI 9 images (registry.access.redhat.com/ubi9), which publish multi-arch manifests that include linux/ppc64le.",
+    "url": "https://packages.fedoraproject.org/pkgs/make/",
+    "substitute": null
+  },
+  "glibc": {
+    "package_name": "glibc",
+    "version": "2.28",
+    "last_analyzed": "2026-10-12T05:54:21.473314+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "2.28": {
+        "status": "native_available",
+        "available_version": "2.34",
+        "tier": "RHEL BaseOS (core system library, ppc64le native)",
+        "evidence": "glibc is a mandatory core system package in RHEL 9 BaseOS, shipped natively for all supported architectures including ppc64le. RHEL 9 provides glibc 2.34 (upgraded from 2.28 in RHEL 8). Available via the standard 'baseos' repository on all RHEL 9 ppc64le systems.",
+        "url": "https://packages.redhat.com/en/enterprise-linux/9/BaseOS/ppc64le/os/Packages/g/",
+        "substitute": null,
+        "version_warning": "Requested version 2.28 corresponds to RHEL 8. On RHEL 9 (ppc64le), glibc is 2.34 or later. The available version is newer than the requested version; workloads requiring exactly 2.28 should target RHEL 8 instead.",
+        "last_analyzed": "2026-10-12T05:54:21.473314+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "2.34",
+    "tier": "RHEL BaseOS (core system library, ppc64le native)",
+    "evidence": "glibc is a mandatory core system package in RHEL 9 BaseOS, shipped natively for all supported architectures including ppc64le. RHEL 9 provides glibc 2.34 (upgraded from 2.28 in RHEL 8). Available via the standard 'baseos' repository on all RHEL 9 ppc64le systems.",
+    "url": "https://packages.redhat.com/en/enterprise-linux/9/BaseOS/ppc64le/os/Packages/g/",
+    "substitute": null
+  },
+  "zstd": {
+    "package_name": "zstd",
+    "version": "1.5.6",
+    "last_analyzed": "2026-10-12T06:49:05.659435+00:00",
+    "analysis_count": 2,
+    "versions": {
+      "1.5.5": {
+        "status": "native_available",
+        "available_version": "1.5.7.2",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'zstd' (version 1.5.7.2). Build script: zstd_ubi_10.2.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/z/zstd",
+        "substitute": null,
+        "version_warning": "Requested version 1.5.5 is older than build-scripts version 1.5.7.2; recommend upgrading to 1.5.7.2.",
+        "last_analyzed": "2026-10-12T05:54:37.281240+00:00"
+      },
+      "1.5.6": {
+        "status": "native_available",
+        "available_version": "1.5.7.2",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'zstd' (version 1.5.7.2). Build script: zstd_ubi_10.2.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/z/zstd",
+        "substitute": null,
+        "version_warning": "Requested version 1.5.6 is older than build-scripts version 1.5.7.2; recommend upgrading to 1.5.7.2.",
+        "last_analyzed": "2026-10-12T06:49:05.659435+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "1.5.7.2",
+    "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+    "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'zstd' (version 1.5.7.2). Build script: zstd_ubi_10.2.sh",
+    "url": "https://github.com/ppc64le/build-scripts/tree/master/z/zstd"
+  },
+  "tbb": {
+    "package_name": "tbb",
+    "version": "2021.9.0",
+    "last_analyzed": "2026-10-12T05:55:07.026918+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "2021.9.0": {
+        "status": "native_available",
+        "available_version": "2021.9.0",
+        "tier": "EPEL9 native ppc64le package (open-source oneTBB)",
+        "evidence": "oneTBB (formerly Intel TBB) is fully open-source (Apache 2.0) since 2020 and ships as 'tbb' in EPEL 9 for ppc64le. The oneTBB 2021.9.0 source is architecture-agnostic C++ and is built natively for ppc64le in EPEL9 and Fedora. conda-forge also provides linux-ppc64le builds.",
+        "url": "https://packages.fedoraproject.org/pkgs/tbb/tbb/",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T05:55:07.026918+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "2021.9.0",
+    "tier": "EPEL9 native ppc64le package (open-source oneTBB)",
+    "evidence": "oneTBB (formerly Intel TBB) is fully open-source (Apache 2.0) since 2020 and ships as 'tbb' in EPEL 9 for ppc64le. The oneTBB 2021.9.0 source is architecture-agnostic C++ and is built natively for ppc64le in EPEL9 and Fedora. conda-forge also provides linux-ppc64le builds.",
+    "url": "https://packages.fedoraproject.org/pkgs/tbb/tbb/",
+    "substitute": null
+  },
+  "liburing": {
+    "package_name": "liburing",
+    "version": "2.3",
+    "last_analyzed": "2026-10-12T05:55:32.848757+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "2.3": {
+        "status": "native_available",
+        "available_version": "2.5",
+        "tier": "Tier 1 - Native OS package (RHEL 9 AppStream, ppc64le)",
+        "evidence": "liburing and liburing-devel are shipped as native ppc64le RPMs in the RHEL 9 / CentOS Stream 9 AppStream repository (e.g. liburing-2.5-1.el9.ppc64le). QEMU-KVM in RHEL 9 depends on it. It is also packaged in Fedora and conda-forge (linux-ppc64le). liburing is a portable C library over the Linux io_uring syscall interface, has no x86-specific code, and supports ppc64le kernels (5.1+; RHEL 9 ships 5.14). Note: based on known repository contents, not a live repository query; exact current version in AppStream may differ by RHEL 9 minor release (2.5 or newer expected).",
+        "url": "https://packages.fedoraproject.org/pkgs/liburing/",
+        "substitute": null,
+        "version_warning": "Requested version 2.3 is older than available ppc64le version 2.5; recommend upgrading.",
+        "last_analyzed": "2026-10-12T05:55:32.848757+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "2.5",
+    "tier": "Tier 1 - Native OS package (RHEL 9 AppStream, ppc64le)",
+    "evidence": "liburing and liburing-devel are shipped as native ppc64le RPMs in the RHEL 9 / CentOS Stream 9 AppStream repository (e.g. liburing-2.5-1.el9.ppc64le). QEMU-KVM in RHEL 9 depends on it. It is also packaged in Fedora and conda-forge (linux-ppc64le). liburing is a portable C library over the Linux io_uring syscall interface, has no x86-specific code, and supports ppc64le kernels (5.1+; RHEL 9 ships 5.14). Note: based on known repository contents, not a live repository query; exact current version in AppStream may differ by RHEL 9 minor release (2.5 or newer expected).",
+    "url": "https://packages.fedoraproject.org/pkgs/liburing/",
+    "substitute": null
+  },
+  "googletest": {
+    "package_name": "googletest",
+    "version": "1.8.1",
+    "last_analyzed": "2026-10-12T06:49:23.502717+00:00",
+    "analysis_count": 3,
+    "versions": {
+      "1.14.0": {
+        "status": "native_available",
+        "available_version": "1.14.0",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'googletest' (version 1.14.0). Build script: googletest_ubi_8_7.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/g/googletest",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T05:55:34.102975+00:00"
+      },
+      "1.13.0": {
+        "status": "native_available",
+        "available_version": "1.14.0",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'googletest' (version 1.14.0). Build script: googletest_ubi_8_7.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/g/googletest",
+        "substitute": null,
+        "version_warning": "Requested version 1.13.0 is older than build-scripts version 1.14.0; recommend upgrading to 1.14.0.",
+        "last_analyzed": "2026-10-12T06:31:58.420167+00:00"
+      },
+      "1.8.1": {
+        "status": "native_available",
+        "available_version": "1.14.0",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'googletest' (version 1.14.0). Build script: googletest_ubi_8_7.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/g/googletest",
+        "substitute": null,
+        "version_warning": "Requested version 1.8.1 is older than build-scripts version 1.14.0; recommend upgrading to 1.14.0.",
+        "last_analyzed": "2026-10-12T06:49:23.502717+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "1.14.0",
+    "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+    "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'googletest' (version 1.14.0). Build script: googletest_ubi_8_7.sh",
+    "url": "https://github.com/ppc64le/build-scripts/tree/master/g/googletest"
+  },
+  "openjdk": {
+    "package_name": "openjdk",
+    "version": "8",
+    "last_analyzed": "2026-10-12T05:55:35.273808+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "8": {
+        "status": "platform_agnostic",
+        "available_version": "8",
+        "tier": "Java bytecode package (noarch)",
+        "evidence": "Maven Central: openjdk runs on OpenJDK ppc64le JVM",
+        "url": "https://search.maven.org/artifact/openjdk",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T05:55:35.273808+00:00"
+      }
+    },
+    "status": "platform_agnostic",
+    "available_version": "8",
+    "tier": "Java bytecode package (noarch)",
+    "evidence": "Maven Central: openjdk runs on OpenJDK ppc64le JVM",
+    "url": "https://search.maven.org/artifact/openjdk"
+  },
+  "buildpack-deps": {
+    "package_name": "buildpack-deps",
+    "version": "wheezy",
+    "last_analyzed": "2026-10-12T05:55:40.944050+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "wheezy": {
+        "status": "native_available",
+        "available_version": "latest",
+        "tier": "Official Docker Hub Multi-Arch Container (Latest)",
+        "evidence": "Docker Hub library/buildpack-deps:latest verified multi-arch (linux/ppc64le)",
+        "url": "https://hub.docker.com/r/library/buildpack-deps",
+        "substitute": null,
+        "version_warning": "Requested tag 'wheezy' does not support ppc64le, but 'latest' supports ppc64le; recommend upgrading image tag.",
+        "last_analyzed": "2026-10-12T05:55:40.944050+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "latest",
+    "tier": "Official Docker Hub Multi-Arch Container (Latest)",
+    "evidence": "Docker Hub library/buildpack-deps:latest verified multi-arch (linux/ppc64le)",
+    "url": "https://hub.docker.com/r/library/buildpack-deps"
+  },
+  "snappy-devel": {
+    "package_name": "snappy-devel",
+    "version": "1.1.9",
+    "last_analyzed": "2026-10-12T06:29:03.179520+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "1.1.9": {
+        "status": "native_available",
+        "available_version": "1.1.9",
+        "tier": "RHEL 9 BaseOS — official Red Hat repository, ppc64le supported as Tier-1 architecture",
+        "evidence": "snappy-devel 1.1.9 is shipped in RHEL 9 BaseOS for all Tier-1 architectures including ppc64le. CentOS Stream 9 (upstream tracker) confirms snappy-1.1.9-8.el9 available for ppc64le.",
+        "url": "https://packages.fedoraproject.org/pkgs/snappy/snappy-devel/",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T06:29:03.179520+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "1.1.9",
+    "tier": "RHEL 9 BaseOS — official Red Hat repository, ppc64le supported as Tier-1 architecture",
+    "evidence": "snappy-devel 1.1.9 is shipped in RHEL 9 BaseOS for all Tier-1 architectures including ppc64le. CentOS Stream 9 (upstream tracker) confirms snappy-1.1.9-8.el9 available for ppc64le.",
+    "url": "https://packages.fedoraproject.org/pkgs/snappy/snappy-devel/",
+    "substitute": null
+  },
+  "gflags": {
+    "package_name": "gflags",
+    "version": "2.2.2",
+    "last_analyzed": "2026-10-12T06:30:36.033379+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "2.2.2": {
+        "status": "native_available",
+        "available_version": "2.2.2",
+        "tier": "EPEL 9 ppc64le RPM — gflags is a portable C++ library packaged natively for ppc64le",
+        "evidence": "gflags 2.2.2 is available in EPEL 9 for ppc64le as 'gflags' and 'gflags-devel' RPMs. The package is architecture-native (compiled for ppc64le) and has been part of Fedora/EPEL since Fedora 17. No x86-specific code or ISA restrictions.",
+        "url": "https://packages.fedoraproject.org/pkgs/gflags/",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T06:30:36.033379+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "2.2.2",
+    "tier": "EPEL 9 ppc64le RPM — gflags is a portable C++ library packaged natively for ppc64le",
+    "evidence": "gflags 2.2.2 is available in EPEL 9 for ppc64le as 'gflags' and 'gflags-devel' RPMs. The package is architecture-native (compiled for ppc64le) and has been part of Fedora/EPEL since Fedora 17. No x86-specific code or ISA restrictions.",
+    "url": "https://packages.fedoraproject.org/pkgs/gflags/",
+    "substitute": null
+  },
+  "cmake": {
+    "package_name": "cmake",
+    "version": "3.12",
+    "last_analyzed": "2026-10-12T06:48:49.500731+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "3.12": {
+        "status": "native_available",
+        "available_version": "3.26.5",
+        "tier": "RHEL 9 AppStream (native ppc64le RPM)",
+        "evidence": "cmake is shipped in the RHEL 9 AppStream repository for ppc64le (package cmake, with cmake-data, cmake-rpm-macros). RHEL 9 ships cmake 3.20.x in early minor releases and 3.26.x in later ones. Also built for ppc64le in CentOS Stream 9 / Fedora and available on conda-forge (linux-ppc64le). The requested 3.12 is older than the available version, so the newer 3.x stream satisfies it; 3.12 is not packaged for RHEL 9.",
+        "url": "https://packages.fedoraproject.org/pkgs/cmake/cmake/",
+        "substitute": null,
+        "version_warning": "Requested version 3.12 is older than available ppc64le version 3.26.5; recommend upgrading.",
+        "last_analyzed": "2026-10-12T06:48:49.500731+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "3.26.5",
+    "tier": "RHEL 9 AppStream (native ppc64le RPM)",
+    "evidence": "cmake is shipped in the RHEL 9 AppStream repository for ppc64le (package cmake, with cmake-data, cmake-rpm-macros). RHEL 9 ships cmake 3.20.x in early minor releases and 3.26.x in later ones. Also built for ppc64le in CentOS Stream 9 / Fedora and available on conda-forge (linux-ppc64le). The requested 3.12 is older than the available version, so the newer 3.x stream satisfies it; 3.12 is not packaged for RHEL 9.",
+    "url": "https://packages.fedoraproject.org/pkgs/cmake/cmake/",
+    "substitute": null
+  },
+  "numactl": {
+    "package_name": "numactl",
+    "version": "2.0.16",
+    "last_analyzed": "2026-10-12T06:49:22.233051+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "2.0.16": {
+        "status": "native_available",
+        "available_version": "2.0.19",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'numactl' (version 2.0.19). Build script: numactl_ubi_9.3.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/n/numactl",
+        "substitute": null,
+        "version_warning": "Requested version 2.0.16 is older than build-scripts version 2.0.19; recommend upgrading to 2.0.19.",
+        "last_analyzed": "2026-10-12T06:49:22.233051+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "2.0.19",
+    "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+    "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'numactl' (version 2.0.19). Build script: numactl_ubi_9.3.sh",
+    "url": "https://github.com/ppc64le/build-scripts/tree/master/n/numactl"
+  },
+  "org.rocksdb:rocksdbjni": {
+    "package_name": "org.rocksdb:rocksdbjni",
+    "version": "10.5.1",
+    "last_analyzed": "2026-10-12T06:49:50.433929+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "10.5.1": {
+        "status": "platform_agnostic",
+        "available_version": "10.5.1",
+        "tier": "Java bytecode package (noarch)",
+        "evidence": "Maven Central: org.rocksdb:rocksdbjni runs on OpenJDK ppc64le JVM",
+        "url": "https://search.maven.org/artifact/org.rocksdb:rocksdbjni",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T06:49:50.433929+00:00"
+      }
+    },
+    "status": "platform_agnostic",
+    "available_version": "10.5.1",
+    "tier": "Java bytecode package (noarch)",
+    "evidence": "Maven Central: org.rocksdb:rocksdbjni runs on OpenJDK ppc64le JVM",
+    "url": "https://search.maven.org/artifact/org.rocksdb:rocksdbjni"
+  },
+  "my-storage-engine": {
+    "package_name": "my-storage-engine",
+    "version": "2.0",
+    "last_analyzed": "2026-10-12T07:20:09.517812+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "2.0": {
+        "status": "blocker",
+        "available_version": "2.0",
+        "tier": "Unknown / Unrecognized Package",
+        "evidence": "Exhaustive search across RHEL 8/9 BaseOS, AppStream, EPEL 8/9 (ppc64le), Quay.io, Docker Hub, Red Hat Registry (registry.access.redhat.com, registry.redhat.io), PyPI, IBM Open-CE (linux-ppc64le), and conda-forge (linux-ppc64le) returned zero results. 'my-storage-engine' is not a known package in any public ecosystem.",
+        "url": "https://anaconda.org/conda-forge/my-storage-engine",
+        "substitute": null,
+        "version_warning": "Requested version 2.0 cannot be evaluated — package 'my-storage-engine' does not exist in any searched repository or registry for any architecture, including ppc64le.",
+        "last_analyzed": "2026-10-12T07:20:09.517812+00:00"
+      }
+    },
+    "status": "blocker",
+    "available_version": "2.0",
+    "tier": "Unknown / Unrecognized Package",
+    "evidence": "Exhaustive search across RHEL 8/9 BaseOS, AppStream, EPEL 8/9 (ppc64le), Quay.io, Docker Hub, Red Hat Registry (registry.access.redhat.com, registry.redhat.io), PyPI, IBM Open-CE (linux-ppc64le), and conda-forge (linux-ppc64le) returned zero results. 'my-storage-engine' is not a known package in any public ecosystem.",
+    "url": "https://anaconda.org/conda-forge/my-storage-engine",
+    "substitute": null
+  },
+  "test spdk sizing": {
+    "package_name": "test spdk sizing",
+    "version": "latest",
+    "last_analyzed": "2026-10-12T07:22:09.968524+00:00",
+    "analysis_count": 1,
+    "versions": {},
+    "arch_posture": {
+      "ppc64le_markers_found": [
+        "include/spdk/barrier.h has __powerpc64__ memory barrier paths",
+        "Bundled DPDK supports ppc64le (VSX/Altivec code paths)",
+        "Generic C fallbacks for crc32c/crc16/memcpy when ISA-L is not used"
+      ],
+      "x86_only_markers_found": [
+        "ISA-L / ISA-L-crypto (x86/aarch64 asm only, accel/crc/compress/crypto offload)",
+        "Intel IOAT/DSA/IAA accel modules (lib/ioat, idxd)",
+        "SSE4.2 crc32c intrinsics and -march=native defaults",
+        "VTune/Intel-specific tooling and x86-centric NASM assembly deps"
+      ],
+      "ci_matrix_has_power": false,
+      "scan_source": "llm_inference",
+      "effort_adjustment_factor": 1.0
+    }
+  }
+}

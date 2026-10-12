@@ -34,7 +34,7 @@ class NumberedCanvas(canvas.Canvas):
         
         # Header (pages > 1)
         if self._pageNumber > 1:
-            self.drawString(45, 752, "IBM Power Porting Triage Agent — AI Elite Program Submission")
+            self.drawString(45, 752, "IBM Power Porting Triage Agent — Enterprise Migration Qualification Briefing")
             self.setStrokeColor(colors.HexColor("#cbd5e1"))
             self.setLineWidth(0.5)
             self.line(45, 746, 567, 746)
@@ -44,7 +44,7 @@ class NumberedCanvas(canvas.Canvas):
         self.setLineWidth(0.5)
         self.line(45, 42, 567, 42)
         
-        footer_text = "CONFIDENTIAL — FOR INTERNAL REVIEW & PROGRAM SUBMISSION ONLY"
+        footer_text = "CONFIDENTIAL — FOR ENTERPRISE CLIENT REVIEW & MODERNIZATION ARCHITECTURE"
         self.drawString(45, 30, footer_text)
         page_str = f"Page {self._pageNumber} of {page_count}"
         self.drawRightString(567, 30, page_str)
@@ -74,38 +74,38 @@ def build_presentation_pdf(output_path="customer_presentation.pdf"):
     BORDER_COLOR = colors.HexColor("#cbd5e1")   # Border grey slate-300
     ACCENT_GREEN = colors.HexColor("#16a34a")   # Emerald Green
     ACCENT_AMBER = colors.HexColor("#d97706")   # Amber Warning
-    ACCENT_RED = colors.HexColor("#dc2626")     # Red Risk
+    ACCENT_PURPLE = colors.HexColor("#7c3aed")  # Purple Alternative
 
     # Custom Typography Styles
     title_style = ParagraphStyle(
         'DocTitle',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=20,
-        leading=24,
+        fontSize=18,
+        leading=22,
         textColor=SECONDARY,
-        spaceAfter=3
+        spaceAfter=2
     )
 
     subtitle_style = ParagraphStyle(
         'DocSubtitle',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=11,
-        leading=14,
+        fontSize=10.5,
+        leading=13.5,
         textColor=PRIMARY,
-        spaceAfter=10
+        spaceAfter=8
     )
 
     h1_style = ParagraphStyle(
         'SectionH1',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=12.5,
-        leading=15.5,
+        fontSize=12,
+        leading=15,
         textColor=SECONDARY,
-        spaceBefore=8,
-        spaceAfter=5,
+        spaceBefore=7,
+        spaceAfter=4,
         keepWithNext=True
     )
 
@@ -116,7 +116,7 @@ def build_presentation_pdf(output_path="customer_presentation.pdf"):
         fontSize=9.5,
         leading=12.5,
         textColor=PRIMARY,
-        spaceBefore=6,
+        spaceBefore=5,
         spaceAfter=3,
         keepWithNext=True
     )
@@ -125,26 +125,26 @@ def build_presentation_pdf(output_path="customer_presentation.pdf"):
         'BodyDark',
         parent=styles['Normal'],
         fontName='Helvetica',
-        fontSize=8.5,
-        leading=11.5,
+        fontSize=8.2,
+        leading=11.2,
         textColor=TEXT_DARK,
-        spaceAfter=4
+        spaceAfter=3.5
     )
 
     bullet_style = ParagraphStyle(
         'BulletText',
         parent=body_style,
-        leftIndent=12,
-        firstLineIndent=-8,
-        spaceAfter=3
+        leftIndent=11,
+        firstLineIndent=-7,
+        spaceAfter=2.5
     )
 
     callout_style = ParagraphStyle(
         'CalloutText',
         parent=styles['Normal'],
         fontName='Helvetica',
-        fontSize=8.5,
-        leading=12,
+        fontSize=8.2,
+        leading=11.5,
         textColor=SECONDARY
     )
 
@@ -152,8 +152,8 @@ def build_presentation_pdf(output_path="customer_presentation.pdf"):
         'TableHeader',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=8,
-        leading=10,
+        fontSize=7.8,
+        leading=9.8,
         textColor=colors.white
     )
 
@@ -161,8 +161,8 @@ def build_presentation_pdf(output_path="customer_presentation.pdf"):
         'TableCell',
         parent=styles['Normal'],
         fontName='Helvetica',
-        fontSize=7.8,
-        leading=10.2,
+        fontSize=7.5,
+        leading=9.8,
         textColor=TEXT_DARK
     )
 
@@ -176,95 +176,95 @@ def build_presentation_pdf(output_path="customer_presentation.pdf"):
         'TableCellCode',
         parent=styles['Normal'],
         fontName='Courier',
-        fontSize=7.2,
-        leading=9.2,
+        fontSize=7.0,
+        leading=9.0,
         textColor=SECONDARY
     )
 
     story = []
 
     # =========================================================================
-    # PAGE 1: EXECUTIVE SUMMARY, TARGET PERSONA & PROBLEM STATEMENT
+    # PAGE 1: EXECUTIVE SUMMARY, TARGET PERSONAS & BUSINESS PROBLEM
     # =========================================================================
-    story.append(Paragraph("AI Elite Program — Customer Presentation Document", title_style))
-    story.append(Paragraph("Autonomous IBM Power Porting Triage Agent with Multi-Pillar Architecture Auditing", subtitle_style))
+    story.append(Paragraph("IBM Power Porting Triage Agent", title_style))
+    story.append(Paragraph("Enterprise Workload Qualification & Transitive Migration Sizing for Linux on Power (ppc64le)", subtitle_style))
     
     meta_data = [
         [
-            Paragraph("<b>Initiative:</b> AI Elite Program Prototype Submission", table_cell_style),
+            Paragraph("<b>Solution Focus:</b> Autonomous Migration Feasibility & Sizing", table_cell_style),
             Paragraph("<b>Target Architecture:</b> IBM Power (<code>ppc64le</code>)", table_cell_style)
         ],
         [
-            Paragraph("<b>Primary Personas:</b> Technical Pre-Sales & Solution Architects", table_cell_style),
-            Paragraph("<b>Runtime Platforms:</b> RHEL 8/9, OpenShift (OCP), Ubuntu, SLES", table_cell_style)
+            Paragraph("<b>Primary Personas:</b> Technical Pre-Sales & Enterprise Architects", table_cell_style),
+            Paragraph("<b>Platforms:</b> RHEL 8/9, OpenShift (OCP), Ubuntu, SLES", table_cell_style)
         ]
     ]
     meta_table = Table(meta_data, colWidths=[260, 262])
     meta_table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, -1), BG_ALT),
-        ('PADDING', (0, 0), (-1, -1), 4),
+        ('PADDING', (0, 0), (-1, -1), 3.5),
         ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
         ('INNERGRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#e2e8f0")),
     ]))
     story.append(meta_table)
-    story.append(Spacer(1, 8))
+    story.append(Spacer(1, 6))
 
-    # Section 1: Customer & Persona
+    # Section 1: Customer Profile & Personas
     story.append(Paragraph("1. Customer Profile & Target Personas", h1_style))
     story.append(Paragraph(
-        "<b>Customer Profile:</b> Global enterprises running high-throughput transactional, time-series, and data/AI workloads (financial services, telecom, healthcare, and retail) evaluating platform modernization from commodity x86 infrastructure to <b>IBM Power (<code>ppc64le</code>)</b> on RHEL and OpenShift.",
+        "<b>Customer Profile:</b> Global enterprises running high-throughput transactional, time-series, and enterprise AI workloads (financial services, insurance, telecom, retail, and healthcare) evaluating platform modernization from commodity x86 infrastructure to <b>IBM Power (<code>ppc64le</code>)</b> on RHEL and Red Hat OpenShift Container Platform (OCP).",
         body_style
     ))
-    story.append(Paragraph("• <b>IBM Technical Pre-Sales Specialists & Solution Architects:</b> Frontline technical sellers who must rapidly qualify migration feasibility, size porting timelines, and build client confidence during competitive evaluations.", bullet_style))
-    story.append(Paragraph("• <b>Enterprise Decision-Makers (CIO / CTO / VP Infrastructure):</b> Stakeholders requiring transparent risk qualification, timeline predictability, and platform ROI before approving modernization contracts.", bullet_style))
-    story.append(Paragraph("• <b>IBM Power Porting Lab & Ecosystem Engineers:</b> Specialized engineering squads responsible for compiling, tuning, and verifying unported packages, who need structured, actionable technical backlogs.", bullet_style))
-    story.append(Spacer(1, 6))
+    story.append(Paragraph("• <b>IBM Technical Pre-Sales Specialists & Solution Architects:</b> Frontline technical sellers who must rapidly qualify migration feasibility, size porting timelines, and build customer confidence during competitive evaluations.", bullet_style))
+    story.append(Paragraph("• <b>Enterprise Architecture Decision-Makers (CIO / CTO / VP Infrastructure):</b> Executive stakeholders requiring transparent risk qualification, timeline predictability, and platform ROI justification before approving modernization contracts.", bullet_style))
+    story.append(Paragraph("• <b>IBM Power Porting Lab & Ecosystem Engineering Squads:</b> Specialized engineering squads responsible for compiling, tuning, and certifying non-native packages, who need structured, production-grade technical handoffs.", bullet_style))
+    story.append(Spacer(1, 4))
 
     # Section 2: Business Problem
     story.append(Paragraph("2. Business Problem & Pre-Sales Friction", h1_style))
     story.append(Paragraph(
-        "While IBM Power offers unmatched hardware throughput (high memory bandwidth, SMT8 core threading, and hardware Matrix Math Accelerators), <b>pre-sales qualification creates severe friction in the sales pipeline:</b>",
+        "Modernizing to IBM Power delivers transformative hardware throughput (<b>industry-leading memory bandwidth</b>, <b>SMT8 core threading</b>, and integrated <b>Matrix Math Accelerators / MMA</b>). However, winning executive platform commitment hinges on answering a fundamental question during pre-sales: <i>'Will our software stack run on IBM Power, and what is the exact engineering timeline required to address any gaps?'</i> Today, answering this question introduces severe friction into the enterprise sales cycle:",
         body_style
     ))
-    story.append(Paragraph("• <b>Unstandardized & Heterogeneous Inputs:</b> Customers provide dependency specifications in fragmented formats: CycloneDX/SPDX SBOM JSONs, multi-stage Dockerfiles, Python requirements, Compose/Kubernetes YAMLs, or informal notes.", bullet_style))
-    story.append(Paragraph("• <b>Fragmented Ecosystem Registries & Version Drift:</b> Determining package availability requires tedious manual searches across RHEL BaseOS/AppStream, EPEL 9, Quay.io, Docker Hub, PyPI, and community channels (Conda-forge, IBM Open-CE). Often, generic version queries give false confidence when the customer's <i>specific version tag</i> lacks a ppc64le binary.", bullet_style))
-    story.append(Paragraph("• <b>The 'Iceberg' Estimation Gap:</b> When a C/C++ library or database engine lacks an official prebuilt binary for <code>ppc64le</code>, pre-sales teams cannot see beneath the surface. Uncovered build-time dependencies (e.g. jemalloc needing 64KB page size tuning) or unported x86 SIMD intrinsics (AVX2/AVX-512) surface late, resulting in costly project overruns.", bullet_style))
-    story.append(Paragraph("• <b>Opaque Effort Sizing:</b> Traditional sizing relies on subjective guesswork, leading to 2x–5x variance and eroded trust between sales teams and client engineering leads.", bullet_style))
-    story.append(Spacer(1, 6))
+    story.append(Paragraph("• <b>Unstandardized Ingestion Formats:</b> Customers provide dependency specifications in fragmented formats: CycloneDX/SPDX SBOMs, multi-stage Dockerfiles, Python requirements, Compose/Kubernetes YAMLs, or meeting transcripts.", bullet_style))
+    story.append(Paragraph("• <b>Fragmented Registries & Version Drift:</b> Validating package availability requires tedious searches across RHEL BaseOS, EPEL 8/9, Quay.io, Docker Hub, PyPI, and community channels. Generic queries often mask version drift where the client's specific tag lacks a ppc64le binary.", bullet_style))
+    story.append(Paragraph("• <b>The Unseen 'Dependency Iceberg':</b> When a C/C++ library lacks an official binary, standard triage fails to anticipate transitive build requirements (e.g. jemalloc needing 64KB page size tuning) or hardcoded x86 SIMD intrinsics (AVX2/AVX-512), causing delivery overruns.", bullet_style))
+    story.append(Paragraph("• <b>Subjective Timeline Estimation:</b> Heuristic guesswork produces 2x–5x variances that erode trust between sales teams and client executive stakeholders.", bullet_style))
+    story.append(Spacer(1, 4))
 
     # Section 3: Business Impact Table
-    story.append(Paragraph("3. Quantified Business Impact", h1_style))
+    story.append(Paragraph("3. Quantified Operational Impact", h1_style))
     impact_data = [
-        [Paragraph("Operational Dimension", table_header_style), Paragraph("Current Manual Process", table_header_style), Paragraph("AI Agent Prototype Impact", table_header_style)],
+        [Paragraph("Operational Dimension", table_header_style), Paragraph("Traditional Manual Process", table_header_style), Paragraph("Autonomous Triage Agent Solution", table_header_style)],
         [
-            Paragraph("<b>Qualification Turnaround Time</b>", table_cell_style),
+            Paragraph("<b>Qualification Velocity</b>", table_cell_style),
             Paragraph("5 to 10 Business Days across manual catalog lookups and emails", table_cell_style),
-            Paragraph("<b>&lt; 30 Seconds</b> automated end-to-end qualification", table_cell_bold)
+            Paragraph("<b>&lt; 30 Seconds</b> automated end-to-end qualification and analysis", table_cell_bold)
         ],
         [
-            Paragraph("<b>Porting Lab Bandwidth Waste</b>", table_cell_style),
-            Paragraph("~40% of senior engineer time spent on routine initial triage", table_cell_style),
+            Paragraph("<b>Engineering Bandwidth Waste</b>", table_cell_style),
+            Paragraph("~40% of senior porting lab capacity spent on routine initial lookups", table_cell_style),
             Paragraph("<b>Zero wasted hours</b> on routine triage; lab only receives scoped specs", table_cell_bold)
         ],
         [
-            Paragraph("<b>Deal Velocity & Friction</b>", table_cell_style),
+            Paragraph("<b>Pre-Sales Deal Velocity</b>", table_cell_style),
             Paragraph("Prolonged sales cycles; customer hesitation due to unknown porting risks", table_cell_style),
-            Paragraph("<b>Immediate sales confidence</b> with instant traffic-light readiness scoring", table_cell_bold)
+            Paragraph("<b>Immediate client alignment</b> via traffic-light scoring & transparent derivation", table_cell_bold)
         ],
         [
-            Paragraph("<b>Effort Sizing Accuracy</b>", table_cell_style),
-            Paragraph("Subjective guesswork prone to 2x–5x variance from hidden dependencies", table_cell_style),
-            Paragraph("<b>Transparent 3-Pillar Sizing</b> (Build + Engineering + Test PD)", table_cell_bold)
+            Paragraph("<b>Effort Sizing Defensibility</b>", table_cell_style),
+            Paragraph("Subjective guesswork prone to significant variance from hidden dependencies", table_cell_style),
+            Paragraph("<b>Mathematical 6-Stage WBS</b> + Multi-Tier Complexity &amp; Debugging Room", table_cell_bold)
         ],
         [
-            Paragraph("<b>Container & CI Visibility</b>", table_cell_style),
-            Paragraph("Multi-stage Dockerfiles and CI workflows ignored until deployment", table_cell_style),
-            Paragraph("<b>Automated multi-stage Dockerfile & CI matrix scanning</b>", table_cell_bold)
+            Paragraph("<b>Multi-Tier Deliverable Scoping</b>", table_cell_style),
+            Paragraph("Ambiguity between Container, Source Build, and Build Script needs", table_cell_style),
+            Paragraph("<b>Automated deliverable alignment</b> (Containers, Builds, Build Recipes)", table_cell_bold)
         ],
         [
             Paragraph("<b>Executive Proposal Deliverables</b>", table_cell_style),
             Paragraph("Days spent assembling custom slide decks and proposal memos", table_cell_style),
-            Paragraph("<b>1-Click Executive Memo & CSV Backlog</b> generated autonomously", table_cell_bold)
+            Paragraph("<b>1-Click Executive PDF Memo</b> with provenance &amp; JIRA CSV backlog", table_cell_bold)
         ]
     ]
     impact_table = Table(impact_data, colWidths=[130, 192, 200])
@@ -272,47 +272,48 @@ def build_presentation_pdf(output_path="customer_presentation.pdf"):
         ('BACKGROUND', (0, 0), (-1, 0), SECONDARY),
         ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('PADDING', (0, 0), (-1, -1), 4),
+        ('PADDING', (0, 0), (-1, -1), 3.5),
         ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, BG_LIGHT]),
         ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
     ]))
     story.append(impact_table)
 
     # =========================================================================
-    # PAGE 2: AGENT ARCHITECTURE & 8 CORE INNOVATIONS
+    # PAGE 2: ARCHITECTURE & MULTI-SOURCE ECOSYSTEM INTELLIGENCE
     # =========================================================================
     story.append(PageBreak())
-    story.append(Paragraph("4. Proposed Opportunity: Autonomous AI Agent Architecture", h1_style))
+    story.append(Paragraph("4. Solution Architecture & Ecosystem Intelligence Pipeline", h1_style))
     story.append(Paragraph(
-        "The <b>Autonomous IBM Power Porting Triage Agent</b> combines deterministic ecosystem probing with generative sales synthesis, delivering instant qualification, transparent effort sizing, and executive deliverables:",
+        "The <b>IBM Power Porting Triage Agent</b> seamlessly bridges deterministic ecosystem registry connectors, a persistent mounted knowledge cache, dual LLM reasoning engines (IBM Bob Shell &amp; Google Gemini), and an enterprise lifecycle sizing engine to provide real-time feasibility analysis and defensible delivery estimates:",
         body_style
     ))
     story.append(Spacer(1, 2))
 
     innovations = [
-        ("Universal Ingestion & Multi-Stage Dockerfile Parsing", "Automatically ingests CycloneDX/SPDX SBOMs, Python requirements, Compose/Kubernetes manifests, and raw multi-stage Dockerfiles (<code>FROM ... AS builder</code>), validating base images for every build and runtime stage."),
-        ("Multi-Source Prober with Version-Aware Intelligence", "Executes real-time live queries against Quay.io, Docker Hub v2 API, RHEL/EPEL 9 repos, and PyPI. Detects version mismatches (e.g. requested tag unavailable on <code>ppc64le</code>), providing actionable upgrade/downgrade advice with clickable verification URLs."),
-        ("Deep Transitive Build Dependency Analysis ('Solving the Iceberg')", "Recursively inspects build requirements (<code>BuildRequires</code>, submodules, header libraries) for unported packages to uncover hidden dependencies before compilation starts (e.g. scoping <code>jemalloc-ppc64le</code> for RocksDB)."),
-        ("Hardware Architecture Sensitivity Auditing", "Audits source code and build configs for CPU architecture friction: flags x86 SIMD (AVX2/AVX-512) intrinsics (recommending SIMDe to Power VSX translations), 64KB page size sensitivities (jemalloc tuning), and inline assembly (x86 <code>pause</code> mapped to Power <code>or 27,27,27</code>)."),
-        ("Calibrated SIMD Volume Bracket Scaling", "Scales engineering effort based on vector instruction volume across 5 standardized brackets: 0–50 inst (1.0x), 51–200 inst (1.5x), 201–500 inst (2.5x), and >500 inst (4.0x multiplier), reflecting the code surface requiring inspection and porting."),
-        ("4-Tier SIMD-to-VSX Porting Complexity Classification", "Classifies vector adaptation into 4 rigorous engineering tiers: <code>DIRECT</code> (1.0x), <code>SIMDE_COMPATIBLE</code> (1.5x), <code>PARTIAL_REWRITE</code> (2.5x), and <code>FULL_REDESIGN</code> (4.0x for AVX-512 gather/scatter or Power MMA kernels)."),
-        ("Dedicated Test Suite & Validation Effort Sizing", "Discovers test frameworks (GTest, pytest, Catch2, Testcontainers) and allocates dedicated test validation effort (<code>test_effort_pd</code>) to guarantee regression verification is sized alongside compilation."),
-        ("Git Repository Architecture Posture & CI Matrix Scanning", "Inspects upstream Git repositories for existing Power markers (<code>#ifdef __powerpc__</code>) and audits GitHub Actions / GitLab CI matrices for active <code>ppc64le</code> runners, applying an effort adjustment factor (0.7x for mature Power CI to 1.3x for x86-only codebases)."),
-        ("Compose, Kubernetes & Infrastructure Image Verifier", "Parses Docker Compose files, Kubernetes manifests, and Helm charts to verify all ancillary service images (databases, sidecars, log forwarders) on <code>ppc64le</code>."),
-        ("Generative Executive Proposal Engine", "Uses Google Gemini (with resilient multi-model fallback across <code>gemini-3.5-flash</code> and <code>gemini-3.5-flash-lite</code>) to draft client-ready strategic value proposals highlighting Power memory bandwidth, SMT8 threading, and enterprise ROI.")
+        ("Streamlined Dual-Input Ingestion", "Ingests CycloneDX/SPDX SBOMs, multi-stage Dockerfiles (<code>FROM ... AS builder</code>), Python requirements, Docker Compose, Kubernetes manifests, raw client text, and direct <b>Git repository &amp; documentation URLs</b> (e.g., <code>https://github.com/openai/whisper</code> or <code>https://rocksdb.org</code>)."),
+        ("Dual LLM Reasoning Engine (IBM Bob Shell &amp; Gemini)", "Features first-class native support for <b>IBM Bob Shell (<code>ibm_bob</code>)</b> headless execution alongside Google Gemini. Auto-detects local CLI binaries and keys with dynamic fallback and neutral, provider-agnostic telemetry in the live activity feed."),
+        ("Persistent Mounted Package Knowledge Cache", "Maintains a filesystem-mounted cache (<code>backend/data/packages_lookup.json</code> at <code>/app/backend/data</code>) that persists and dynamically refreshes analyzed packages and versions, eliminating repetitive LLM and registry lookups."),
+        ("Multi-Tier Package Complexity &amp; Dedicated Debugging Room", "Replaces flat 1 PD assumptions with dynamic complexity tiers (Systems/Storage: 5.5–8.5d, Vector Math: 8.5–9d, Native C/C++: 3.5–4d, Rust/Go: 3d). Explicitly allocates <b>1.0–1.5 PD</b> for compiler flag adaptation, 64KB page-size alignment, and test suite debugging."),
+        ("IBM DevPi Wheels &amp; ICR Multi-Arch Containers", "Directly matches optimized ppc64le wheels (PyTorch, Numba, NumPy, Tiktoken) in IBM DevPi and enterprise multi-arch images in IBM Cloud Registry (ICR) and <code>ppc64le/build-scripts</code>."),
+        ("Multi-Source Prober with Version-Aware Intelligence", "Queries Red Hat Ecosystem Catalog, Fedora Koji / EPEL 8/9 XML-RPC APIs, Quay.io, Docker Hub v2 API, and PyPI with real-time version mismatch and upgrade/downgrade advice."),
+        ("Deliverable-Aware Alignment &amp; Matching", "Evaluates packages against <b>Container Image</b>, <b>Source Build</b>, or <b>Build Script / Recipe</b>, calculating adaptation multipliers when artifacts require format bridging."),
+        ("Deep Transitive Build Dependency Scoping", "Recursively inspects build requirements (<code>BuildRequires</code>, submodules, header libraries) for non-native components to uncover hidden dependencies before compilation starts (e.g. scoping <code>jemalloc-ppc64le</code> for RocksDB)."),
+        ("Hardware Architecture Sensitivity Auditing", "Audits source code for CPU friction points: flags x86 SIMD (AVX2/AVX-512) intrinsics (recommending SIMDe to Power VSX translations), 64KB page size sensitivities (jemalloc tuning), and inline assembly (x86 <code>pause</code> mapped to Power <code>or 27,27,27</code> yield)."),
+        ("Upstream CI Matrix &amp; Architecture Posture Scanning", "Audits upstream Git repositories for existing Power markers (<code>#ifdef __powerpc__</code>) and CI matrices for active <code>ppc64le</code> runners, applying an evidence-based effort discount (0.7x) for Power-aware codebases."),
+        ("Token &amp; Cost Accounting with Collapsible Stage Breakdown", "Real-time tracking of input/output tokens and cost in USD. The metric tile on the Executive Scorecard features an interactive collapsible drawer detailing stage-by-stage token and cost contributions.")
     ]
 
     for title, desc in innovations:
         story.append(Paragraph(f"• <b>{title}:</b> {desc}", bullet_style))
-    story.append(Spacer(1, 8))
+    story.append(Spacer(1, 4))
 
     # Architecture Workflow Box
     workflow_data = [
         [
-            Paragraph("<b>Universal Manifest Ingestion</b><br/><font color='#475569'>SBOM, Dockerfile, Compose, Git URL, Free-text</font>", table_cell_style),
-            Paragraph("<b>Deterministic Prober & Scoper</b><br/><font color='#475569'>Quay, Docker Hub, RHEL 9, PyPI, Deep Build Tree</font>", table_cell_style),
-            Paragraph("<b>Architecture & CI Posture Audit</b><br/><font color='#475569'>SIMD Brackets, 4-Tier VSX, 64K Pages, CI Matrix</font>", table_cell_style),
-            Paragraph("<b>Executive Synthesis & Sizing</b><br/><font color='#475569'>Build+Eng+Test PD, Traffic Light, 1-Click Memo</font>", table_cell_style),
+            Paragraph("<b>Streamlined Ingestion</b><br/><font color='#475569'>SBOM, Dockerfile, Git / Doc URLs, Transcripts</font>", table_cell_style),
+            Paragraph("<b>Multi-Source &amp; Cache</b><br/><font color='#475569'>Persistent Lookup, DevPi, ICR, build-scripts, Koji</font>", table_cell_style),
+            Paragraph("<b>Complexity &amp; Arch Audit</b><br/><font color='#475569'>SIMD Brackets, 64K Pages, Toolchains, Debug Room</font>", table_cell_style),
+            Paragraph("<b>Executive Synthesis</b><br/><font color='#475569'>6-Stage WBS, Dual LLM (Bob/Gemini), 1-Click PDF</font>", table_cell_style),
         ]
     ]
     workflow_table = Table(workflow_data, colWidths=[130, 130, 132, 130])
@@ -320,25 +321,26 @@ def build_presentation_pdf(output_path="customer_presentation.pdf"):
         ('BACKGROUND', (0, 0), (-1, -1), BG_ALT),
         ('BOX', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
         ('INNERGRID', (0, 0), (-1, -1), 0.5, colors.HexColor("#cbd5e1")),
-        ('PADDING', (0, 0), (-1, -1), 5),
+        ('PADDING', (0, 0), (-1, -1), 4.5),
     ]))
     story.append(workflow_table)
 
     # =========================================================================
-    # PAGE 3: TRANSPARENT SIZING METHODOLOGY & MATHEMATICAL DERIVATION
+    # PAGE 3: SIZING METHODOLOGY & CONSERVATIVE PROPORTIONAL SCALING
     # =========================================================================
     story.append(PageBreak())
-    story.append(Paragraph("5. Transparent Effort Sizing Methodology & Engineering Derivation", h1_style))
+    story.append(Paragraph("5. Transparent Sizing Methodology & Lifecycle WBS", h1_style))
     story.append(Paragraph(
-        "To replace subjective estimation with mathematical rigor, the agent computes porting effort using a standardized <b>3-Pillar Sizing Formula</b> that isolates compilation, hardware adaptation, and test validation:",
+        "To replace subjective estimation with enterprise delivery rigor and eliminate legacy Fibonacci sizing, the agent computes porting effort across an auditable <b>6-Stage Porting Lifecycle Work Breakdown Structure (WBS)</b> with an explicit 20–25% contingency buffer:",
         body_style
     ))
     
     formula_box = [
         [
             Paragraph(
-                "<b>Formula:</b> Total Person-Days (PD) = Build Effort + Engineering Adaptation Effort + Test Effort<br/>"
-                "<b>Where:</b> Engineering Effort = Base Engineering × SIMD Count Multiplier × Complexity Multiplier × Repo CI Factor",
+                "<b>6-Stage Lifecycle WBS:</b> Subtotal Effort = Prep Env &amp; Toolchain + Readiness Audit + Build from Source + CI Pipeline + Bug Fix &amp; Stabilization<br/>"
+                "<b>Risk Contingency Buffer:</b> +20% (Standard) or +25% (Architecture Friction / Deep Transitive Iceberg, min 1.0 PD)<br/>"
+                "<b>Consistency Guarantee:</b> Scorecard Committed Effort = ceil(Subtotal + Buffer) &gt;= Sum of Package Rows (never flat 1 PD).",
                 callout_style
             )
         ]
@@ -347,114 +349,126 @@ def build_presentation_pdf(output_path="customer_presentation.pdf"):
     formula_table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#eff6ff")),
         ('BOX', (0, 0), (-1, -1), 1, PRIMARY),
-        ('PADDING', (0, 0), (-1, -1), 6),
+        ('PADDING', (0, 0), (-1, -1), 5),
     ]))
     story.append(formula_table)
-    story.append(Spacer(1, 6))
+    story.append(Spacer(1, 4))
 
     story.append(Paragraph("Sizing Parameters & Multiplier Matrix", h2_style))
     matrix_data = [
-        [Paragraph("Sizing Dimension", table_header_style), Paragraph("Bracket / Classification Tier", table_header_style), Paragraph("Multiplier", table_header_style), Paragraph("Engineering Rationale & Scope", table_header_style)],
+        [Paragraph("Sizing Dimension", table_header_style), Paragraph("Classification Brackets / Tiers", table_header_style), Paragraph("Multiplier / Scope", table_header_style), Paragraph("Engineering Scope & Rationale", table_header_style)],
+        [
+            Paragraph("<b>Package Complexity Tiers</b>", table_cell_style),
+            Paragraph("Systems/Storage Engine<br/>Custom Vector/DSP Math<br/>Native C/C++ Library<br/>Rust / Go / Python C-Ext<br/>Baseline Portable Floor", table_cell_style),
+            Paragraph("<b>5.5 – 8.5 PD</b><br/><b>8.5 – 9.0 PD</b><br/><b>3.5 – 4.0 PD</b><br/><b>3.0 PD</b><br/><b>3.0 PD</b>", table_cell_bold),
+            Paragraph("Evaluates ecosystem, toolchains, memory barriers, 64KB page kernels, with <b>1.0–1.5 PD allocated for test suite execution &amp; debugging room</b>.", table_cell_style)
+        ],
         [
             Paragraph("<b>SIMD Instruction Volume</b>", table_cell_style),
             Paragraph("0 – 50 instructions<br/>51 – 200 instructions<br/>201 – 500 instructions<br/>&gt; 500 instructions", table_cell_style),
             Paragraph("<b>1.0x</b><br/><b>1.5x</b><br/><b>2.5x</b><br/><b>4.0x</b>", table_cell_bold),
-            Paragraph("Reflects the total vector instruction surface requiring manual inspection, inline substitution, and micro-benchmarking.", table_cell_style)
+            Paragraph("Reflects total vector instruction density requiring manual inspection, inline substitution, and micro-benchmarking.", table_cell_style)
         ],
         [
             Paragraph("<b>Porting Complexity Tier</b>", table_cell_style),
             Paragraph("<code>DIRECT</code><br/><code>SIMDE_COMPATIBLE</code><br/><code>PARTIAL_REWRITE</code><br/><code>FULL_REDESIGN</code>", table_cell_style),
             Paragraph("<b>1.0x</b><br/><b>1.5x</b><br/><b>2.5x</b><br/><b>4.0x</b>", table_cell_bold),
-            Paragraph("From 1:1 intrinsic substitution, to SIMDe header mapping, to 128-bit vs 256-bit loop refactoring, up to full AVX-512 redesign to Power MMA.", table_cell_style)
+            Paragraph("From 1:1 intrinsic substitution, to SIMDe header mapping, loop refactoring, up to full AVX-512 redesign to Power MMA.", table_cell_style)
         ],
         [
             Paragraph("<b>Repository CI Posture</b>", table_cell_style),
             Paragraph("Power CI present (<code>ppc64le</code> runner)<br/>Neutral / Mixed markers<br/>Hardcoded x86 / No Power CI", table_cell_style),
             Paragraph("<b>0.7x</b> (Discount)<br/><b>1.0x</b> (Baseline)<br/><b>1.3x</b> (Friction)", table_cell_bold),
-            Paragraph("Accounts for upstream willingness and infrastructure to validate, accept, and maintain Power patches.", table_cell_style)
-        ],
-        [
-            Paragraph("<b>Test Suite Validation</b>", table_cell_style),
-            Paragraph("Standard Unit Tests<br/>Integration / Benchmarks<br/>Missing Native Test Harness", table_cell_style),
-            Paragraph("<b>0.5 – 1.0d</b><br/><b>1.5 – 2.0d</b><br/><b>+2.0d</b>", table_cell_bold),
-            Paragraph("Ensures regression verification, test container availability, and performance validation are fully accounted for.", table_cell_style)
+            Paragraph("Accounts for upstream willingness and established continuous integration to validate and maintain Power patches.", table_cell_style)
         ]
     ]
-    matrix_table = Table(matrix_data, colWidths=[110, 140, 72, 200])
+    matrix_table = Table(matrix_data, colWidths=[110, 140, 80, 192])
     matrix_table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), SECONDARY),
         ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('PADDING', (0, 0), (-1, -1), 4),
+        ('PADDING', (0, 0), (-1, -1), 3.0),
         ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, BG_LIGHT]),
         ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
     ]))
     story.append(matrix_table)
-    story.append(Spacer(1, 8))
+    story.append(Spacer(1, 5))
 
     story.append(Paragraph("Worked Enterprise Sizing Derivations", h2_style))
     examples_data = [
-        [Paragraph("Target Component", table_header_style), Paragraph("Component Analysis & Findings", table_header_style), Paragraph("Step-by-Step Derivation Formula", table_header_style), Paragraph("Total PD", table_header_style)],
+        [Paragraph("Target Component / Stack", table_header_style), Paragraph("Component Analysis & Findings", table_header_style), Paragraph("Step-by-Step Derivation Formula", table_header_style), Paragraph("Committed Sizing", table_header_style)],
         [
-            Paragraph("<b>simdjson 3.6</b><br/>(C++ JSON Parser)", table_cell_style),
-            Paragraph("• Build: CMake toolchain (1.0d)<br/>• SIMD: 320 AVX2 instructions<br/>• Tier: <code>SIMDE_COMPATIBLE</code><br/>• Test: cxxopts + benchmark (1.0d)", table_cell_style),
-            Paragraph("<b>Build:</b> 1.0d<br/><b>Engineering:</b> 2.0d base × 2.5 (vol) × 1.5 (tier) × 1.0 (CI) = <b>7.5d</b><br/><b>Test:</b> 1.0d<br/><b>Sum:</b> 1.0 + 7.5 + 1.0 = 9.5 ≈ 10 PD", table_cell_code),
-            Paragraph("<b>10 PD</b>", table_cell_bold)
+            Paragraph("<b>OpenAI Whisper</b><br/>(Speech-to-Text Pipeline)", table_cell_style),
+            Paragraph("• DevPi: Torch, Numba, NumPy, Tiktoken native<br/>• Build: Whisper core package (3.0d)<br/>• Debug Room: 1.0d test harness &amp; linker triage", table_cell_style),
+            Paragraph("<b>Prep:</b> 1.0d | <b>Readiness:</b> 0.5d | <b>Build:</b> 3.0d<br/><b>CI:</b> 1.0d | <b>Bug Fix &amp; Test:</b> 1.5d<br/><b>Subtotal:</b> 7.0d | <b>Contingency (20%):</b> 1.4d", table_cell_code),
+            Paragraph("<b>7 PD</b><br/>(Minor Effort)", table_cell_bold)
         ],
         [
-            Paragraph("<b>RocksDB 8.6</b><br/>(Storage Engine)", table_cell_style),
-            Paragraph("• Build: CMake (1.5d)<br/>• Transitive: jemalloc-64k (1.5d)<br/>• Arch: Inline asm yield (1.5d)<br/>• Test: GTest harness (1.0d)", table_cell_style),
-            Paragraph("<b>Build:</b> 1.5d<br/><b>Transitive Build Dep:</b> 1.5d (jemalloc 64k config)<br/><b>Engineering:</b> 1.5d base × 1.0 × 1.0 = <b>1.5d</b><br/><b>Test:</b> 1.0d<br/><b>Sum:</b> 1.5 + 1.5 + 1.5 + 1.0 = 5.5 ≈ 6 PD", table_cell_code),
-            Paragraph("<b>6 PD</b>", table_cell_bold)
+            Paragraph("<b>Storage Engine Stack</b><br/>(RocksDB 8.6 + simdjson 3.6)", table_cell_style),
+            Paragraph("• RocksDB (6.0d): 64KB-page jemalloc + WAL audit<br/>• simdjson (10.0d): 320 AVX2 instructions<br/>• Test: dbbench + cxxopts validation suites", table_cell_style),
+            Paragraph("<b>Prep:</b> 1.5d | <b>Readiness:</b> 1.5d | <b>Build:</b> 14.5d<br/><b>CI:</b> 2.0d | <b>Bug Fix &amp; Test:</b> 3.0d<br/><b>Subtotal:</b> 22.5d | <b>Contingency (25%):</b> 5.6d", table_cell_code),
+            Paragraph("<b>26 PD</b><br/>(Moderate Effort)", table_cell_bold)
         ]
     ]
-    examples_table = Table(examples_data, colWidths=[110, 160, 192, 60])
+    examples_table = Table(examples_data, colWidths=[115, 155, 192, 60])
     examples_table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, 0), SECONDARY),
         ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('PADDING', (0, 0), (-1, -1), 4),
+        ('PADDING', (0, 0), (-1, -1), 3.0),
         ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, BG_LIGHT]),
         ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
     ]))
     story.append(examples_table)
 
     # =========================================================================
-    # PAGE 4: DEMONSTRATION SCENARIOS & STRATEGIC VALUE
+    # PAGE 4: DEMONSTRATED WORKLOAD SCENARIOS & STRATEGIC VALUE
     # =========================================================================
     story.append(PageBreak())
     story.append(Paragraph("6. Demonstrated Workload Scenarios & Validation", h1_style))
     story.append(Paragraph(
-        "The prototype was tested and validated across four production-grade enterprise migration workloads:",
+        "The solution was validated across six representative enterprise migration workloads:",
         body_style
     ))
     story.append(Spacer(1, 2))
 
     demo_data = [
-        [Paragraph("Scenario / Workload", table_header_style), Paragraph("Stack Components", table_header_style), Paragraph("Agent Triage Findings & Recommendations", table_header_style), Paragraph("Score & Sizing", table_header_style)],
+        [Paragraph("Scenario / Workload", table_header_style), Paragraph("Stack Components", table_header_style), Paragraph("Triage Findings & Multi-Source Matches", table_header_style), Paragraph("Score & Sizing", table_header_style)],
         [
             Paragraph("<b>Enterprise Cloud Microservices</b>", table_cell_style),
             Paragraph("Nginx, Redis, PostgreSQL, Strimzi Kafka, Node.js", table_cell_style),
-            Paragraph("All components have verified native ppc64le container images in Docker Hub and Quay.io. Multi-stage Dockerfile audit confirmed ppc64le base images.", table_cell_style),
-            Paragraph("<font color='#16a34a'><b>100% GO</b></font><br/><b>5 Person-Days</b><br/>(Smoke & staging)", table_cell_style)
+            Paragraph("All components have verified native ppc64le container images in Docker Hub, Quay.io, and Red Hat Catalog. Defaulted to container deliverable.", table_cell_style),
+            Paragraph("<font color='#16a34a'><b>Turnkey (100%)</b></font><br/><b>0 Person-Days</b><br/>(Direct binary)", table_cell_style)
+        ],
+        [
+            Paragraph("<b>OpenAI Whisper Pipeline</b><br/>(Git URL Ingestion)", table_cell_style),
+            Paragraph("Whisper, PyTorch 2.0, Numba, NumPy, Tiktoken, Triton", table_cell_style),
+            Paragraph("PyTorch, Numba, NumPy, and Tiktoken matched in IBM DevPi Wheels. Whisper core build scoped with native compilation &amp; debug room (3 PD); lifecycle WBS applied.", table_cell_style),
+            Paragraph("<font color='#16a34a'><b>Minor Effort</b></font><br/><b>7 Person-Days</b><br/>(Lifecycle WBS)", table_cell_style)
         ],
         [
             Paragraph("<b>AI / ML Vector Pipeline</b>", table_cell_style),
             Paragraph("PyTorch, NumPy, Pandas, Scipy, Custom C++ DSP", table_cell_style),
-            Paragraph("PyTorch routed to IBM Open-CE with Power MMA acceleration; custom DSP kernel scoped with SIMDe AVX2->VSX remediation. Test suite validated.", table_cell_style),
-            Paragraph("<font color='#16a34a'><b>Minor Effort</b></font><br/><b>8 Person-Days</b><br/>(Fibonacci Sized)", table_cell_style)
+            Paragraph("PyTorch routed to IBM Open-CE with Power MMA acceleration; custom DSP kernel scoped with SIMDe AVX2->VSX remediation and precision validation (8.5 PD).", table_cell_style),
+            Paragraph("<font color='#16a34a'><b>Minor Effort</b></font><br/><b>9 Person-Days</b><br/>(Lifecycle WBS)", table_cell_style)
         ],
         [
             Paragraph("<b>High-Throughput Storage Engine</b>", table_cell_style),
             Paragraph("RocksDB 8.6, simdjson 3.6, Redis, zlib", table_cell_style),
-            Paragraph("Deep dependency iceberg scoped: 6 build deps, including 64KB-page tuned jemalloc and SIMD vector translation. Full transparent derivation provided.", table_cell_style),
-            Paragraph("<font color='#d97706'><b>Moderate Effort</b></font><br/><b>21 Person-Days</b><br/>(Fibonacci Sized)", table_cell_style)
+            Paragraph("Deep dependency iceberg scoped: RocksDB (6 PD) with 64KB-page jemalloc, simdjson (10 PD) with VSX vector scaling, full regression suites &amp; debug room.", table_cell_style),
+            Paragraph("<font color='#d97706'><b>Moderate Effort</b></font><br/><b>26 Person-Days</b><br/>(Lifecycle WBS)", table_cell_style)
+        ],
+        [
+            Paragraph("<b>High-Performance Storage (SPDK)</b>", table_cell_style),
+            Paragraph("SPDK 23.05, DPDK, libaio, numactl", table_cell_style),
+            Paragraph("SPDK native C/Meson storage engine scoped: 64KB page kernel hugepage buffers, DPDK integration, Power memory barriers, and DMA debugging room (8 PD).", table_cell_style),
+            Paragraph("<font color='#d97706'><b>Moderate Effort</b></font><br/><b>16 Person-Days</b><br/>(Lifecycle WBS)", table_cell_style)
         ],
         [
             Paragraph("<b>Legacy Financial Analytics</b>", table_cell_style),
             Paragraph("Intel MKL, Python 3.9, Proprietary Risk Calc", table_cell_style),
-            Paragraph("Proprietary closed-source x86 blocker flagged; automated recommendation to substitute with <b>IBM ESSL</b> or OpenBLAS.", table_cell_style),
-            Paragraph("<font color='#7c3aed'><b>Not Possible As-Is</b></font><br/><b>Arch Substitution</b><br/>(ESSL / OpenBLAS)", table_cell_style)
+            Paragraph("Proprietary closed-source x86 blocker flagged; constructive recommendation to substitute with <b>IBM ESSL</b> or OpenBLAS drop-in replacement.", table_cell_style),
+            Paragraph("<font color='#7c3aed'><b>Alternative Req.</b></font><br/><b>Drop-in ESSL</b><br/>(OpenBLAS)", table_cell_style)
         ]
     ]
     demo_table = Table(demo_data, colWidths=[115, 110, 217, 80])
@@ -462,29 +476,30 @@ def build_presentation_pdf(output_path="customer_presentation.pdf"):
         ('BACKGROUND', (0, 0), (-1, 0), SECONDARY),
         ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
         ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-        ('PADDING', (0, 0), (-1, -1), 4),
+        ('PADDING', (0, 0), (-1, -1), 2.8),
         ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, BG_LIGHT]),
         ('GRID', (0, 0), (-1, -1), 0.5, BORDER_COLOR),
     ]))
     story.append(demo_table)
-    story.append(Spacer(1, 8))
+    story.append(Spacer(1, 4))
 
     # Section 7: Strategic Value
-    story.append(Paragraph("7. Strategic Value to IBM & Program Alignment", h1_style))
+    story.append(Paragraph("7. Strategic Value to IBM & Enterprise Clients", h1_style))
     story.append(Paragraph(
-        "This prototype directly addresses the core mission of the <b>AI Elite Program</b> by applying advanced agentic AI to eliminate real-world enterprise sales friction:",
+        "The IBM Power Porting Triage Agent accelerates the enterprise modernization pipeline and eliminates delivery friction:",
         body_style
     ))
-    story.append(Paragraph("1. <b>Accelerates Infrastructure Revenue:</b> Eliminates the 5-to-10 day qualification bottleneck, arming client teams with authoritative migration roadmaps within seconds of first contact.", bullet_style))
-    story.append(Paragraph("2. <b>Optimizes Engineering Allocation:</b> Prevents the IBM Power Porting Lab from wasting bandwidth on off-the-shelf components, focusing scarce specialist time exclusively on scoped unported libraries.", bullet_style))
-    story.append(Paragraph("3. <b>Demonstrates Hybrid AI Leadership:</b> Seamlessly combines deterministic knowledge-graph probing, container registry APIs, and multi-model LLM reasoning to solve mission-critical systems challenges.", bullet_style))
-    story.append(Paragraph("4. <b>Actionable Developer Deliverables:</b> Generates one-click executive 1-page proposals alongside structured CSV engineering backlogs ready for immediate JIRA ingestion.", bullet_style))
-    story.append(Spacer(1, 8))
+    story.append(Paragraph("1. <b>Compresses Sales Cycles:</b> Reduces pre-sales qualification turnaround from 5–10 business days to under 30 seconds, arming client teams with authoritative migration roadmaps within seconds of first contact.", bullet_style))
+    story.append(Paragraph("2. <b>Optimizes Engineering Capacity:</b> Shields the IBM Power Porting Lab from routine package lookups, ensuring senior specialists focus exclusively on scoped, high-value unported libraries.", bullet_style))
+    story.append(Paragraph("3. <b>Establishes Unquestioned Sizing Credibility:</b> Replaces heuristic guesswork with a transparent 6-stage lifecycle WBS, multi-tier complexity analysis with debugging room, and an interactive derivation drawer.", bullet_style))
+    story.append(Paragraph("4. <b>Minimizes Operational Cost &amp; Latency:</b> Persistent mounted lookup cache avoids redundant LLM token expenditures and registry latency, while supporting dual LLM engines (IBM Bob Shell and Google Gemini).", bullet_style))
+    story.append(Paragraph("5. <b>Actionable Developer Deliverables:</b> Generates one-click executive proposals alongside structured JIRA-ready CSV engineering backlogs ready for immediate sprint execution.", bullet_style))
+    story.append(Spacer(1, 4))
 
-    # Callout Box: Submission Sign-off
+    # Executive Sign-off Callout
     callout_data = [[
         Paragraph(
-            "<b>Submission Note:</b> Prototype is fully implemented and operational, containerized via Podman / Docker Compose, validated with a 100% passing test suite across all 7 gap features, and available for live demonstration.",
+            "<b>Executive Deployment Status:</b> The IBM Power Porting Triage Agent is fully operational and containerized via Podman and Docker Compose. It features native integration with seven ecosystem registries, dual LLM engine execution (IBM Bob Shell &amp; Google Gemini), persistent mounted lookup caching, and delivers compliant IBM Carbon Design System (g100) interfaces ready for client demonstrations and automated API deployment.",
             callout_style
         )
     ]]
@@ -492,7 +507,7 @@ def build_presentation_pdf(output_path="customer_presentation.pdf"):
     callout_table.setStyle(TableStyle([
         ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#eff6ff")),
         ('BORDER', (0, 0), (-1, -1), 1, PRIMARY),
-        ('PADDING', (0, 0), (-1, -1), 6),
+        ('PADDING', (0, 0), (-1, -1), 4),
     ]))
     story.append(callout_table)
 

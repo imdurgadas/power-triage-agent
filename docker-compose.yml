@@ -8,9 +8,15 @@ services:
     ports:
       - "8000:8000"
     environment:
+      - BOBSHELL_API_KEY=${BOBSHELL_API_KEY:-}
+      - BOB_API_KEY=${BOB_API_KEY:-}
+      - LLM_PROVIDER=${LLM_PROVIDER:-ibm_bob}
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
       - GEMINI_MODEL=${GEMINI_MODEL:-gemini-3.5-flash}
+      - PACKAGE_LOOKUP_PATH=${PACKAGE_LOOKUP_PATH:-/app/backend/data/packages_lookup.json}
       - PYTHONUNBUFFERED=1
+    volumes:
+      - ./backend/data:/app/backend/data:Z
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8000/api/health || exit 1"]
       interval: 10s

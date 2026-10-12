@@ -1,5 +1,6 @@
 import json
 import logging
+from typing import Optional
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, Response
@@ -105,9 +106,70 @@ libcustom-dsp-engine==1.2.0
     ]
 
 
+@app.get("/api/llm-config")
+async def get_llm_config():
+    """Returns detected LLM provider status and capabilities for the portal UI."""
+    from .bob_client import BobClient
+    import os
+    bob_client = BobClient()
+    gemini_key = os.environ.get("GEMINI_API_KEY", "")
+    has_gemini = bool(gemini_key and not gemini_key.startswith("your_"))
+    bob_key = os.environ.get("BOBSHELL_API_KEY", "") or os.environ.get("BOB_API_KEY", "")
+    has_bob = bool(bob_key and not bob_key.startswith("your_"))
+
+    default_provider = "ibm_bob" if bob_client.is_available() else ("gemini" if has_gemini else "ibm_bob")
+    return {
+        "default_provider": default_provider,
+        "providers": {
+            "ibm_bob": {
+                "id": "ibm_bob",
+                "name": "IBM Bob (Bob Shell)",
+                "available": bob_client.is_available(),
+                "binary_found": bool(bob_client.binary),
+                "binary_path": bob_client.binary,
+                "key_configured": has_bob,
+            },
+            "gemini": {
+                "id": "gemini",
+                "name": "Google Gemini",
+                "available": has_gemini,
+                "key_configured": has_gemini,
+            }
+        }
+    }
+
+
+@app.get("/api/lookup/info")
+async def get_lookup_info():
+    """Returns filesystem mounting metadata, file location, package count, and last modification timestamp."""
+    from .package_lookup import get_lookup_manager
+    return get_lookup_manager().get_info()
+
+
+@app.get("/api/lookup/packages")
+async def get_lookup_packages():
+    """Returns the persistent dynamic package lookup index."""
+    from .package_lookup import get_lookup_manager
+    return get_lookup_manager().all_packages()
+
+
+@app.get("/api/lookup/package/{name}")
+async def get_lookup_package(name: str, version: Optional[str] = None):
+    """Returns the persistent lookup entry for a specific package and optional version."""
+    from .package_lookup import get_lookup_manager
+    entry = get_lookup_manager().get(name, version)
+    if not entry:
+        raise HTTPException(status_code=404, detail=f"Package '{name}' not found in lookup")
+    return entry
+
+
 @app.post("/api/triage", response_model=TriageResponse)
 async def triage_workload(request: TriageRequest):
-    agent = TriageAgent(api_key=request.gemini_api_key)
+    agent = TriageAgent(
+        api_key=request.gemini_api_key,
+        llm_provider=request.llm_provider,
+        bobshell_api_key=request.bobshell_api_key,
+    )
     final_data = None
     async for event in agent.run_triage_stream(request):
         if event["type"] == "result":
@@ -123,7 +185,11 @@ async def triage_workload(request: TriageRequest):
 @app.post("/api/triage/stream")
 async def triage_workload_stream(request: TriageRequest):
     """Server-Sent Events (SSE) streaming endpoint returning real-time agent thoughts, tool calls, and final report."""
-    agent = TriageAgent(api_key=request.gemini_api_key)
+    agent = TriageAgent(
+        api_key=request.gemini_api_key,
+        llm_provider=request.llm_provider,
+        bobshell_api_key=request.bobshell_api_key,
+    )
 
     async def event_generator():
         async for event in agent.run_triage_stream(request):

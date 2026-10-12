@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { Tile } from '@carbon/react';
 import { Bot, Terminal, CheckmarkFilled, WarningAltFilled } from '@carbon/icons-react';
 
-export default function AgentLiveFeed({ steps, isRunning }) {
+export default function AgentLiveFeed({ steps, isRunning, tokenUsage }) {
   const feedEndRef = useRef(null);
 
   useEffect(() => {
@@ -22,23 +22,61 @@ export default function AgentLiveFeed({ steps, isRunning }) {
           </span>
         </div>
 
-        {isRunning && (
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              background: 'rgba(15, 98, 254, 0.2)',
-              border: '1px solid rgba(15, 98, 254, 0.5)',
-              padding: '0.25rem 0.75rem',
-              borderRadius: '1rem',
-              flexShrink: 0,
-            }}
-          >
-            <span className="spinner" style={{ width: '13px', height: '13px', borderWidth: '2px', borderTopColor: '#78a9ff' }} />
-            <span style={{ fontSize: '0.8rem', color: '#78a9ff', fontWeight: 600 }}>Active Reasoning...</span>
-          </div>
-        )}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+          {tokenUsage && (
+            <div
+              id="live-feed-telemetry"
+              title={
+                tokenUsage.breakdown && tokenUsage.breakdown.length > 0
+                  ? 'Cost breakdown:\n' + tokenUsage.breakdown.map((b) => `${b.stage}: $${Number(b.cost_usd || 0).toFixed(4)} (${b.percentage}%)`).join('\n')
+                  : 'LLM Accounting Telemetry'
+              }
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                cursor: tokenUsage.breakdown ? 'help' : 'default',
+                background: tokenUsage.llm_provider === 'ibm_bob' ? 'rgba(15, 98, 254, 0.15)' : 'rgba(138, 63, 252, 0.15)',
+                border: tokenUsage.llm_provider === 'ibm_bob' ? '1px solid #0f62fe' : '1px solid #8a3ffc',
+                padding: '0.2rem 0.65rem',
+                borderRadius: '1rem',
+                fontSize: '0.78rem',
+                color: '#f4f4f4',
+                fontFamily: "'IBM Plex Mono', monospace",
+              }}
+            >
+              <span style={{ color: '#42be65', fontWeight: 700 }}>
+                ${Number(tokenUsage.cost_usd || 0).toFixed(4)}
+              </span>
+              <span style={{ color: '#8d8d8d' }}>•</span>
+              <span style={{ color: '#78a9ff' }}>
+                {Number(tokenUsage.total_tokens || ((tokenUsage.input_tokens || 0) + (tokenUsage.output_tokens || 0)) || 0).toLocaleString()} tok
+              </span>
+              <span style={{ color: '#8d8d8d' }}>•</span>
+              <span style={{ color: '#a8a8a8' }}>
+                {tokenUsage.llm_provider === 'ibm_bob' ? 'Bob Shell' : 'Gemini'}
+              </span>
+            </div>
+          )}
+
+          {isRunning && (
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                background: 'rgba(15, 98, 254, 0.2)',
+                border: '1px solid rgba(15, 98, 254, 0.5)',
+                padding: '0.25rem 0.75rem',
+                borderRadius: '1rem',
+                flexShrink: 0,
+              }}
+            >
+              <span className="spinner" style={{ width: '13px', height: '13px', borderWidth: '2px', borderTopColor: '#78a9ff' }} />
+              <span style={{ fontSize: '0.8rem', color: '#78a9ff', fontWeight: 600 }}>Active Reasoning...</span>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Step log */}

@@ -90,9 +90,18 @@ KNOWLEDGE_BASE_NATIVE_BUILDS = {
                 "status": AvailabilityStatus.NATIVE_AVAILABLE,
                 "evidence_source": "EPEL 9 ppc64le",
                 "porting_effort_pd": 0.0
+            },
+            {
+                "name": "rocksdb-dbbench-validation",
+                "version": "1.0",
+                "test_dep_type": "benchmark_suite",
+                "status": AvailabilityStatus.UNPORTED_BUILD_REQUIRED,
+                "evidence_source": "WAL/SSTable 64KB page size stress verification",
+                "porting_effort_pd": 1.0,
+                "notes": "Stress tests WAL buffer layout and spinlock latency under Power 64KB page kernel; room for page-alignment debugging."
             }
         ],
-        "base_effort": 1.5,
+        "base_effort": 2.0,
         "arch_effort": 1.5
     },
     "simdjson": {
@@ -133,6 +142,43 @@ KNOWLEDGE_BASE_NATIVE_BUILDS = {
             }
         ],
         "base_effort": 1.0,
+        "arch_effort": 2.0
+    },
+    "spdk": {
+        "build_system": "C / Meson / Make",
+        "toolchains": [
+            {"tool": "GCC / Clang", "required_version": ">= 10.0", "ppc64le_supported": True, "notes": "C11 with Power atomics and hugepage support"},
+            {"tool": "Meson / Ninja", "required_version": ">= 0.58", "ppc64le_supported": True, "notes": "Standard SPDK build harness"}
+        ],
+        "build_deps": [
+            {"name": "dpdk-devel", "status": AvailabilityStatus.NATIVE_AVAILABLE, "effort": 0.0, "source": "RHEL 9 ppc64le AppStream"},
+            {"name": "libaio-devel", "status": AvailabilityStatus.NATIVE_AVAILABLE, "effort": 0.0, "source": "RHEL 9 ppc64le BaseOS"},
+            {"name": "numactl-devel", "status": AvailabilityStatus.NATIVE_AVAILABLE, "effort": 0.0, "source": "RHEL 9 ppc64le BaseOS"}
+        ],
+        "arch_sensitivity": {
+            "has_simd_avx": True,
+            "simd_details": "SPDK NVMe-oF and memory acceleration routines utilize x86 AVX2/SSE4; requires Power VSX/MMA vector substitution",
+            "has_inline_asm": True,
+            "asm_details": "x86 memory fencing (mfence/lfence) and cycle timers in SPDK env abstraction",
+            "has_64k_page_risk": True,
+            "page_risk_details": "SPDK DMA hugepage allocations assume 2MB/1GB hugepages on 4KB base pages; must configure for Power 16MB/16GB hugepages",
+            "remediation_strategy": "Adapt SPDK DPDK backend with Power memory barriers (sync/eieio) and configure 64KB page kernel DMA pools.",
+            "code_snippet": "#if defined(__powerpc64__)\n  __asm__ __volatile__(\"sync\" : : : \"memory\");\n#else\n  __asm__ __volatile__(\"mfence\" : : : \"memory\");\n#endif",
+            "simd_instruction_count": 120,
+            "simd_porting_complexity": SIMDPortingComplexity.SIMDE_COMPATIBLE
+        },
+        "test_deps": [
+            {
+                "name": "spdk-nvme-autotest",
+                "version": "1.0",
+                "test_dep_type": "benchmark_suite",
+                "status": AvailabilityStatus.UNPORTED_BUILD_REQUIRED,
+                "evidence_source": "SPDK DMA & NVMe-oF Power hardware integration suite",
+                "porting_effort_pd": 1.5,
+                "notes": "Validates SPDK DMA memory buffers and queue pairs under Power 64KB page architecture; accommodates driver debugging."
+            }
+        ],
+        "base_effort": 2.5,
         "arch_effort": 2.0
     }
 }
@@ -245,10 +291,40 @@ class BuildAnalyzer:
     @classmethod
     def _dynamic_heuristic_build(cls, package: PackageTriageResult, target_os: str) -> PackageTriageResult:
         pkg_name = package.package_name.lower()
+        ecosystem = (package.ecosystem or "").lower()
         
-        # Detect if it's specifically a custom vector/DSP math acceleration component
-        is_custom_vector = any(ext in pkg_name for ext in ["dsp", "simd", "avx", "vector", "matrix"])
+        # 1. Custom vector / DSP math acceleration component
+        is_custom_vector = any(ext in pkg_name for ext in ["dsp", "simd", "avx", "vector", "matrix", "tensor", "math", "blas", "fft"])
         
+        # 2. High-complexity Systems / Storage / DB / Kernel / Memory Engine
+        is_systems = (
+            any(kw in pkg_name for kw in [
+                "storage", "db", "driver", "kernel", "engine", "crypto", "ssl", "kv",
+                "alloc", "memory", "fuse", "io", "spdk", "dpdk", "leveldb", "sqlite",
+                "redis", "clickhouse", "ceph", "kafka", "cassandra", "rocksdb",
+                "jemalloc", "tcmalloc", "etcd", "raft", "distributed", "consensus"
+            ])
+            or (ecosystem in ("c", "cpp", "native_c") and any(kw in pkg_name for kw in ["server", "service", "core", "client"]))
+        )
+
+        # 3. Native C / C++ library or application
+        is_native_c = (
+            ecosystem in ("c", "cpp", "native_c")
+            or any(kw in pkg_name for kw in ["lib", "c++", "cpp", "cmake", "make", "native"])
+        )
+
+        # 4. Rust / Go native with CGO bindings
+        is_rust_go = (
+            ecosystem in ("cargo", "rust", "golang", "go")
+            or any(kw in pkg_name for kw in ["rs-", "go-", "-rs", "-go"])
+        )
+
+        # 5. Python C-extension / Wheel compilation
+        is_python_c = (
+            ecosystem in ("pypi", "python", "pip")
+            or any(kw in pkg_name for kw in ["py-", "-py", "python-"])
+        )
+
         if is_custom_vector:
             package.build_system = "CMake / Ninja"
             package.toolchain_prerequisites = [
@@ -256,7 +332,6 @@ class BuildAnalyzer:
                 ToolchainRequirement(tool="CMake", required_version=">= 3.20", ppc64le_supported=True, notes="Standard build tool")
             ]
             
-            # Sub-dependency for custom vector/DSP acceleration
             unported_sub_dep = BuildDependency(
                 name=f"{pkg_name}-vector-submodule",
                 version="1.0",
@@ -266,7 +341,6 @@ class BuildAnalyzer:
                 evidence_source="Custom internal C/C++ SIMD vector extension",
                 notes="Contains x86 AVX2 intrinsics. Can be ported using SIMDe (simde/x86/avx2.h) or Power VSX intrinsics."
             )
-            
             common_os_dep = BuildDependency(
                 name="glibc-devel",
                 version="2.34",
@@ -275,7 +349,6 @@ class BuildAnalyzer:
                 porting_effort_pd=0.0,
                 evidence_source=f"Available in {target_os} ppc64le BaseOS"
             )
-
             package.build_dependencies = [common_os_dep, unported_sub_dep]
             package.arch_sensitivity = ArchSensitivity(
                 has_simd_avx=True,
@@ -287,7 +360,6 @@ class BuildAnalyzer:
                 remediation_strategy="Include 'simde/x86/avx2.h' header to map AVX2 calls to Power VSX instructions without extensive rewrite.",
                 code_snippet="// Detected in vector source:\n#include <immintrin.h>\n__m256d vA = _mm256_load_pd(&data[i]);\n__m256d vB = _mm256_mul_pd(vA, vWeight);"
             )
-            
             package.test_dependencies = [
                 TestDependency(
                     name="gtest",
@@ -298,18 +370,17 @@ class BuildAnalyzer:
                     porting_effort_pd=0.0
                 ),
                 TestDependency(
-                    name="vector-accuracy-test-harness",
+                    name=f"{pkg_name}-precision-regression-harness",
                     version="1.0",
                     test_dep_type="unit_test",
                     status=AvailabilityStatus.UNPORTED_BUILD_REQUIRED,
                     evidence_source="x86 floating-point precision regression suite",
-                    porting_effort_pd=0.5,
-                    notes="Requires cross-validating VSX double precision results against x86 FMA output"
+                    porting_effort_pd=1.0,
+                    notes="Requires cross-validating VSX double precision output against x86 FMA; includes room for compiler optimization & precision debugging."
                 )
             ]
-            package.test_effort_pd = 0.5
-
-            package.base_build_effort_pd = 1.0
+            package.test_effort_pd = 1.0
+            package.base_build_effort_pd = 1.5
             package.transitive_deps_effort_pd = unported_sub_dep.porting_effort_pd
             base_arch = 2.0
             package.base_arch_complexity_effort_pd = base_arch
@@ -331,22 +402,32 @@ class BuildAnalyzer:
                 + package.arch_complexity_effort_pd
                 + package.test_effort_pd
             )
-            package.total_effort_pd = int(round(total))
+            package.total_effort_pd = max(3, int(round(total)))
             package.confidence_level = "Medium"
             package.porting_notes = (
-                f"Custom vector/DSP library. Scoped 2 build-time dependencies, including 1 unported vector submodule "
-                f"({unported_sub_dep.porting_effort_pd} PD), AVX2 translation ({package.arch_complexity_effort_pd} PD), "
-                f"and test validation ({package.test_effort_pd} PD)."
+                f"Custom vector/DSP library ({package.package_name}). Scoped 2 build dependencies, including 1 unported vector submodule "
+                f"({unported_sub_dep.porting_effort_pd} PD), AVX2 translation ({package.arch_complexity_effort_pd} PD), toolchain compilation ({package.base_build_effort_pd} PD), "
+                f"and test validation with dedicated precision debugging room ({package.test_effort_pd} PD)."
             )
-        else:
-            # Generic portable C/C++ package
-            package.build_system = "CMake / Autotools"
+
+        elif is_systems:
+            package.build_system = "CMake / Make / Meson"
             package.toolchain_prerequisites = [
-                ToolchainRequirement(tool="GCC / G++", required_version=">= 8.5", ppc64le_supported=True, notes="Standard C/C++ toolchain")
+                ToolchainRequirement(tool="GCC / G++", required_version=">= 10.0", ppc64le_supported=True, notes="Standard systems compiler with C++17/C11"),
+                ToolchainRequirement(tool="CMake / Meson", required_version=">= 3.20", ppc64le_supported=True, notes="Native build generator")
             ]
             package.build_dependencies = [
-                BuildDependency(name="glibc-devel", status=AvailabilityStatus.NATIVE_AVAILABLE, porting_effort_pd=0.0, evidence_source=f"Available in {target_os} ppc64le BaseOS")
+                BuildDependency(name="glibc-devel", status=AvailabilityStatus.NATIVE_AVAILABLE, porting_effort_pd=0.0, evidence_source=f"Available in {target_os} BaseOS"),
+                BuildDependency(name="kernel-headers", status=AvailabilityStatus.NATIVE_AVAILABLE, porting_effort_pd=0.0, evidence_source=f"Available in {target_os} BaseOS"),
             ]
+            package.arch_sensitivity = ArchSensitivity(
+                has_simd_avx=False,
+                has_inline_asm=True,
+                asm_details="Low-level atomic memory barriers and spinlock primitives",
+                has_64k_page_risk=True,
+                page_risk_details="Default buffer pooling and memory structures assume 4KB page size; audit needed for Power 64KB page kernel",
+                remediation_strategy="Compile with -mcpu=power9 -O2; configure buffers for 64KB page size alignment; map spinlocks to Power __ppc_get_timebase()."
+            )
             package.test_dependencies = [
                 TestDependency(
                     name="ctest",
@@ -355,20 +436,216 @@ class BuildAnalyzer:
                     status=AvailabilityStatus.NATIVE_AVAILABLE,
                     evidence_source=f"Available in {target_os} BaseOS",
                     porting_effort_pd=0.0
+                ),
+                TestDependency(
+                    name=f"{pkg_name}-stress-and-regression-suite",
+                    version=package.requested_version or "latest",
+                    test_dep_type="benchmark_suite",
+                    status=AvailabilityStatus.UNPORTED_BUILD_REQUIRED,
+                    evidence_source="Target Power 64KB page kernel stress suite",
+                    porting_effort_pd=1.5,
+                    notes="Stress tests concurrency, memory allocation, and WAL integrity under 64KB page kernel; covers debugging room for memory alignment anomalies."
                 )
             ]
-            package.test_effort_pd = 0.0
+            package.base_build_effort_pd = 2.5
+            package.transitive_deps_effort_pd = 0.0
+            package.arch_complexity_effort_pd = 1.5
+            package.test_effort_pd = 1.5
+            total = (
+                package.base_build_effort_pd
+                + package.transitive_deps_effort_pd
+                + package.arch_complexity_effort_pd
+                + package.test_effort_pd
+            )
+            package.total_effort_pd = max(3, int(round(total)))
+            package.confidence_level = "Medium"
+            package.porting_notes = (
+                f"High-complexity systems/storage component ({package.package_name}). Scoped toolchain setup & compilation ({package.base_build_effort_pd} PD), "
+                f"64KB page-size alignment & memory barrier audit ({package.arch_complexity_effort_pd} PD), and test validation with dedicated issue debugging room ({package.test_effort_pd} PD)."
+            )
+
+        elif is_native_c:
+            package.build_system = "CMake / Autotools"
+            package.toolchain_prerequisites = [
+                ToolchainRequirement(tool="GCC / G++", required_version=">= 8.5", ppc64le_supported=True, notes="Standard C/C++ toolchain"),
+                ToolchainRequirement(tool="CMake", required_version=">= 3.20", ppc64le_supported=True, notes="Build generator")
+            ]
+            package.build_dependencies = [
+                BuildDependency(name="glibc-devel", status=AvailabilityStatus.NATIVE_AVAILABLE, porting_effort_pd=0.0, evidence_source=f"Available in {target_os} BaseOS"),
+                BuildDependency(name="gcc-c++", status=AvailabilityStatus.NATIVE_AVAILABLE, porting_effort_pd=0.0, evidence_source=f"Available in {target_os} AppStream"),
+            ]
             package.arch_sensitivity = ArchSensitivity(
                 has_simd_avx=False,
                 has_inline_asm=False,
                 has_64k_page_risk=False,
-                remediation_strategy="Recompile from clean source with standard gcc flags on ppc64le."
+                remediation_strategy="Recompile from clean source with -mcpu=power9 optimization flags; audit 64-bit relocations and linker visibility."
             )
-            package.base_build_effort_pd = 0.5
+            package.test_dependencies = [
+                TestDependency(
+                    name="ctest",
+                    version="3.20",
+                    test_dep_type="framework",
+                    status=AvailabilityStatus.NATIVE_AVAILABLE,
+                    evidence_source=f"Available in {target_os} BaseOS",
+                    porting_effort_pd=0.0
+                ),
+                TestDependency(
+                    name=f"{pkg_name}-test-validation",
+                    version=package.requested_version or "latest",
+                    test_dep_type="unit_test",
+                    status=AvailabilityStatus.UNPORTED_BUILD_REQUIRED,
+                    evidence_source="Native regression test harness",
+                    porting_effort_pd=1.0,
+                    notes="Test suite execution and dedicated room for compiler adaptation, linker relocations (R_PPC64_REL24), and test assertion debugging."
+                )
+            ]
+            package.base_build_effort_pd = 2.0
             package.transitive_deps_effort_pd = 0.0
-            package.arch_complexity_effort_pd = 0.0
-            package.total_effort_pd = 1  # 0.5 rounded to nearest integer
+            package.arch_complexity_effort_pd = 0.5
+            package.test_effort_pd = 1.0
+            total = (
+                package.base_build_effort_pd
+                + package.transitive_deps_effort_pd
+                + package.arch_complexity_effort_pd
+                + package.test_effort_pd
+            )
+            package.total_effort_pd = max(3, int(round(total)))
             package.confidence_level = "Medium"
-            package.porting_notes = "Standard portable C/C++ codebase. Clean rebuild and test execution on target Power environment expected to succeed."
+            package.porting_notes = (
+                f"Native C/C++ library ({package.package_name}). Scoped clean source compilation ({package.base_build_effort_pd} PD), "
+                f"Power architecture flag verification ({package.arch_complexity_effort_pd} PD), and test validation with room for compiler/linker troubleshooting ({package.test_effort_pd} PD)."
+            )
+
+        elif is_rust_go:
+            lang_label = "Rust (Cargo)" if "rust" in ecosystem or "cargo" in ecosystem or "rs" in pkg_name else "Golang"
+            package.build_system = f"{lang_label} Toolchain"
+            package.toolchain_prerequisites = [
+                ToolchainRequirement(tool=f"{lang_label} Compiler", required_version=">= 1.21 / 1.70", ppc64le_supported=True, notes="Native ppc64le target support"),
+                ToolchainRequirement(tool="GCC", required_version=">= 8.5", ppc64le_supported=True, notes="Required for CGO / native linking")
+            ]
+            package.build_dependencies = [
+                BuildDependency(name="glibc-devel", status=AvailabilityStatus.NATIVE_AVAILABLE, porting_effort_pd=0.0, evidence_source=f"Available in {target_os} BaseOS")
+            ]
+            package.arch_sensitivity = ArchSensitivity(
+                has_simd_avx=False,
+                has_inline_asm=False,
+                has_64k_page_risk=False,
+                remediation_strategy=f"Configure {lang_label} target triple for powerpc64le-unknown-linux-gnu; audit native CGO flags."
+            )
+            package.test_dependencies = [
+                TestDependency(
+                    name=f"{pkg_name}-test-suite",
+                    version=package.requested_version or "latest",
+                    test_dep_type="unit_test",
+                    status=AvailabilityStatus.UNPORTED_BUILD_REQUIRED,
+                    evidence_source=f"{lang_label} built-in test harness",
+                    porting_effort_pd=1.0,
+                    notes=f"Runs {lang_label} test suite; includes dedicated troubleshooting room for CGO linker flags and Power architecture quirks."
+                )
+            ]
+            package.base_build_effort_pd = 1.5
+            package.transitive_deps_effort_pd = 0.0
+            package.arch_complexity_effort_pd = 0.5
+            package.test_effort_pd = 1.0
+            total = (
+                package.base_build_effort_pd
+                + package.transitive_deps_effort_pd
+                + package.arch_complexity_effort_pd
+                + package.test_effort_pd
+            )
+            package.total_effort_pd = max(3, int(round(total)))
+            package.confidence_level = "Medium"
+            package.porting_notes = (
+                f"{lang_label} native package ({package.package_name}). Scoped toolchain configuration ({package.base_build_effort_pd} PD), "
+                f"target triple setup ({package.arch_complexity_effort_pd} PD), and test validation with room for CGO/linker debugging ({package.test_effort_pd} PD)."
+            )
+
+        elif is_python_c:
+            package.build_system = "PyPA Build / setuptools / wheel"
+            package.toolchain_prerequisites = [
+                ToolchainRequirement(tool="Python3-devel", required_version=">= 3.9", ppc64le_supported=True, notes="Python C headers"),
+                ToolchainRequirement(tool="GCC / G++", required_version=">= 8.5", ppc64le_supported=True, notes="Required to compile native extensions")
+            ]
+            package.build_dependencies = [
+                BuildDependency(name="python3-devel", status=AvailabilityStatus.NATIVE_AVAILABLE, porting_effort_pd=0.0, evidence_source=f"Available in {target_os} AppStream"),
+                BuildDependency(name="glibc-devel", status=AvailabilityStatus.NATIVE_AVAILABLE, porting_effort_pd=0.0, evidence_source=f"Available in {target_os} BaseOS")
+            ]
+            package.arch_sensitivity = ArchSensitivity(
+                has_simd_avx=False,
+                has_inline_asm=False,
+                has_64k_page_risk=False,
+                remediation_strategy="Build native wheel for ppc64le; verify glibc symbol compatibility and ABI tags."
+            )
+            package.test_dependencies = [
+                TestDependency(
+                    name=f"{pkg_name}-pytest-validation",
+                    version=package.requested_version or "latest",
+                    test_dep_type="unit_test",
+                    status=AvailabilityStatus.UNPORTED_BUILD_REQUIRED,
+                    evidence_source="pytest regression harness",
+                    porting_effort_pd=1.0,
+                    notes="Pytest suite execution, native C extension import auditing, and wheel packaging troubleshooting on ppc64le."
+                )
+            ]
+            package.base_build_effort_pd = 1.5
+            package.transitive_deps_effort_pd = 0.0
+            package.arch_complexity_effort_pd = 0.5
+            package.test_effort_pd = 1.0
+            total = (
+                package.base_build_effort_pd
+                + package.transitive_deps_effort_pd
+                + package.arch_complexity_effort_pd
+                + package.test_effort_pd
+            )
+            package.total_effort_pd = max(3, int(round(total)))
+            package.confidence_level = "Medium"
+            package.porting_notes = (
+                f"Python C-extension ({package.package_name}). Scoped native wheel compilation ({package.base_build_effort_pd} PD), "
+                f"ABI tag verification ({package.arch_complexity_effort_pd} PD), and pytest validation with troubleshooting room ({package.test_effort_pd} PD)."
+            )
+
+        else:
+            # Baseline portable unported package
+            package.build_system = "CMake / Autotools"
+            package.toolchain_prerequisites = [
+                ToolchainRequirement(tool="GCC / G++", required_version=">= 8.5", ppc64le_supported=True, notes="Standard C/C++ toolchain"),
+                ToolchainRequirement(tool="CMake", required_version=">= 3.20", ppc64le_supported=True, notes="Standard build tool")
+            ]
+            package.build_dependencies = [
+                BuildDependency(name="glibc-devel", status=AvailabilityStatus.NATIVE_AVAILABLE, porting_effort_pd=0.0, evidence_source=f"Available in {target_os} ppc64le BaseOS")
+            ]
+            package.test_dependencies = [
+                TestDependency(
+                    name=f"{pkg_name}-validation-harness",
+                    version=package.requested_version or "latest",
+                    test_dep_type="unit_test",
+                    status=AvailabilityStatus.UNPORTED_BUILD_REQUIRED,
+                    evidence_source=f"Available in {target_os} test harness",
+                    porting_effort_pd=1.0,
+                    notes="Test suite execution and dedicated room for compiler adaptation, linker troubleshooting, and issue debugging on ppc64le."
+                )
+            ]
+            package.arch_sensitivity = ArchSensitivity(
+                has_simd_avx=False,
+                has_inline_asm=False,
+                has_64k_page_risk=False,
+                remediation_strategy="Recompile from clean source with standard gcc optimization flags on ppc64le."
+            )
+            package.base_build_effort_pd = 1.5
+            package.transitive_deps_effort_pd = 0.0
+            package.arch_complexity_effort_pd = 0.5
+            package.test_effort_pd = 1.0
+            total = (
+                package.base_build_effort_pd
+                + package.transitive_deps_effort_pd
+                + package.arch_complexity_effort_pd
+                + package.test_effort_pd
+            )
+            package.total_effort_pd = max(3, int(round(total)))
+            package.confidence_level = "Medium"
+            package.porting_notes = (
+                f"Unported component ({package.package_name}). Scoped source compilation ({package.base_build_effort_pd} PD), "
+                f"architecture verification ({package.arch_complexity_effort_pd} PD), and test validation with room for issue debugging on Power ({package.test_effort_pd} PD)."
+            )
 
         return package
