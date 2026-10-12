@@ -1311,5 +1311,255 @@
     "tier": "Python Package (assumed pure script)",
     "evidence": "Standard PyPI package custom-risk-calc",
     "url": "https://pypi.org/project/custom-risk-calc"
+  },
+  "openai porting qualification": {
+    "package_name": "openai porting qualification",
+    "version": "latest",
+    "last_analyzed": "2026-10-12T12:25:07.448795+00:00",
+    "analysis_count": 1,
+    "versions": {},
+    "arch_posture": {
+      "ppc64le_markers_found": [
+        "Pure-Python SDK (py3-none-any wheel), architecture-independent",
+        "Native dependencies pydantic-core and jiter (Rust) publish manylinux ppc64le wheels upstream"
+      ],
+      "x86_only_markers_found": [],
+      "ci_matrix_has_power": false,
+      "scan_source": "llm_inference",
+      "effort_adjustment_factor": 1.0
+    }
+  },
+  "openai": {
+    "package_name": "openai",
+    "version": "latest",
+    "last_analyzed": "2026-10-12T12:25:20.033936+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "latest": {
+        "status": "platform_agnostic",
+        "available_version": "3.29.0",
+        "tier": "PyPI universal pure Python wheel (py3-none-any); no native C code, not a RHEL BaseOS/AppStream/EPEL package",
+        "evidence": "PyPI openai-3.29.0-py3-none-any.whl is a universal pure-Python wheel that installs on RHEL 9 ppc64le via pip (dependencies such as pydantic-core, jiter and httpx are available as ppc64le wheels or build from source). Also available on conda-forge as noarch. The package is not shipped in RHEL BaseOS, AppStream or EPEL 9 rpm repositories.",
+        "url": "https://pypi.org/project/openai/",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T12:25:20.033936+00:00"
+      }
+    },
+    "status": "platform_agnostic",
+    "available_version": "3.29.0",
+    "tier": "PyPI universal pure Python wheel (py3-none-any); no native C code, not a RHEL BaseOS/AppStream/EPEL package",
+    "evidence": "PyPI openai-3.29.0-py3-none-any.whl is a universal pure-Python wheel that installs on RHEL 9 ppc64le via pip (dependencies such as pydantic-core, jiter and httpx are available as ppc64le wheels or build from source). Also available on conda-forge as noarch. The package is not shipped in RHEL BaseOS, AppStream or EPEL 9 rpm repositories.",
+    "url": "https://pypi.org/project/openai/",
+    "substitute": null
+  },
+  "openai-whisper": {
+    "package_name": "openai-whisper",
+    "version": "latest",
+    "last_analyzed": "2026-10-12T12:26:37.402169+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "latest": {
+        "status": "platform_agnostic",
+        "available_version": "20250625",
+        "tier": "Tier 2 - Pure Python package (sdist only, no compiled code); installs on ppc64le once native dependencies are available",
+        "evidence": "PyPI openai-whisper 20250625 ships only a pure-Python sdist (openai_whisper-20250625.tar.gz). The optional triton dependency is gated to x86_64 Linux, so it is skipped on ppc64le. Native dependencies need ppc64le builds: torch (IBM Open-CE / conda-forge linux-ppc64le, or a source build), numba/llvmlite and numpy (conda-forge linux-ppc64le), and tiktoken (Rust extension: conda-forge linux-ppc64le or a source build with a Rust toolchain). Not packaged in RHEL BaseOS/AppStream or EPEL 9. ffmpeg is needed at runtime and comes from RPM Fusion or conda-forge.",
+        "url": "https://pypi.org/project/openai-whisper/",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T12:26:37.402169+00:00"
+      }
+    },
+    "status": "platform_agnostic",
+    "available_version": "20250625",
+    "tier": "Tier 2 - Pure Python package (sdist only, no compiled code); installs on ppc64le once native dependencies are available",
+    "evidence": "PyPI openai-whisper 20250625 ships only a pure-Python sdist (openai_whisper-20250625.tar.gz). The optional triton dependency is gated to x86_64 Linux, so it is skipped on ppc64le. Native dependencies need ppc64le builds: torch (IBM Open-CE / conda-forge linux-ppc64le, or a source build), numba/llvmlite and numpy (conda-forge linux-ppc64le), and tiktoken (Rust extension: conda-forge linux-ppc64le or a source build with a Rust toolchain). Not packaged in RHEL BaseOS/AppStream or EPEL 9. ffmpeg is needed at runtime and comes from RPM Fusion or conda-forge.",
+    "url": "https://pypi.org/project/openai-whisper/",
+    "substitute": null
+  },
+  "numba": {
+    "package_name": "numba",
+    "version": "latest",
+    "last_analyzed": "2026-10-12T12:26:39.232943+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "latest": {
+        "status": "native_available",
+        "available_version": "0.57.0",
+        "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+        "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 9 version(s) available: 0.57.0, 0.59.0, 0.61.2, 0.62.0, 0.62.0.dev0",
+        "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T12:26:39.232943+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "0.57.0",
+    "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+    "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 9 version(s) available: 0.57.0, 0.59.0, 0.61.2, 0.62.0, 0.62.0.dev0",
+    "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md"
+  },
+  "tqdm": {
+    "package_name": "tqdm",
+    "version": "latest",
+    "last_analyzed": "2026-10-12T12:26:41.496360+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "latest": {
+        "status": "platform_agnostic",
+        "available_version": "4.70.1",
+        "tier": "Pure Python package (noarch)",
+        "evidence": "Universal wheel (none-any.whl) available for tqdm (4.70.1)",
+        "url": "https://pypi.org/project/tqdm",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T12:26:41.496360+00:00"
+      }
+    },
+    "status": "platform_agnostic",
+    "available_version": "4.70.1",
+    "tier": "Pure Python package (noarch)",
+    "evidence": "Universal wheel (none-any.whl) available for tqdm (4.70.1)",
+    "url": "https://pypi.org/project/tqdm"
+  },
+  "more-itertools": {
+    "package_name": "more-itertools",
+    "version": "latest",
+    "last_analyzed": "2026-10-12T12:26:43.005060+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "latest": {
+        "status": "platform_agnostic",
+        "available_version": "11.1.0",
+        "tier": "Pure Python package (noarch)",
+        "evidence": "Universal wheel (none-any.whl) available for more-itertools (11.1.0)",
+        "url": "https://pypi.org/project/more-itertools",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T12:26:43.005060+00:00"
+      }
+    },
+    "status": "platform_agnostic",
+    "available_version": "11.1.0",
+    "tier": "Pure Python package (noarch)",
+    "evidence": "Universal wheel (none-any.whl) available for more-itertools (11.1.0)",
+    "url": "https://pypi.org/project/more-itertools"
+  },
+  "tiktoken": {
+    "package_name": "tiktoken",
+    "version": "latest",
+    "last_analyzed": "2026-10-12T12:26:44.262025+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "latest": {
+        "status": "native_available",
+        "available_version": "0.12.0",
+        "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+        "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 4 version(s) available: 0.12.0, 0.13.0, 0.7.0, 0.9.0",
+        "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T12:26:44.262025+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "0.12.0",
+    "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+    "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 4 version(s) available: 0.12.0, 0.13.0, 0.7.0, 0.9.0",
+    "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md"
+  },
+  "triton": {
+    "package_name": "triton",
+    "version": ">=2.0.0",
+    "last_analyzed": "2026-10-12T12:26:45.810478+00:00",
+    "analysis_count": 1,
+    "versions": {
+      ">=2.0.0": {
+        "status": "platform_agnostic",
+        "available_version": ">=2.0.0",
+        "tier": "Python Package (assumed pure script)",
+        "evidence": "Standard PyPI package triton",
+        "url": "https://pypi.org/project/triton",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T12:26:45.810478+00:00"
+      }
+    },
+    "status": "platform_agnostic",
+    "available_version": ">=2.0.0",
+    "tier": "Python Package (assumed pure script)",
+    "evidence": "Standard PyPI package triton",
+    "url": "https://pypi.org/project/triton"
+  },
+  "ffmpeg": {
+    "package_name": "ffmpeg",
+    "version": "latest",
+    "last_analyzed": "2026-10-12T12:26:48.128806+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "latest": {
+        "status": "native_available",
+        "available_version": "n9.0",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'FFmpeg' (version n9.0). Build script: ffmpeg_ubi_10.2.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/f/ffmpeg",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T12:26:48.128806+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "n9.0",
+    "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+    "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'FFmpeg' (version n9.0). Build script: ffmpeg_ubi_10.2.sh",
+    "url": "https://github.com/ppc64le/build-scripts/tree/master/f/ffmpeg"
+  },
+  "llvmlite": {
+    "package_name": "llvmlite",
+    "version": "latest",
+    "last_analyzed": "2026-10-12T12:26:49.908303+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "latest": {
+        "status": "native_available",
+        "available_version": "0.40.0",
+        "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+        "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 7 version(s) available: 0.40.0, 0.42.0, 0.44.0, 0.44.0rc1, 0.45.1",
+        "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-12T12:26:49.908303+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "0.40.0",
+    "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+    "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 7 version(s) available: 0.40.0, 0.42.0, 0.44.0, 0.44.0rc1, 0.45.1",
+    "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md"
+  },
+  "rust": {
+    "package_name": "rust",
+    "version": "latest",
+    "last_analyzed": "2026-10-12T12:27:04.277358+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "latest": {
+        "status": "native_available",
+        "available_version": "1.84 (RHEL 9 AppStream, varies by minor release; upstream rustup/conda-forge provide newer stable)",
+        "tier": "Tier 1 - RHEL 9 AppStream (rust, cargo, rustc, rust-toolset) for ppc64le; also conda-forge linux-ppc64le and upstream Rust Tier 2 target powerpc64le-unknown-linux-gnu",
+        "evidence": "RHEL 9 AppStream ships rust/rustc/cargo and the rust-toolset module stream for ppc64le (version tracks RHEL minor release, e.g. ~1.75-1.84). Also available from conda-forge (linux-ppc64le) and via rustup (powerpc64le-unknown-linux-gnu host toolchain, Tier 2 with host tools). Exact minor version should be confirmed with 'dnf info rust' on the target RHEL 9.x system.",
+        "url": "https://packages.fedoraproject.org/pkgs/rust/rust/",
+        "substitute": null,
+        "version_warning": "'latest' upstream stable Rust may be newer than the version in RHEL 9 AppStream; to get the newest release on ppc64le use rustup (powerpc64le-unknown-linux-gnu) or conda-forge.",
+        "last_analyzed": "2026-10-12T12:27:04.277358+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "1.84 (RHEL 9 AppStream, varies by minor release; upstream rustup/conda-forge provide newer stable)",
+    "tier": "Tier 1 - RHEL 9 AppStream (rust, cargo, rustc, rust-toolset) for ppc64le; also conda-forge linux-ppc64le and upstream Rust Tier 2 target powerpc64le-unknown-linux-gnu",
+    "evidence": "RHEL 9 AppStream ships rust/rustc/cargo and the rust-toolset module stream for ppc64le (version tracks RHEL minor release, e.g. ~1.75-1.84). Also available from conda-forge (linux-ppc64le) and via rustup (powerpc64le-unknown-linux-gnu host toolchain, Tier 2 with host tools). Exact minor version should be confirmed with 'dnf info rust' on the target RHEL 9.x system.",
+    "url": "https://packages.fedoraproject.org/pkgs/rust/rust/",
+    "substitute": null
   }
 }

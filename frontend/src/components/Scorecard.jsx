@@ -173,9 +173,11 @@ export default function Scorecard({ summary, triageResult, tokenUsage, onOpenExp
             </span>
             <span style={{ fontSize: '0.9rem', color: '#a8a8a8', fontWeight: 600 }}>PD</span>
           </div>
-          <p style={{ fontSize: '0.82rem', color: '#c6c6c6', marginTop: '0.6rem', marginBottom: 0 }}>
-            {estimatedEffort === 0 ? 'Zero Effort — Turnkey Ready' : `Lifecycle WBS (${contingencyPct}% buffer)`}
-          </p>
+          {estimatedEffort === 0 && (
+            <p style={{ fontSize: '0.82rem', color: '#c6c6c6', marginTop: '0.6rem', marginBottom: 0 }}>
+              Zero Effort — Turnkey Ready
+            </p>
+          )}
           {estimatedEffort > 0 && (
             <button
               type="button"
