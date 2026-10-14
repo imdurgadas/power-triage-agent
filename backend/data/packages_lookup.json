@@ -175,16 +175,16 @@
   "python": {
     "package_name": "python",
     "ecosystem": "container",
-    "version": "3.9",
+    "version": "3.10",
     "status": "native_available",
-    "available_version": "3.9",
+    "available_version": "3.10",
     "tier": "Official Docker Hub Multi-Arch Container",
-    "evidence": "Docker Hub library/python:3.9 verified multi-arch (linux/ppc64le)",
+    "evidence": "Docker Hub library/python:3.10 verified multi-arch (linux/ppc64le)",
     "url": "https://hub.docker.com/r/library/python",
     "git_repo_url": "https://github.com/python/cpython",
     "doc_url": "https://www.python.org",
-    "last_analyzed": "2026-10-12T11:01:34.581106+00:00",
-    "analysis_count": 1,
+    "last_analyzed": "2026-10-13T05:04:11.464978+00:00",
+    "analysis_count": 2,
     "versions": {
       "3.9": {
         "status": "native_available",
@@ -195,6 +195,16 @@
         "substitute": null,
         "version_warning": null,
         "last_analyzed": "2026-10-12T11:01:34.581106+00:00"
+      },
+      "3.10": {
+        "status": "native_available",
+        "available_version": "3.10",
+        "tier": "Official Docker Hub Multi-Arch Container",
+        "evidence": "Docker Hub library/python:3.10 verified multi-arch (linux/ppc64le)",
+        "url": "https://hub.docker.com/r/library/python",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T05:04:11.464978+00:00"
       }
     }
   },
@@ -337,14 +347,14 @@
   "lz4": {
     "package_name": "lz4",
     "ecosystem": "native_c",
-    "version": "1.9.3",
+    "version": "1.9.4",
     "status": "native_available",
     "available_version": "4.4.5",
     "tier": "ppc64le/build-scripts — active IBM Power build recipe",
     "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'lz4' (version 4.4.5). Build script: lz4_4.4.5_ubi_9.6.sh",
     "url": "https://github.com/ppc64le/build-scripts/tree/master/l/lz4",
-    "last_analyzed": "2026-10-12T10:49:30.348150+00:00",
-    "analysis_count": 1,
+    "last_analyzed": "2026-10-13T09:16:28.080103+00:00",
+    "analysis_count": 2,
     "versions": {
       "1.9.3": {
         "status": "native_available",
@@ -355,13 +365,23 @@
         "substitute": null,
         "version_warning": "Requested version 1.9.3 is older than build-scripts version 4.4.5; recommend upgrading to 4.4.5.",
         "last_analyzed": "2026-10-12T10:49:30.348150+00:00"
+      },
+      "1.9.4": {
+        "status": "native_available",
+        "available_version": "4.4.5",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'lz4' (version 4.4.5). Build script: lz4_4.4.5_ubi_9.6.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/l/lz4",
+        "substitute": null,
+        "version_warning": "Requested version 1.9.4 is older than build-scripts version 4.4.5; recommend upgrading to 4.4.5.",
+        "last_analyzed": "2026-10-13T09:16:28.080103+00:00"
       }
     }
   },
   "rocksdb": {
     "package_name": "rocksdb",
     "ecosystem": "native_c",
-    "version": "10.5.1",
+    "version": "9.7.4",
     "status": "native_available",
     "available_version": "9.4.0",
     "tier": "ppc64le/build-scripts — active IBM Power build recipe",
@@ -382,8 +402,8 @@
       "scan_source": "lookup_file",
       "effort_adjustment_factor": 0.8
     },
-    "last_analyzed": "2026-10-12T06:48:38.842435+00:00",
-    "analysis_count": 3,
+    "last_analyzed": "2026-10-13T09:16:25.203532+00:00",
+    "analysis_count": 4,
     "versions": {
       "10.4": {
         "status": "native_available",
@@ -414,6 +434,16 @@
         "substitute": null,
         "version_warning": "Requested version 10.5.1 is newer than build-scripts version 9.4.0; build script may need updating.",
         "last_analyzed": "2026-10-12T06:48:38.842435+00:00"
+      },
+      "9.7.4": {
+        "status": "native_available",
+        "available_version": "9.4.0",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'rocksdb' (version 9.4.0). Build script: rocksdb_ubi_9.3.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/r/rocksdb",
+        "substitute": null,
+        "version_warning": "Requested version 9.7.4 is newer than build-scripts version 9.4.0; build script may need updating.",
+        "last_analyzed": "2026-10-13T09:16:25.203532+00:00"
       }
     }
   },
@@ -464,7 +494,7 @@
   "numpy": {
     "package_name": "numpy",
     "ecosystem": "pypi",
-    "version": "1.24",
+    "version": "1.26",
     "status": "native_available",
     "available_version": "1.23.5",
     "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
@@ -472,8 +502,8 @@
     "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
     "git_repo_url": "https://github.com/numpy/numpy",
     "doc_url": "https://numpy.org",
-    "last_analyzed": "2026-10-12T11:01:37.828386+00:00",
-    "analysis_count": 1,
+    "last_analyzed": "2026-10-13T05:25:03.520714+00:00",
+    "analysis_count": 3,
     "versions": {
       "1.24": {
         "status": "native_available",
@@ -484,6 +514,26 @@
         "substitute": null,
         "version_warning": "Requested version 1.24 not in DevPi index; latest DevPi ppc64le version is 1.23.5. May require source build.",
         "last_analyzed": "2026-10-12T11:01:37.828386+00:00"
+      },
+      "1.26.4": {
+        "status": "native_available",
+        "available_version": "1.26.4",
+        "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+        "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 23 version(s) available: 1.23.5, 1.24.2, 1.26.0, 1.26.4, 2.0.2",
+        "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T05:04:21.204390+00:00"
+      },
+      "1.26": {
+        "status": "native_available",
+        "available_version": "1.23.5",
+        "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+        "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 23 version(s) available: 1.23.5, 1.24.2, 1.26.0, 1.26.4, 2.0.2",
+        "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+        "substitute": null,
+        "version_warning": "Requested version 1.26 not in DevPi index; latest DevPi ppc64le version is 1.23.5. May require source build.",
+        "last_analyzed": "2026-10-13T05:25:03.520714+00:00"
       }
     }
   },
@@ -540,14 +590,58 @@
   "torch": {
     "package_name": "torch",
     "ecosystem": "pypi",
-    "version": "2.1.0",
-    "status": "NATIVE_AVAILABLE",
-    "available_version": "2.1.0",
-    "tier": "ppc64le/pyeco DevPi wheels index",
-    "evidence": "ppc64le/pyeco wheel index",
-    "url": "https://pypi.org/project/torch",
+    "version": "2.3.0",
+    "status": "native_available",
+    "available_version": "2.0.0",
+    "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+    "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 15 version(s) available: 2.0.0, 2.0.1, 2.1.0, 2.1.2, 2.10.0",
+    "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
     "git_repo_url": "https://github.com/pytorch/pytorch",
-    "doc_url": "https://pytorch.org"
+    "doc_url": "https://pytorch.org",
+    "last_analyzed": "2026-10-13T14:48:04.066340+00:00",
+    "analysis_count": 4,
+    "versions": {
+      "2.4.0": {
+        "status": "native_available",
+        "available_version": "2.0.0",
+        "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+        "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 15 version(s) available: 2.0.0, 2.0.1, 2.1.0, 2.1.2, 2.10.0",
+        "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+        "substitute": null,
+        "version_warning": "Requested version 2.4.0 not in DevPi index; latest DevPi ppc64le version is 2.0.0. May require source build.",
+        "last_analyzed": "2026-10-13T05:04:14.046403+00:00"
+      },
+      "2.1": {
+        "status": "native_available",
+        "available_version": "2.0.0",
+        "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+        "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 15 version(s) available: 2.0.0, 2.0.1, 2.1.0, 2.1.2, 2.10.0",
+        "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+        "substitute": null,
+        "version_warning": "Requested version 2.1 not in DevPi index; latest DevPi ppc64le version is 2.0.0. May require source build.",
+        "last_analyzed": "2026-10-13T05:24:59.165027+00:00"
+      },
+      "2.1.0": {
+        "status": "native_available",
+        "available_version": "2.1.0",
+        "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+        "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 15 version(s) available: 2.0.0, 2.0.1, 2.1.0, 2.1.2, 2.10.0",
+        "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T14:26:04.877001+00:00"
+      },
+      "2.3.0": {
+        "status": "native_available",
+        "available_version": "2.0.0",
+        "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+        "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 15 version(s) available: 2.0.0, 2.0.1, 2.1.0, 2.1.2, 2.10.0",
+        "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+        "substitute": null,
+        "version_warning": "Requested version 2.3.0 not in DevPi index; latest DevPi ppc64le version is 2.0.0. May require source build.",
+        "last_analyzed": "2026-10-13T14:48:04.066340+00:00"
+      }
+    }
   },
   "fastapi": {
     "package_name": "fastapi",
@@ -574,12 +668,26 @@
   "requests": {
     "package_name": "requests",
     "ecosystem": "pypi",
-    "version": "2.31.0",
-    "status": "PLATFORM_AGNOSTIC",
-    "available_version": "2.31.0",
+    "version": "2.32.3",
+    "status": "platform_agnostic",
+    "available_version": "2.32.3",
     "tier": "Pure Python package (noarch)",
-    "evidence": "PyPI (py2.py3-none-any.whl)",
-    "url": "https://pypi.org/project/requests"
+    "evidence": "Universal wheel (none-any.whl) available for requests (2.32.3)",
+    "url": "https://pypi.org/project/requests",
+    "last_analyzed": "2026-10-13T05:04:45.078562+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "2.32.3": {
+        "status": "platform_agnostic",
+        "available_version": "2.32.3",
+        "tier": "Pure Python package (noarch)",
+        "evidence": "Universal wheel (none-any.whl) available for requests (2.32.3)",
+        "url": "https://pypi.org/project/requests",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T05:04:45.078562+00:00"
+      }
+    }
   },
   "pydantic": {
     "package_name": "pydantic",
@@ -627,12 +735,26 @@
   "openblas": {
     "package_name": "openblas",
     "ecosystem": "native_c",
-    "version": "0.3.24",
-    "status": "NATIVE_AVAILABLE",
-    "available_version": "0.3.24",
-    "tier": "Native High-Performance BLAS / Math Library",
-    "evidence": "RHEL AppStream / EPEL ppc64le (optimized with Power10 MMA / Power9 VSX)",
-    "url": "https://www.openblas.net"
+    "version": "0.3.26",
+    "status": "native_available",
+    "available_version": "0.3.29",
+    "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+    "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'OpenBLAS' (version 0.3.29). Build script: openblas_ubi_9.3.sh",
+    "url": "https://github.com/ppc64le/build-scripts/tree/master/o/openblas",
+    "last_analyzed": "2026-10-13T05:05:12.121596+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "0.3.26": {
+        "status": "native_available",
+        "available_version": "0.3.29",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'OpenBLAS' (version 0.3.29). Build script: openblas_ubi_9.3.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/o/openblas",
+        "substitute": null,
+        "version_warning": "Requested version 0.3.26 is older than build-scripts version 0.3.29; recommend upgrading to 0.3.29.",
+        "last_analyzed": "2026-10-13T05:05:12.121596+00:00"
+      }
+    }
   },
   "blis": {
     "package_name": "blis",
@@ -761,8 +883,8 @@
   "test microservices": {
     "package_name": "test microservices",
     "version": "latest",
-    "last_analyzed": "2026-10-12T07:10:16.316602+00:00",
-    "analysis_count": 3,
+    "last_analyzed": "2026-10-13T15:06:20.621552+00:00",
+    "analysis_count": 4,
     "versions": {},
     "arch_posture": {
       "ppc64le_markers_found": [],
@@ -1379,9 +1501,9 @@
   },
   "numba": {
     "package_name": "numba",
-    "version": "latest",
-    "last_analyzed": "2026-10-12T12:26:39.232943+00:00",
-    "analysis_count": 1,
+    "version": "0.58",
+    "last_analyzed": "2026-10-13T05:25:01.372621+00:00",
+    "analysis_count": 3,
     "versions": {
       "latest": {
         "status": "native_available",
@@ -1392,6 +1514,26 @@
         "substitute": null,
         "version_warning": null,
         "last_analyzed": "2026-10-12T12:26:39.232943+00:00"
+      },
+      "0.60.0": {
+        "status": "native_available",
+        "available_version": "0.57.0",
+        "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+        "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 9 version(s) available: 0.57.0, 0.59.0, 0.61.2, 0.62.0, 0.62.0.dev0",
+        "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+        "substitute": null,
+        "version_warning": "Requested version 0.60.0 not in DevPi index; latest DevPi ppc64le version is 0.57.0. May require source build.",
+        "last_analyzed": "2026-10-13T05:04:25.883977+00:00"
+      },
+      "0.58": {
+        "status": "native_available",
+        "available_version": "0.57.0",
+        "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+        "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 9 version(s) available: 0.57.0, 0.59.0, 0.61.2, 0.62.0, 0.62.0.dev0",
+        "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+        "substitute": null,
+        "version_warning": "Requested version 0.58 not in DevPi index; latest DevPi ppc64le version is 0.57.0. May require source build.",
+        "last_analyzed": "2026-10-13T05:25:01.372621+00:00"
       }
     },
     "status": "native_available",
@@ -1402,9 +1544,9 @@
   },
   "tqdm": {
     "package_name": "tqdm",
-    "version": "latest",
-    "last_analyzed": "2026-10-12T12:26:41.496360+00:00",
-    "analysis_count": 1,
+    "version": "4.66.4",
+    "last_analyzed": "2026-10-13T14:48:05.406651+00:00",
+    "analysis_count": 4,
     "versions": {
       "latest": {
         "status": "platform_agnostic",
@@ -1415,19 +1557,49 @@
         "substitute": null,
         "version_warning": null,
         "last_analyzed": "2026-10-12T12:26:41.496360+00:00"
+      },
+      "4.66.5": {
+        "status": "platform_agnostic",
+        "available_version": "4.66.5",
+        "tier": "Pure Python package (noarch)",
+        "evidence": "Universal wheel (none-any.whl) available for tqdm (4.66.5)",
+        "url": "https://pypi.org/project/tqdm",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T05:04:36.371027+00:00"
+      },
+      "4.66": {
+        "status": "platform_agnostic",
+        "available_version": "4.66.0",
+        "tier": "Pure Python package (noarch)",
+        "evidence": "Universal wheel (none-any.whl) available for tqdm (4.66.0)",
+        "url": "https://pypi.org/project/tqdm",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T05:25:07.615336+00:00"
+      },
+      "4.66.4": {
+        "status": "platform_agnostic",
+        "available_version": "4.66.4",
+        "tier": "Pure Python package (noarch)",
+        "evidence": "Universal wheel (none-any.whl) available for tqdm (4.66.4)",
+        "url": "https://pypi.org/project/tqdm",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T14:48:05.406651+00:00"
       }
     },
     "status": "platform_agnostic",
-    "available_version": "4.70.1",
+    "available_version": "4.66.4",
     "tier": "Pure Python package (noarch)",
-    "evidence": "Universal wheel (none-any.whl) available for tqdm (4.70.1)",
+    "evidence": "Universal wheel (none-any.whl) available for tqdm (4.66.4)",
     "url": "https://pypi.org/project/tqdm"
   },
   "more-itertools": {
     "package_name": "more-itertools",
-    "version": "latest",
-    "last_analyzed": "2026-10-12T12:26:43.005060+00:00",
-    "analysis_count": 1,
+    "version": "10.2.0",
+    "last_analyzed": "2026-10-13T14:48:06.869941+00:00",
+    "analysis_count": 4,
     "versions": {
       "latest": {
         "status": "platform_agnostic",
@@ -1438,19 +1610,49 @@
         "substitute": null,
         "version_warning": null,
         "last_analyzed": "2026-10-12T12:26:43.005060+00:00"
+      },
+      "10.4.0": {
+        "status": "platform_agnostic",
+        "available_version": "10.4.0",
+        "tier": "Pure Python package (noarch)",
+        "evidence": "Universal wheel (none-any.whl) available for more-itertools (10.4.0)",
+        "url": "https://pypi.org/project/more-itertools",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T05:04:37.812283+00:00"
+      },
+      "10.1": {
+        "status": "platform_agnostic",
+        "available_version": "10.1.0",
+        "tier": "Pure Python package (noarch)",
+        "evidence": "Universal wheel (none-any.whl) available for more-itertools (10.1.0)",
+        "url": "https://pypi.org/project/more-itertools",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T05:25:09.537629+00:00"
+      },
+      "10.2.0": {
+        "status": "platform_agnostic",
+        "available_version": "10.2.0",
+        "tier": "Pure Python package (noarch)",
+        "evidence": "Universal wheel (none-any.whl) available for more-itertools (10.2.0)",
+        "url": "https://pypi.org/project/more-itertools",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T14:48:06.869941+00:00"
       }
     },
     "status": "platform_agnostic",
-    "available_version": "11.1.0",
+    "available_version": "10.2.0",
     "tier": "Pure Python package (noarch)",
-    "evidence": "Universal wheel (none-any.whl) available for more-itertools (11.1.0)",
+    "evidence": "Universal wheel (none-any.whl) available for more-itertools (10.2.0)",
     "url": "https://pypi.org/project/more-itertools"
   },
   "tiktoken": {
     "package_name": "tiktoken",
-    "version": "latest",
-    "last_analyzed": "2026-10-12T12:26:44.262025+00:00",
-    "analysis_count": 1,
+    "version": "0.7",
+    "last_analyzed": "2026-10-13T05:25:05.341518+00:00",
+    "analysis_count": 3,
     "versions": {
       "latest": {
         "status": "native_available",
@@ -1461,6 +1663,26 @@
         "substitute": null,
         "version_warning": null,
         "last_analyzed": "2026-10-12T12:26:44.262025+00:00"
+      },
+      "0.7.0": {
+        "status": "platform_agnostic",
+        "available_version": "0.7.0",
+        "tier": "Python Package (assumed pure script)",
+        "evidence": "Standard PyPI package tiktoken",
+        "url": "https://pypi.org/project/tiktoken",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T05:04:33.867697+00:00"
+      },
+      "0.7": {
+        "status": "native_available",
+        "available_version": "0.12.0",
+        "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+        "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 4 version(s) available: 0.12.0, 0.13.0, 0.7.0, 0.9.0",
+        "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+        "substitute": null,
+        "version_warning": "Requested version 0.7 is older than DevPi ppc64le version 0.12.0; recommend upgrading.",
+        "last_analyzed": "2026-10-13T05:25:05.341518+00:00"
       }
     },
     "status": "native_available",
@@ -1471,9 +1693,9 @@
   },
   "triton": {
     "package_name": "triton",
-    "version": ">=2.0.0",
-    "last_analyzed": "2026-10-12T12:26:45.810478+00:00",
-    "analysis_count": 1,
+    "version": "2.0.0",
+    "last_analyzed": "2026-10-13T14:48:09.089095+00:00",
+    "analysis_count": 4,
     "versions": {
       ">=2.0.0": {
         "status": "platform_agnostic",
@@ -1484,19 +1706,49 @@
         "substitute": null,
         "version_warning": null,
         "last_analyzed": "2026-10-12T12:26:45.810478+00:00"
+      },
+      "3.0.0": {
+        "status": "native_available",
+        "available_version": "3.6.0",
+        "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+        "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 1 version(s) available: 3.6.0",
+        "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+        "substitute": null,
+        "version_warning": "Requested version 3.0.0 is older than DevPi ppc64le version 3.6.0; recommend upgrading.",
+        "last_analyzed": "2026-10-13T05:04:40.214362+00:00"
+      },
+      "2.1": {
+        "status": "native_available",
+        "available_version": "3.6.0",
+        "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+        "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 1 version(s) available: 3.6.0",
+        "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+        "substitute": null,
+        "version_warning": "Requested version 2.1 is older than DevPi ppc64le version 3.6.0; recommend upgrading.",
+        "last_analyzed": "2026-10-13T05:25:14.623566+00:00"
+      },
+      "2.0.0": {
+        "status": "native_available",
+        "available_version": "3.6.0",
+        "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+        "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 1 version(s) available: 3.6.0",
+        "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+        "substitute": null,
+        "version_warning": "Requested version 2.0.0 is older than DevPi ppc64le version 3.6.0; recommend upgrading.",
+        "last_analyzed": "2026-10-13T14:48:09.089095+00:00"
       }
     },
-    "status": "platform_agnostic",
-    "available_version": ">=2.0.0",
-    "tier": "Python Package (assumed pure script)",
-    "evidence": "Standard PyPI package triton",
-    "url": "https://pypi.org/project/triton"
+    "status": "native_available",
+    "available_version": "3.6.0",
+    "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+    "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 1 version(s) available: 3.6.0",
+    "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md"
   },
   "ffmpeg": {
     "package_name": "ffmpeg",
-    "version": "latest",
-    "last_analyzed": "2026-10-12T12:26:48.128806+00:00",
-    "analysis_count": 1,
+    "version": "6.0",
+    "last_analyzed": "2026-10-13T05:25:16.263580+00:00",
+    "analysis_count": 3,
     "versions": {
       "latest": {
         "status": "native_available",
@@ -1507,6 +1759,26 @@
         "substitute": null,
         "version_warning": null,
         "last_analyzed": "2026-10-12T12:26:48.128806+00:00"
+      },
+      "6.1": {
+        "status": "native_available",
+        "available_version": "n9.0",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'FFmpeg' (version n9.0). Build script: ffmpeg_ubi_10.2.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/f/ffmpeg",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T05:04:51.415880+00:00"
+      },
+      "6.0": {
+        "status": "native_available",
+        "available_version": "n9.0",
+        "tier": "ppc64le/build-scripts — active IBM Power build recipe",
+        "evidence": "IBM ppc64le/build-scripts repo has build_info.json for 'FFmpeg' (version n9.0). Build script: ffmpeg_ubi_10.2.sh",
+        "url": "https://github.com/ppc64le/build-scripts/tree/master/f/ffmpeg",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T05:25:16.263580+00:00"
       }
     },
     "status": "native_available",
@@ -1517,9 +1789,9 @@
   },
   "llvmlite": {
     "package_name": "llvmlite",
-    "version": "latest",
-    "last_analyzed": "2026-10-12T12:26:49.908303+00:00",
-    "analysis_count": 1,
+    "version": "0.41",
+    "last_analyzed": "2026-10-13T05:25:11.913361+00:00",
+    "analysis_count": 3,
     "versions": {
       "latest": {
         "status": "native_available",
@@ -1530,6 +1802,26 @@
         "substitute": null,
         "version_warning": null,
         "last_analyzed": "2026-10-12T12:26:49.908303+00:00"
+      },
+      "0.43.0": {
+        "status": "native_available",
+        "available_version": "0.40.0",
+        "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+        "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 7 version(s) available: 0.40.0, 0.42.0, 0.44.0, 0.44.0rc1, 0.45.1",
+        "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+        "substitute": null,
+        "version_warning": "Requested version 0.43.0 not in DevPi index; latest DevPi ppc64le version is 0.40.0. May require source build.",
+        "last_analyzed": "2026-10-13T05:04:28.485196+00:00"
+      },
+      "0.41": {
+        "status": "native_available",
+        "available_version": "0.40.0",
+        "tier": "ppc64le/pyeco DevPi — native ppc64le wheel",
+        "evidence": "ppc64le/pyeco DevPi index (cloned from DevpiWheelsIndex.md); 7 version(s) available: 0.40.0, 0.42.0, 0.44.0, 0.44.0rc1, 0.45.1",
+        "url": "https://github.com/ppc64le/pyeco/blob/main/DevpiWheelsIndex.md",
+        "substitute": null,
+        "version_warning": "Requested version 0.41 not in DevPi index; latest DevPi ppc64le version is 0.40.0. May require source build.",
+        "last_analyzed": "2026-10-13T05:25:11.913361+00:00"
       }
     },
     "status": "native_available",
@@ -1560,6 +1852,156 @@
     "tier": "Tier 1 - RHEL 9 AppStream (rust, cargo, rustc, rust-toolset) for ppc64le; also conda-forge linux-ppc64le and upstream Rust Tier 2 target powerpc64le-unknown-linux-gnu",
     "evidence": "RHEL 9 AppStream ships rust/rustc/cargo and the rust-toolset module stream for ppc64le (version tracks RHEL minor release, e.g. ~1.75-1.84). Also available from conda-forge (linux-ppc64le) and via rustup (powerpc64le-unknown-linux-gnu host toolchain, Tier 2 with host tools). Exact minor version should be confirmed with 'dnf info rust' on the target RHEL 9.x system.",
     "url": "https://packages.fedoraproject.org/pkgs/rust/rust/",
+    "substitute": null
+  },
+  "regex": {
+    "package_name": "regex",
+    "version": "2024.7.24",
+    "last_analyzed": "2026-10-13T05:04:43.570410+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "2024.7.24": {
+        "status": "native_available",
+        "available_version": "2024.7.24",
+        "tier": "PyPI Native ppc64le Wheel",
+        "evidence": "PyPI release 2024.7.24: pre-built ppc64le wheel found for regex",
+        "url": "https://pypi.org/project/regex",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T05:04:43.570410+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "2024.7.24",
+    "tier": "PyPI Native ppc64le Wheel",
+    "evidence": "PyPI release 2024.7.24: pre-built ppc64le wheel found for regex",
+    "url": "https://pypi.org/project/regex"
+  },
+  "setuptools": {
+    "package_name": "setuptools",
+    "version": "70.0.0",
+    "last_analyzed": "2026-10-13T05:04:46.587572+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "70.0.0": {
+        "status": "platform_agnostic",
+        "available_version": "70.0.0",
+        "tier": "Pure Python package (noarch)",
+        "evidence": "Universal wheel (none-any.whl) available for setuptools (70.0.0)",
+        "url": "https://pypi.org/project/setuptools",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T05:04:46.587572+00:00"
+      }
+    },
+    "status": "platform_agnostic",
+    "available_version": "70.0.0",
+    "tier": "Pure Python package (noarch)",
+    "evidence": "Universal wheel (none-any.whl) available for setuptools (70.0.0)",
+    "url": "https://pypi.org/project/setuptools"
+  },
+  "setuptools-rust": {
+    "package_name": "setuptools-rust",
+    "version": "1.8",
+    "last_analyzed": "2026-10-13T05:25:19.562276+00:00",
+    "analysis_count": 2,
+    "versions": {
+      "1.9.0": {
+        "status": "platform_agnostic",
+        "available_version": "1.9.0",
+        "tier": "Pure Python package (noarch)",
+        "evidence": "Universal wheel (none-any.whl) available for setuptools-rust (1.9.0)",
+        "url": "https://pypi.org/project/setuptools-rust",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T05:04:48.401262+00:00"
+      },
+      "1.8": {
+        "status": "platform_agnostic",
+        "available_version": "1.8.0",
+        "tier": "Pure Python package (noarch)",
+        "evidence": "Universal wheel (none-any.whl) available for setuptools-rust (1.8.0)",
+        "url": "https://pypi.org/project/setuptools-rust",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T05:25:19.562276+00:00"
+      }
+    },
+    "status": "platform_agnostic",
+    "available_version": "1.8.0",
+    "tier": "Pure Python package (noarch)",
+    "evidence": "Universal wheel (none-any.whl) available for setuptools-rust (1.8.0)",
+    "url": "https://pypi.org/project/setuptools-rust"
+  },
+  "wheel": {
+    "package_name": "wheel",
+    "version": "0.44.0",
+    "last_analyzed": "2026-10-13T05:04:49.928571+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "0.44.0": {
+        "status": "platform_agnostic",
+        "available_version": "0.44.0",
+        "tier": "Pure Python package (noarch)",
+        "evidence": "Universal wheel (none-any.whl) available for wheel (0.44.0)",
+        "url": "https://pypi.org/project/wheel",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T05:04:49.928571+00:00"
+      }
+    },
+    "status": "platform_agnostic",
+    "available_version": "0.44.0",
+    "tier": "Pure Python package (noarch)",
+    "evidence": "Universal wheel (none-any.whl) available for wheel (0.44.0)",
+    "url": "https://pypi.org/project/wheel"
+  },
+  "llvm": {
+    "package_name": "llvm",
+    "version": "14",
+    "last_analyzed": "2026-10-13T05:05:10.520460+00:00",
+    "analysis_count": 1,
+    "versions": {
+      "14": {
+        "status": "native_available",
+        "available_version": "14.0.6",
+        "tier": "RHEL 9 AppStream (ppc64le) - llvm rebased per minor release; 14.x only in early 9.x minors",
+        "evidence": "RHEL 9.0/9.1 AppStream ppc64le ships llvm 14.0.6 (llvm, llvm-devel, llvm-libs). RHEL 9.2 onward rebased llvm to newer majors (15, 16, 17, ... 19.x), so a pinned 14 is not available on current RHEL 9 minors. Not sourced from EPEL; conda-forge also publishes llvm 14 for linux-ppc64le.",
+        "url": "https://packages.fedoraproject.org/pkgs/llvm/llvm/",
+        "substitute": null,
+        "version_warning": "llvm 14 is only shipped in RHEL 9.0/9.1 AppStream. Later RHEL 9 minor releases ship newer major versions (e.g. 19.x), and the 14.x series is not installable from the current AppStream. Use the system llvm, or conda-forge llvmdev=14 for linux-ppc64le, if exactly 14 is required. Confirm the exact minor-release version with 'dnf list llvm --showduplicates' on the target host.",
+        "last_analyzed": "2026-10-13T05:05:10.520460+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "14.0.6",
+    "tier": "RHEL 9 AppStream (ppc64le) - llvm rebased per minor release; 14.x only in early 9.x minors",
+    "evidence": "RHEL 9.0/9.1 AppStream ppc64le ships llvm 14.0.6 (llvm, llvm-devel, llvm-libs). RHEL 9.2 onward rebased llvm to newer majors (15, 16, 17, ... 19.x), so a pinned 14 is not available on current RHEL 9 minors. Not sourced from EPEL; conda-forge also publishes llvm 14 for linux-ppc64le.",
+    "url": "https://packages.fedoraproject.org/pkgs/llvm/llvm/",
+    "substitute": null
+  },
+  "python3": {
+    "package_name": "python3",
+    "version": ">=3.8",
+    "last_analyzed": "2026-10-13T15:39:47.589577+00:00",
+    "analysis_count": 1,
+    "versions": {
+      ">=3.8": {
+        "status": "native_available",
+        "available_version": "3.9.x (BaseOS python3, e.g. 3.9.18+ depending on RHEL 9 minor release); up to 3.12/3.13 via AppStream python3.12/python3.13",
+        "tier": "RHEL 9 BaseOS (ppc64le) native RPM; newer streams (python3.11, python3.12, python3.13) in AppStream",
+        "evidence": "RHEL 9 BaseOS ships the 'python3' RPM (Python 3.9.x) built for ppc64le; AppStream provides python3.11/python3.12/python3.13 packages for ppc64le. Also available on CentOS Stream 9 / AlmaLinux 9 / Rocky 9 ppc64le and Fedora ppc64le.",
+        "url": "https://packages.fedoraproject.org/pkgs/python3.9/python3/",
+        "substitute": null,
+        "version_warning": null,
+        "last_analyzed": "2026-10-13T15:39:47.589577+00:00"
+      }
+    },
+    "status": "native_available",
+    "available_version": "3.9.x (BaseOS python3, e.g. 3.9.18+ depending on RHEL 9 minor release); up to 3.12/3.13 via AppStream python3.12/python3.13",
+    "tier": "RHEL 9 BaseOS (ppc64le) native RPM; newer streams (python3.11, python3.12, python3.13) in AppStream",
+    "evidence": "RHEL 9 BaseOS ships the 'python3' RPM (Python 3.9.x) built for ppc64le; AppStream provides python3.11/python3.12/python3.13 packages for ppc64le. Also available on CentOS Stream 9 / AlmaLinux 9 / Rocky 9 ppc64le and Fedora ppc64le.",
+    "url": "https://packages.fedoraproject.org/pkgs/python3.9/python3/",
     "substitute": null
   }
 }

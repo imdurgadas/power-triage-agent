@@ -60,7 +60,7 @@ function getDeliverableBadge(match) {
 }
 
 
-export default function DependencyTable({ packages, onOpenCodeAudit }) {
+export default function DependencyTable({ packages, onOpenCodeAudit, onOpenPortingAgent }) {
   const [filter, setFilter] = useState('ALL');
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedRows, setExpandedRows] = useState({});
@@ -280,6 +280,19 @@ export default function DependencyTable({ packages, onOpenCodeAudit }) {
                       ) : (
                         <span style={{ color: 'var(--cds-text-secondary)', fontSize: '0.8rem' }}>Catalog Checked</span>
                       )}
+                      {p.total_effort_pd > 0 && onOpenPortingAgent && (
+                        <div style={{ marginTop: '0.35rem' }}>
+                          <Button
+                            kind="ghost"
+                            size="sm"
+                            renderIcon={Launch}
+                            onClick={(e) => { e.stopPropagation(); onOpenPortingAgent(p); }}
+                            style={{ padding: '0 0.4rem', height: '1.75rem', fontSize: '0.75rem', color: '#78a9ff' }}
+                          >
+                            Port to ppc64le
+                          </Button>
+                        </div>
+                      )}
                     </td>
                   </tr>
 
@@ -289,21 +302,33 @@ export default function DependencyTable({ packages, onOpenCodeAudit }) {
                       <td colSpan={8} style={{ padding: '0.5rem 1rem 1rem', background: 'var(--cds-layer-02)' }}>
                         <div style={{ border: '1px solid var(--cds-border-subtle-01)', borderRadius: '2px', padding: '1.25rem' }}>
                           {/* Drawer header */}
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                             <span style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--cds-support-warning)' }}>
                               <Tools size={16} /> Scoped Build-Time Transitive Dependencies for{' '}
                               <code style={{ fontFamily: "'IBM Plex Mono', monospace" }}>{p.package_name}</code>
                             </span>
-                            {hasArchFlags && (
-                              <Button
-                                kind="ghost"
-                                size="sm"
-                                renderIcon={Code}
-                                onClick={(e) => { e.stopPropagation(); onOpenCodeAudit(p); }}
-                              >
-                                View Architecture Code Audit &amp; SIMDe Fix
-                              </Button>
-                            )}
+                            <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                              {onOpenPortingAgent && (
+                                <Button
+                                  kind="primary"
+                                  size="sm"
+                                  renderIcon={Launch}
+                                  onClick={(e) => { e.stopPropagation(); onOpenPortingAgent(p); }}
+                                >
+                                  Port to IBM Power (ppc64le)
+                                </Button>
+                              )}
+                              {hasArchFlags && (
+                                <Button
+                                  kind="ghost"
+                                  size="sm"
+                                  renderIcon={Code}
+                                  onClick={(e) => { e.stopPropagation(); onOpenCodeAudit(p); }}
+                                >
+                                  View Architecture Code Audit &amp; SIMDe Fix
+                                </Button>
+                              )}
+                            </div>
                           </div>
 
                           {p.porting_notes && (

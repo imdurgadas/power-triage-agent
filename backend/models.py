@@ -341,3 +341,87 @@ class TriageResponse(BaseModel):
     package_ecosystem: Optional[str] = None
     package_version: Optional[str] = None
     token_usage: Optional[TokenUsage] = None
+
+
+class PowerVMConfig(BaseModel):
+    """Configuration for connecting to or provisioning an IBM Power (ppc64le) target VM."""
+    host: str = ""
+    port: int = 22
+    username: str = "root"
+    private_key: Optional[str] = None
+    password: Optional[str] = None
+    use_mock: bool = False
+    cloud_provider: str = "direct_ssh"  # "direct_ssh" | "powervs" | "openstack"
+    workspace_dir: str = "/var/tmp/power_porting"
+    target_os_image: str = "registry.access.redhat.com/ubi9/ubi:latest"
+    container_engine: str = "auto"  # "auto" | "podman" | "docker"
+
+
+class PortingActionType(str, Enum):
+    BUILD_FROM_SOURCE = "build_from_source"
+    BUILD_WHEEL       = "build_wheel"
+    CREATE_CONTAINER  = "create_container"
+
+
+class PortingPlan(BaseModel):
+    """Structured plan specifying actions required to make a package available on ppc64le."""
+    package_name: str
+    version: str = "latest"
+    ecosystem: str = "python"
+    git_repo_url: Optional[str] = None
+    deliverable_target: str = "wheel"  # "wheel" | "container" | "source"
+    action_type: PortingActionType = PortingActionType.BUILD_WHEEL
+    detected_sensitivities: List[str] = Field(default_factory=list)
+    prerequisites: List[str] = Field(default_factory=list)
+    build_commands: List[str] = Field(default_factory=list)
+    test_commands: List[str] = Field(default_factory=list)
+    rationale: str = ""
+
+
+class PortingJobStep(BaseModel):
+    step_number: int
+    title: str
+    status: str = "pending"  # "pending" | "running" | "completed" | "failed" | "skipped"
+    detail: Optional[str] = None
+    logs: List[str] = Field(default_factory=list)
+    started_at: Optional[str] = None
+    completed_at: Optional[str] = None
+
+
+class PortingJobRequest(BaseModel):
+    package_name: str
+    version: Optional[str] = "latest"
+    ecosystem: Optional[str] = "python"
+    git_repo_url: Optional[str] = None
+    deliverable_target: Optional[str] = "wheel"  # "wheel" | "container" | "source"
+    vm_config: PowerVMConfig
+    github_token: Optional[str] = None
+    upstream_repo: Optional[str] = None
+    pr_target_branch: Optional[str] = "main"
+    llm_provider: Optional[str] = "ibm_bob"  # "ibm_bob" | "gemini"
+    triage_finding: Optional[Dict[str, Any]] = None
+    include_child_dependencies: bool = True
+    child_dependencies: List[Dict[str, Any]] = Field(default_factory=list)
+
+
+class PortingJobResponse(BaseModel):
+    job_id: str
+    package_name: str
+    version: str = "latest"
+    status: str = "queued"  # "queued" | "running" | "completed" | "failed"
+    current_step_index: int = 0
+    steps: List[PortingJobStep] = Field(default_factory=list)
+    vm_info: Dict[str, Any] = Field(default_factory=dict)
+    container_info: Dict[str, Any] = Field(default_factory=dict)
+    diff: Optional[str] = None
+    files_modified: List[str] = Field(default_factory=list)
+    test_summary: Dict[str, Any] = Field(default_factory=dict)
+    artifact_path: Optional[str] = None
+    pr_url: Optional[str] = None
+    pr_number: Optional[int] = None
+    evidence_report_markdown: Optional[str] = None
+    child_dependencies_ported: List[Dict[str, Any]] = Field(default_factory=list)
+    token_usage: Optional[TokenUsage] = None
+    error: Optional[str] = None
+
+

@@ -299,10 +299,9 @@ class BuildAnalyzer:
         # 2. High-complexity Systems / Storage / DB / Kernel / Memory Engine
         is_systems = (
             any(kw in pkg_name for kw in [
-                "storage", "db", "driver", "kernel", "engine", "crypto", "ssl", "kv",
-                "alloc", "memory", "fuse", "io", "spdk", "dpdk", "leveldb", "sqlite",
-                "redis", "clickhouse", "ceph", "kafka", "cassandra", "rocksdb",
-                "jemalloc", "tcmalloc", "etcd", "raft", "distributed", "consensus"
+                "storage", "database", "driver", "kernel", "engine", "crypto", "ssl", "kv",
+                "alloc", "memory", "fuse", "io", "spdk", "dpdk",
+                "distributed", "consensus", "cache", "queue"
             ])
             or (ecosystem in ("c", "cpp", "native_c") and any(kw in pkg_name for kw in ["server", "service", "core", "client"]))
         )

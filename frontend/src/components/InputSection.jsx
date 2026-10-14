@@ -23,14 +23,13 @@ import {
   Flash,
   Launch,
   Key,
+  Upload,
+  TrashCan,
 } from '@carbon/icons-react';
 
 export default function InputSection({
   onRunTriage,
   isRunning,
-  presets = [],
-  activePreset,
-  onSelectPreset,
 }) {
   const [selectedTabIndex, setSelectedTabIndex] = useState(0); // 0: Text, 1: URL
   const [manifestText, setManifestText] = useState('');
@@ -43,6 +42,7 @@ export default function InputSection({
   const [geminiKey, setGeminiKey] = useState('');
   const [showKeyInput, setShowKeyInput] = useState(false);
   const [llmConfig, setLlmConfig] = useState(null);
+  const [uploadedFileName, setUploadedFileName] = useState('');
 
   // Fetch detected LLM config from server on mount
   useEffect(() => {
@@ -57,35 +57,18 @@ export default function InputSection({
       .catch(err => console.debug('Could not fetch LLM config:', err));
   }, []);
 
-  // When active preset changes, populate text, environment, and deliverable type
-  useEffect(() => {
-    if (activePreset) {
-      setSelectedTabIndex(0);
-      setManifestText(activePreset.content || '');
-      if (activePreset.target_environment) {
-        setTargetEnvironment(activePreset.target_environment);
+  const handleFileUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadedFileName(file.name);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const content = event.target?.result;
+      if (typeof content === 'string') {
+        setManifestText(content);
       }
-      if (activePreset.deliverable_type) {
-        setDeliverableType(activePreset.deliverable_type);
-      } else {
-        const isMicroservices = (activePreset.name || '').toLowerCase().includes('microservices') || activePreset.id === 'microservices';
-        setDeliverableType(isMicroservices ? 'container' : 'build');
-      }
-    }
-  }, [activePreset]);
-
-  const urlPresets = [
-    { name: "RocksDB (GitHub)", url: "https://github.com/facebook/rocksdb", env: "rhel9_baremetal", deliverable: "build" },
-    { name: "RocksDB (Docs Website)", url: "https://rocksdb.org", env: "rhel9_baremetal", deliverable: "build" },
-    { name: "Redis Engine (GitHub)", url: "https://github.com/redis/redis", env: "rhel9_ocp", deliverable: "build" },
-    { name: "FastAPI Framework", url: "https://github.com/tiangolo/fastapi", env: "rhel9_ocp", deliverable: "build" },
-  ];
-
-  const handleSelectUrlPreset = (p) => {
-    setSelectedTabIndex(1);
-    setInputUrl(p.url);
-    if (p.env) setTargetEnvironment(p.env);
-    if (p.deliverable) setDeliverableType(p.deliverable);
+    };
+    reader.readAsText(file);
   };
 
   const handleSubmit = (e) => {
@@ -109,9 +92,16 @@ export default function InputSection({
 
     if (selectedTabIndex === 0) {
       if (!manifestText.trim()) return;
+      let derivedName = "Enterprise Workload Qualification";
+      const lines = manifestText.split('\n').map(l => l.trim()).filter(Boolean);
+      const firstNamedLine = lines.find(l => !l.startsWith('#') && !l.startsWith('//') && l.length < 50);
+      if (firstNamedLine) {
+        const cleanPkg = firstNamedLine.split(/[\s=<>@:]/)[0];
+        if (cleanPkg) derivedName = `${cleanPkg} Workload Porting`;
+      }
       onRunTriage({
         ...commonPayload,
-        project_name: activePreset ? activePreset.name : "Workload Migration",
+        project_name: uploadedFileName ? `${uploadedFileName} Porting Qualification` : derivedName,
         raw_manifest: manifestText,
         manifest_type: "auto",
       });
@@ -119,7 +109,7 @@ export default function InputSection({
       if (!inputUrl.trim()) return;
       const raw = inputUrl.trim();
       const isGithub = raw.includes('github.com');
-      let extractedPkgName = 'URL Inferred Workload';
+      let extractedPkgName = 'Workload';
       try {
         const clean = raw.replace(/^https?:\/\//, '').replace(/\/$/, '');
         const parts = clean.split('/');
@@ -129,7 +119,7 @@ export default function InputSection({
           extractedPkgName = parts[0].split('.')[0];
         }
       } catch (err) {
-        extractedPkgName = 'URL Inferred Workload';
+        extractedPkgName = 'Workload';
       }
 
       onRunTriage({
@@ -306,82 +296,74 @@ export default function InputSection({
               onChange={({ selectedIndex }) => setSelectedTabIndex(selectedIndex)}
             >
               <TabList aria-label="Input specification type" contained>
-                <Tab renderIcon={DocumentBlank}>Manifest / Text</Tab>
-                <Tab renderIcon={Launch}>GitHub Repo / URL</Tab>
+                <Tab renderIcon={DocumentBlank}>Manifest File / Text</Tab>
+                <Tab renderIcon={Launch}>GitHub Repo / Docs URL</Tab>
               </TabList>
               <TabPanels>
-                {/* Panel 0: Manifest Text */}
+                {/* Panel 0: Manifest Text & File Upload */}
                 <TabPanel style={{ padding: '1rem 0' }}>
-                  {presets && presets.length > 0 && (
-                    <div style={{ marginBottom: '0.75rem' }}>
-                      <span className="cds--label" style={{ display: 'block', marginBottom: '0.35rem' }}>
-                        Quick Sample Workload Stacks:
-                      </span>
-                      <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-                        {presets.map((p, idx) => (
-                          <Tag
-                            key={idx}
-                            type={activePreset?.name === p.name ? 'cyan' : 'cool-gray'}
-                            size="md"
-                            style={{ cursor: 'pointer' }}
-                            onClick={() => {
-                              if (onSelectPreset) onSelectPreset(p);
-                              const isMicro = (p.name || '').toLowerCase().includes('microservices') || p.id === 'microservices';
-                              setDeliverableType(p.deliverable_type || (isMicro ? 'container' : 'build'));
-                            }}
-                          >
-                            {p.name}
-                          </Tag>
-                        ))}
-                      </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.65rem' }}>
+                    <span className="cds--label" style={{ fontSize: '0.82rem', color: '#c6c6c6' }}>
+                      Manifest Specification:
+                    </span>
+                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                      <label
+                        htmlFor="manifest-file-upload"
+                        className="cds--btn cds--btn--sm cds--btn--tertiary"
+                        style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.35rem', margin: 0, padding: '0 0.75rem', height: '2rem' }}
+                      >
+                        <Upload size={14} />
+                        <span>{uploadedFileName ? `Loaded: ${uploadedFileName}` : 'Upload Manifest File'}</span>
+                      </label>
+                      <input
+                        id="manifest-file-upload"
+                        type="file"
+                        style={{ display: 'none' }}
+                        onChange={handleFileUpload}
+                      />
+                      {manifestText && (
+                        <Button
+                          kind="ghost"
+                          size="sm"
+                          hasIconOnly
+                          renderIcon={TrashCan}
+                          iconDescription="Clear manifest input"
+                          onClick={() => { setManifestText(''); setUploadedFileName(''); }}
+                        />
+                      )}
                     </div>
-                  )}
+                  </div>
 
                   <TextArea
                     id="manifest-text-input"
-                    labelText="Paste Manifest, Requirements, Dockerfile, or Email"
-                    helperText="Supports requirements.txt, go.mod, pom.xml, package.json, Dockerfile, or plain component lists."
+                    labelText="Manifest, Requirements, Dockerfile, or Dependency Specification"
+                    helperText="Upload or paste requirements.txt, go.mod, pom.xml, package.json, Dockerfile, or direct software package list."
                     rows={9}
                     value={manifestText}
                     onChange={(e) => setManifestText(e.target.value)}
-                    placeholder={`e.g.\nrocksdb=8.10.0\nredis>=7.0.0\nfastapi\nnumpy==1.26.4\ncython`}
+                    placeholder="Paste package dependencies, Dockerfile, requirements.txt, or upload a manifest file to evaluate IBM Power readiness."
                     style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.85rem' }}
                   />
                 </TabPanel>
 
                 {/* Panel 1: URL */}
                 <TabPanel style={{ padding: '1rem 0' }}>
-                  <div style={{ marginBottom: '0.75rem' }}>
-                    <span className="cds--label" style={{ display: 'block', marginBottom: '0.35rem' }}>
-                      Example URL Workload Targets:
-                    </span>
-                    <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-                      {urlPresets.map((p, idx) => (
-                        <Tag
-                          key={idx}
-                          type={inputUrl === p.url ? 'cyan' : 'cool-gray'}
-                          size="md"
-                          style={{ cursor: 'pointer' }}
-                          onClick={() => handleSelectUrlPreset(p)}
-                        >
-                          {p.name}
-                        </Tag>
-                      ))}
-                    </div>
+                  <div style={{ marginBottom: '1rem' }}>
+                    <TextInput
+                      id="input-url-field"
+                      labelText="Upstream Git Repository or Documentation Site URL"
+                      helperText="Specify any public or enterprise Git repository (e.g. GitHub/GitLab URL) or project documentation site URL."
+                      placeholder="https://github.com/organization/repository or https://docs.example.org"
+                      value={inputUrl}
+                      onChange={(e) => setInputUrl(e.target.value)}
+                      style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.85rem' }}
+                    />
                   </div>
-
-                  <TextInput
-                    id="input-url-field"
-                    labelText="Repository or Documentation URL"
-                    helperText="Enter a public GitHub repository (e.g. https://github.com/facebook/rocksdb) or documentation site URL."
-                    placeholder="https://github.com/facebook/rocksdb"
-                    value={inputUrl}
-                    onChange={(e) => setInputUrl(e.target.value)}
-                    style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '0.85rem' }}
-                  />
-                  <p className="cds--helper-text-01" style={{ marginTop: '0.65rem' }}>
-                    Autonomous agents will clone the repo or scrape docs to identify C/C++ SIMD intrinsics, build systems, test suites, and container dependencies.
-                  </p>
+                  <div style={{ padding: '0.85rem', background: '#1e1e1e', border: '1px solid #333', borderRadius: '4px' }}>
+                    <p className="cds--helper-text-01" style={{ color: '#c6c6c6', lineHeight: 1.5, margin: 0 }}>
+                      Autonomous porting agents will inspect the upstream repository or technical documentation to detect C/C++ SIMD vector intrinsics (AVX2/SSE), page-size sensitivities (64KB Linux kernels), build toolchain requirements, and transitive sub-dependencies.
+                    </p>
+                  </div>
                 </TabPanel>
               </TabPanels>
             </Tabs>

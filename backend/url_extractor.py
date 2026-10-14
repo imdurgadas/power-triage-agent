@@ -150,8 +150,8 @@ class URLExtractor:
             "Infer appropriate ecosystems from: 'container', 'pypi', 'npm', 'maven', 'rpm', 'native_c'.\n"
             "Return ONLY a JSON array of objects with keys 'name', 'version', and 'ecosystem'. E.g.:\n"
             "[\n"
-            '  {"name": "rocksdb", "version": "8.6", "ecosystem": "native_c"},\n'
-            '  {"name": "snappy", "version": "1.1.9", "ecosystem": "native_c"}\n'
+            '  {"name": "component_name", "version": "1.0.0", "ecosystem": "native_c"},\n'
+            '  {"name": "sub_dependency", "version": "2.1.0", "ecosystem": "native_c"}\n'
             "]\n"
             "JSON:"
         )
@@ -184,7 +184,7 @@ class URLExtractor:
 
     @classmethod
     def _infer_with_heuristics(cls, url: str, content: str) -> List[Dict[str, str]]:
-        """Intelligent heuristic and regex extraction for offline / simulation mode."""
+        """Intelligent dynamic heuristic extraction for Git repositories and documentation URLs."""
         url_lower = url.lower()
         content_lower = content.lower()
         results: List[Dict[str, str]] = []
@@ -196,48 +196,20 @@ class URLExtractor:
                 seen.add(k)
                 results.append({"name": name, "version": ver, "ecosystem": eco})
 
-        # Curated project domain patterns
-        if "rocksdb" in url_lower:
-            add_pkg("rocksdb", "8.6", "native_c")
-            add_pkg("snappy", "1.1.9", "native_c")
-            add_pkg("zlib", "1.2.11", "native_c")
-            add_pkg("lz4", "1.9.4", "native_c")
-            add_pkg("jemalloc", "5.3.0", "native_c")
-            return results
-
-        if "redis" in url_lower:
-            add_pkg("redis", "7.2", "container")
-            add_pkg("jemalloc", "5.3.0", "native_c")
-            return results
-
-        if "fastapi" in url_lower:
-            add_pkg("fastapi", "0.110.0", "pypi")
-            add_pkg("pydantic", "2.6.0", "pypi")
-            add_pkg("uvicorn", "0.28.0", "pypi")
-            return results
-
-        if "pytorch" in url_lower or "torch" in url_lower:
-            add_pkg("torch", "2.1.0", "pypi")
-            add_pkg("numpy", "1.26.0", "pypi")
-            add_pkg("scipy", "1.11.0", "pypi")
-            return results
-
-        if "nginx" in url_lower:
-            add_pkg("nginx", "1.24", "container")
-            add_pkg("openssl", "3.0", "native_c")
-            return results
-
-        if "simdjson" in url_lower:
-            add_pkg("simdjson", "3.6", "native_c")
-            return results
-
-        # Generic GitHub repo name deduction: https://github.com/owner/repo
-        github_match = re.search(r"github\.com/[^/]+/([^/\s?#]+)", url)
-        if github_match:
-            repo_name = github_match.group(1).replace(".git", "").lower()
+        # 1. Generic Git repository extraction: e.g. https://github.com/owner/repo
+        git_match = re.search(r"(?:github\.com|gitlab\.com|bitbucket\.org)/[^/]+/([^/\s?#]+)", url)
+        if git_match:
+            repo_name = git_match.group(1).replace(".git", "").lower()
             add_pkg(repo_name, "latest", "native_c")
 
-        # Scan text for common technology patterns from dynamic package lookup
+        # 2. Domain-based component extraction for docs sites: e.g. https://domain.org -> domain
+        domain_match = re.search(r"https?://(?:www\.)?([^/\.]+)", url)
+        if domain_match:
+            domain_name = domain_match.group(1).lower()
+            if domain_name not in ("github", "gitlab", "bitbucket", "docs", "readthedocs", "pypi", "npmjs", "crates"):
+                add_pkg(domain_name, "latest", "native_c")
+
+        # 3. Dynamic scan of content for known package tokens in indexed database
         try:
             from .package_lookup import get_lookup_manager
             known_tokens = get_lookup_manager().get_known_tokens()
@@ -250,11 +222,17 @@ class URLExtractor:
                 ver = ver_match.group(1) if ver_match else "latest"
                 add_pkg(token, ver, eco)
 
-        # Fallback if nothing extracted: treat repo or domain as package
-        if not results:
-            domain_match = re.search(r"https?://(?:www\.)?([^/\.]+)", url)
-            if domain_match:
-                pkg_name = domain_match.group(1)
-                add_pkg(pkg_name, "latest", "native_c")
+        # 4. Check if primary package has indexed build dependencies in lookup manager
+        if results:
+            primary_name = results[0]["name"]
+            try:
+                from .package_lookup import get_lookup_manager
+                pkg_info = get_lookup_manager().get(primary_name)
+                if pkg_info and "build_deps" in pkg_info:
+                    for bd in pkg_info["build_deps"]:
+                        if isinstance(bd, dict) and "name" in bd:
+                            add_pkg(bd["name"], bd.get("version", "latest"), bd.get("ecosystem", "native_c"))
+            except Exception:
+                pass
 
         return results

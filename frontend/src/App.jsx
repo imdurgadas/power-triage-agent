@@ -15,30 +15,27 @@ import Scorecard from './components/Scorecard';
 import DependencyTable from './components/DependencyTable';
 import CodeAuditModal from './components/CodeAuditModal';
 import ExportModal from './components/ExportModal';
+import PortingAgentModal from './components/PortingAgentModal';
 
 export default function App() {
-  const [presets, setPresets] = useState([]);
-  const [activePreset, setActivePreset] = useState(null);
   const [isRunning, setIsRunning] = useState(false);
   const [agentSteps, setAgentSteps] = useState([]);
   const [triageResult, setTriageResult] = useState(null);
   const [tokenUsage, setTokenUsage] = useState(null);
   const [selectedAuditPkg, setSelectedAuditPkg] = useState(null);
+  const [selectedPortingPkg, setSelectedPortingPkg] = useState(null);
   const [showExportModal, setShowExportModal] = useState(false);
   const [backendOnline, setBackendOnline] = useState(true);
 
-  // Load sample workloads on mount
+  // Check backend service health on mount
   useEffect(() => {
-    fetch('/api/sample-workloads')
+    fetch('/api/health')
       .then(res => res.json())
       .then(data => {
-        setPresets(data);
-        if (data.length > 0) {
-          setActivePreset(data[2]);
-        }
+        setBackendOnline(data.status === 'ok');
       })
       .catch(err => {
-        console.warn('Backend not yet reachable on /api/sample-workloads:', err);
+        console.warn('Backend service not yet reachable:', err);
         setBackendOnline(false);
       });
   }, []);
@@ -149,9 +146,6 @@ export default function App() {
           <InputSection
             onRunTriage={handleRunTriage}
             isRunning={isRunning}
-            presets={presets}
-            activePreset={activePreset}
-            onSelectPreset={setActivePreset}
           />
 
           <AgentLiveFeed steps={agentSteps} isRunning={isRunning} tokenUsage={tokenUsage} />
@@ -169,6 +163,7 @@ export default function App() {
             <DependencyTable
               packages={triageResult.packages}
               onOpenCodeAudit={(pkg) => setSelectedAuditPkg(pkg)}
+              onOpenPortingAgent={(pkg) => setSelectedPortingPkg(pkg)}
             />
           )}
         </Content>
@@ -177,6 +172,13 @@ export default function App() {
           <CodeAuditModal
             packageData={selectedAuditPkg}
             onClose={() => setSelectedAuditPkg(null)}
+          />
+        )}
+
+        {selectedPortingPkg && (
+          <PortingAgentModal
+            packageData={selectedPortingPkg}
+            onClose={() => setSelectedPortingPkg(null)}
           />
         )}
 

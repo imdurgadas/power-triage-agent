@@ -1,12 +1,27 @@
 import json
 import logging
+import asyncio
 from typing import Optional
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, Response
-from .models import TriageRequest, TriageResponse
+from .models import (
+    TriageRequest,
+    TriageResponse,
+    PowerVMConfig,
+    PortingJobRequest,
+    PortingJobResponse,
+    PortingPlan,
+)
 from .agent import TriageAgent
 from .pdf_generator import ExecutivePDFGenerator
+from .porting_planner import formulate_porting_plan
+from .porting_agent import (
+    AutonomousPortingOrchestrator,
+    PORTING_JOBS,
+    subscribe_job,
+)
+from .power_env import get_power_environment
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("main")
@@ -220,4 +235,58 @@ async def export_executive_pdf(report_data: dict):
     except Exception as e:
         logger.error(f"PDF generation failed: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Failed to generate executive PDF: {str(e)}")
+
+
+@app.post("/api/porting/test-connection")
+async def test_power_vm_connection(config: PowerVMConfig):
+    """Probes the Power VM target to verify connectivity, ppc64le architecture, and toolchains."""
+    try:
+        env = get_power_environment(config)
+        info = await env.connect()
+        await env.close()
+        return {"status": "ok", "system_info": info}
+    except Exception as e:
+        logger.error("Failed to connect to Power VM: %s", e)
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/api/porting/plan", response_model=PortingPlan)
+async def create_porting_plan(request: PortingJobRequest):
+    """Generates a structured porting plan from package characteristics and triage findings."""
+    return formulate_porting_plan(
+        package_name=request.package_name,
+        version=request.version or "latest",
+        ecosystem=request.ecosystem or "python",
+        deliverable_target=request.deliverable_target or "wheel",
+        git_repo_url=request.git_repo_url,
+        triage_finding=request.triage_finding,
+    )
+
+
+@app.post("/api/porting/start", response_model=PortingJobResponse)
+async def start_autonomous_porting(request: PortingJobRequest):
+    """Launches the autonomous porting workflow on the target Power VM."""
+    orchestrator = AutonomousPortingOrchestrator(request)
+    asyncio.create_task(orchestrator.execute())
+    return orchestrator.response
+
+
+@app.get("/api/porting/status/{job_id}", response_model=PortingJobResponse)
+async def get_porting_job_status(job_id: str):
+    """Returns the current status, step progress, diff, and logs for a porting job."""
+    job = PORTING_JOBS.get(job_id)
+    if not job:
+        raise HTTPException(status_code=404, detail="Porting job not found")
+    return job
+
+
+@app.get("/api/porting/stream/{job_id}")
+async def stream_porting_job(job_id: str):
+    """SSE streaming endpoint for live logs, diffs, and step updates from the Power VM."""
+    return StreamingResponse(
+        subscribe_job(job_id),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "Connection": "keep-alive"}
+    )
+
 
